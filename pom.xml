@@ -1,0 +1,121 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.gbif</groupId>
+    <artifactId>motherpom</artifactId>
+    <version>16</version>
+  </parent>
+
+  <artifactId>gbif-doi</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>GBIF DOI Service</name>
+  <description>This project provides DOI services used by the IPT and Portal</description>
+  <url>http://github.org/gbif/gbif-doi</url>
+
+  <scm>
+    <connection>scm:git:git@github.com:gbif/gbif-doi.git</connection>
+    <url>https://github.com/gbif/gbif-doi</url>
+    <developerConnection>scm:git:git@github.com:gbif/gbif-doi.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <repositories>
+    <repository>
+      <id>gbif-all</id>
+      <url>http://repository.gbif.org/content/groups/gbif</url>
+    </repository>
+  </repositories>
+
+  <developers>
+    <developer>
+      <name>Kyle Braak</name>
+      <email>kbraak@gbif.org</email>
+    </developer>
+  </developers>
+
+  <properties>
+    <logback.version>1.1.2</logback.version>
+    <slf4j-api.version>1.7.7</slf4j-api.version>
+    <httpclient.version>4.2.3</httpclient.version>
+    <httpcore.version>4.2.3</httpcore.version>
+    <gbif-httputils.version>0.5</gbif-httputils.version>
+    <findbugs-jsr305.version>3.0.0</findbugs-jsr305.version>
+    <mockito.version>1.10.8</mockito.version>
+    <junit.version>4.11</junit.version>
+    <guava.version>17.0</guava.version>
+    <freemarker.version>2.3.21</freemarker.version>
+    <gbif-common.version>0.16</gbif-common.version>
+    <gbif-metadata-profile.version>1.98-SNAPSHOT</gbif-metadata-profile.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.gbif</groupId>
+      <artifactId>gbif-httputils</artifactId>
+      <version>${gbif-httputils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>${httpclient.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+      <version>${httpcore.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>${findbugs-jsr305.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>${freemarker.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gbif</groupId>
+      <artifactId>gbif-common</artifactId>
+      <version>${gbif-common.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gbif</groupId>
+      <artifactId>gbif-metadata-profile</artifactId>
+      <version>${gbif-metadata-profile.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
