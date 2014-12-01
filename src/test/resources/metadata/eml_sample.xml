@@ -7,7 +7,7 @@
   <dataset>
     <alternateIdentifier>0b546e88-baa4-4974-a5d8-e7a53fcc99a4</alternateIdentifier>
     <alternateIdentifier>http://localhost:8080/resource.do?r=biob</alternateIdentifier>
-    <title xml:lang="eng">Bioblitz 2013 Copenhagen Denmark</title>
+    <titles xml:lang="eng">Bioblitz 2013 Copenhagen Denmark</titles>
     <creator>
       <individualName>
         <givenName>Mia Lindegaard</givenName>

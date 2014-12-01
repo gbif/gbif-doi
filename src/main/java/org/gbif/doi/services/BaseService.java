@@ -1,13 +1,13 @@
 package org.gbif.doi.services;
 
-import org.gbif.doi.api.ErrorCode;
-import org.gbif.doi.api.DoiRegistrarException;
-import org.gbif.utils.HttpUtil;
+import org.gbif.doi.DoiRegistrarException;
+import org.gbif.doi.ErrorCode;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
+import com.google.common.net.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,6 +21,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,22 +44,18 @@ public abstract class BaseService {
    * Executes an HTTP POST request.
    *
    * @param uri           to issue request against
-   * @param headers       HTTP headers
    * @param encodedEntity request body
    *
-   * @throws org.gbif.doi.api.DoiRegistrarException in case anything goes wrong during the request, all underlying HTTP errors are mapped to
+   * @throws org.gbif.doi.DoiRegistrarException in case anything goes wrong during the request, all underlying HTTP errors are mapped to
    *                          the appropriate {@link ErrorCode}s.
    */
-  public void doPost(URI uri, Map<String, String> headers, HttpEntity encodedEntity) throws DoiRegistrarException {
+  public void postXml(URI uri, HttpEntity encodedEntity) throws DoiRegistrarException {
     LOG.info("Issuing POST request: {}", uri);
     HttpPost post = new HttpPost(uri);
 
-    // http header
-    if (headers != null) {
-      for (Map.Entry<String, String> header : headers.entrySet()) {
-        post.addHeader(StringUtils.trimToEmpty(header.getKey()), StringUtils.trimToEmpty(header.getValue()));
-      }
-    }
+    // http content type header
+
+    post.addHeader(HTTP.CONTENT_TYPE, MediaType.APPLICATION_XML_UTF_8.toString());
 
     // body
     if (encodedEntity != null) {
@@ -93,7 +90,7 @@ public abstract class BaseService {
    * @param headers       HTTP headers
    * @param encodedEntity request body
    *
-   * @throws org.gbif.doi.api.DoiRegistrarException in case anything goes wrong during the request, all underlying HTTP errors are mapped to
+   * @throws org.gbif.doi.DoiRegistrarException in case anything goes wrong during the request, all underlying HTTP errors are mapped to
    *                          the appropriate {@link ErrorCode}s.
    */
   public void doPut(URI uri, Map<String, String> headers, HttpEntity encodedEntity)

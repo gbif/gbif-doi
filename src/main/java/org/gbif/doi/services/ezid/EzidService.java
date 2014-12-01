@@ -1,14 +1,11 @@
 package org.gbif.doi.services.ezid;
 
-import org.gbif.doi.api.DoiRegistrarException;
-import org.gbif.doi.api.DoiService;
-import org.gbif.doi.api.ErrorCode;
-import org.gbif.doi.metadata.MetadataWriter;
+import org.gbif.api.model.common.DOI;
+import org.gbif.doi.DoiRegistrarException;
+import org.gbif.doi.DoiService;
+import org.gbif.doi.datacite.DataCiteMetadataV3;
 import org.gbif.doi.services.BaseService;
-import org.gbif.metadata.eml.Eml;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -16,13 +13,7 @@ import java.util.Map;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
-import freemarker.template.TemplateException;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,17 +25,15 @@ public class EzidService extends BaseService implements DoiService {
   private static final Logger LOG = LoggerFactory.getLogger(EzidService.class);
   private static final String CONTENT_TYPE = "text/plain;charset=UTF-8";
   private static final String ID_ENDPOINT_URI = "https://ezid.cdlib.org/id/";
-  private static final String DOI_ACCESS_SCHEMA = "doi:";
 
   public EzidService(HttpClient httpClient, String username, String password) {
     super(httpClient, username, password);
   }
 
   @Override
-  public void reserve(File f, Eml eml, String doi, String publisher, String resourceType) throws
-    DoiRegistrarException {
+  public void reserve(DOI doi, DataCiteMetadataV3 metadata, String publisher, String resourceType) throws DoiRegistrarException {
     LOG.info("Reserving identifier: {}", doi);
-    try {
+/*    try {
       // write metadata file
       MetadataWriter.writeMetadataFile(f, eml, doi, publisher, resourceType);
 
@@ -54,11 +43,11 @@ public class EzidService extends BaseService implements DoiService {
       headers.put("Accept", "text/plain");
 
       // metadata (map) as body
-      HashMap<String, String> metadata = Maps.newHashMap();
+      HashMap<String, String> data = Maps.newHashMap();
       String fromFile = FileUtils.readFileToString(f);
-      metadata.put("datacite", fromFile);
-      metadata.put("_status", StringUtils.lowerCase(IdentifierStatus.RESERVED.toString())); // must be lower case!
-      String anvl = serializeAsANVL(metadata);
+      data.put("xsd.datacite", fromFile);
+      data.put("_status", StringUtils.lowerCase(IdentifierStatus.RESERVED.toString())); // must be lower case!
+      String anvl = serializeAsANVL(data);
       StringEntity myEntity = new StringEntity(anvl, "UTF-8");
 
       doPut(createEzidUri(doi), headers, myEntity);
@@ -68,36 +57,38 @@ public class EzidService extends BaseService implements DoiService {
       throw new DoiRegistrarException(e, ErrorCode.IO_EXCEPTION);
     } catch (URISyntaxException e) {
       throw new DoiRegistrarException(e, ErrorCode.HTTP_ERROR);
-    }
+    }*/
+    throw new UnsupportedOperationException("Not Implemenented Yet");
   }
 
   @Override
-  public void makePublic(String doi) throws DoiRegistrarException {
+  public void makePublic(DOI doi) throws DoiRegistrarException {
     // TODO
   }
 
   @Override
-  public void getMetadata(String doi) throws DoiRegistrarException {
+  public DataCiteMetadataV3 getMetadata(DOI doi) throws DoiRegistrarException {
+    // TODO
+    return null;
+  }
+
+  @Override
+  public void delete(DOI doi) throws DoiRegistrarException {
     // TODO
   }
 
   @Override
-  public void delete(String doi) throws DoiRegistrarException {
+  public void makeUnavailable(DOI doi) throws DoiRegistrarException {
     // TODO
   }
 
   @Override
-  public void makeUnavailable(String doi) throws DoiRegistrarException {
+  public void makeAvailable(DOI doi) throws DoiRegistrarException {
     // TODO
   }
 
   @Override
-  public void makeAvailable(String doi) throws DoiRegistrarException {
-    // TODO
-  }
-
-  @Override
-  public void updateMetadata(String doi) throws DoiRegistrarException {
+  public void updateMetadata(DOI doi, DataCiteMetadataV3 metadata) throws DoiRegistrarException {
     // TODO
   }
 
@@ -114,11 +105,8 @@ public class EzidService extends BaseService implements DoiService {
    * @throws URISyntaxException if the the target URI could not be parsed
    */
   @VisibleForTesting
-  protected URI createEzidUri(String doi) throws URISyntaxException {
-    if (!Strings.isNullOrEmpty(doi)) {
-      doi = (doi.startsWith(DOI_ACCESS_SCHEMA)) ? doi : DOI_ACCESS_SCHEMA + doi;
-    }
-    return new URI(ID_ENDPOINT_URI + doi);
+  protected URI createEzidUri(DOI doi) throws URISyntaxException {
+    return new URI(ID_ENDPOINT_URI + doi.toString());
   }
 
   /**

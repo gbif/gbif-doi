@@ -13,7 +13,7 @@
   <packaging>jar</packaging>
 
   <name>GBIF DOI Service</name>
-  <description>This project provides DOI services used by the IPT and Portal</description>
+  <description>This project provides DOI services wrapping DataCite and EZID used by the IPT and Portal</description>
   <url>http://github.org/gbif/gbif-doi</url>
 
   <scm>
@@ -25,37 +25,137 @@
 
   <repositories>
     <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>jaxb2-plugins</id>
+      <name>JAXB2 XJC Plugin Repository</name>
+      <url>http://maven.klemm-scs.com/release</url>
+    </repository>
+    <repository>
       <id>gbif-all</id>
       <url>http://repository.gbif.org/content/groups/gbif</url>
     </repository>
   </repositories>
 
-  <developers>
-    <developer>
-      <name>Kyle Braak</name>
-      <email>kbraak@gbif.org</email>
-    </developer>
-  </developers>
+  <pluginRepositories>
+    <!-- TODO: Mirror this in GBIF Needed for the builder plugin during the
+      JAXB builder stuff -->
+    <pluginRepository>
+      <!--releases> <enabled>true</enabled> <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy> </releases -->
+      <id>jaxb2-plugins</id>
+      <name>JAXB2 XJC Plugin Repository</name>
+      <url>http://maven.klemm-scs.com/release</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <properties>
-    <logback.version>1.1.2</logback.version>
-    <slf4j-api.version>1.7.7</slf4j-api.version>
-    <httpclient.version>4.2.3</httpclient.version>
-    <httpcore.version>4.2.3</httpcore.version>
-    <gbif-httputils.version>0.5</gbif-httputils.version>
-    <findbugs-jsr305.version>3.0.0</findbugs-jsr305.version>
-    <mockito.version>1.10.8</mockito.version>
-    <junit.version>4.11</junit.version>
-    <guava.version>17.0</guava.version>
-    <freemarker.version>2.3.21</freemarker.version>
-    <gbif-common.version>0.16</gbif-common.version>
-    <gbif-metadata-profile.version>1.98-SNAPSHOT</gbif-metadata-profile.version>
-    <gbif-api.version>0.16</gbif-api.version>
     <jdkLevel>1.6</jdkLevel>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- plugins -->
+    <jaxb2-rich-contract-plugin.version>1.2.3</jaxb2-rich-contract-plugin.version>
+    <maven-jaxb2-plugin.version>0.9.0</maven-jaxb2-plugin.version>
+    <jaxb2_commons.version>0.6.3</jaxb2_commons.version>
+    <xjc-guava-plugin.version>0.3</xjc-guava-plugin.version>
+
+    <!-- libs -->
+    <findbugs-jsr305.version>3.0.0</findbugs-jsr305.version>
+    <freemarker.version>2.3.21</freemarker.version>
+    <gbif-api.version>0.17-SNAPSHOT</gbif-api.version>
+    <gbif-common.version>0.16</gbif-common.version>
+    <gbif-httputils.version>0.5</gbif-httputils.version>
+    <guava.version>17.0</guava.version>
+    <httpclient.version>4.2.3</httpclient.version>
+    <httpcore.version>4.2.3</httpcore.version>
+    <jackson.version>1.9.13</jackson.version>
+    <jackson2.version>2.4.2</jackson2.version>
+    <junit.version>4.11</junit.version>
+    <logback.version>1.1.2</logback.version>
+    <mockito.version>1.10.8</mockito.version>
+    <slf4j-api.version>1.7.7</slf4j-api.version>
+    <validation-api.version>1.1.0.Final</validation-api.version>
   </properties>
 
+  <build>
+    <plugins>
+      <!--
+        Generates source from the XSD using plugins to provide immutable
+        classes, fluent builders, annotations for selected @XmlRootElement and guava
+        based equals, toString and hashcode.
+        See also:
+        - https://github.com/mklemm/jaxb2-rich-contract-plugin (immutable and builders)
+        - https://github.com/danielwegener/xjc-guava-plugin (guava helpers)
+      -->
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>${maven-jaxb2-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>xsd-generate-2.1</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>src/main/resources/xsd/datacite</schemaDirectory>
+          <bindingDirectory>src/main/resources/xsd/datacite</bindingDirectory>
+          <generatePackage>org.gbif.doi.datacite</generatePackage>
+          <schemaIncludes>
+            <schemaInclude>**/metadata.xsd</schemaInclude>
+          </schemaIncludes>
+          <strict>true</strict>
+          <verbose>true</verbose>
+          <extension>true</extension>
+          <!-- Important! Deletes any other source code in directory by design -->
+          <removeOldOutput>true</removeOldOutput>
+          <forceRegenerate>true</forceRegenerate>
+          <generateDirectory>${project.basedir}/src/main/java-generated</generateDirectory>
+          <args>
+            <arg>-Ximmutable</arg>
+            <arg>-Xfluent-builder</arg>
+            <!-- Required to bring in @XmlRootElement -->
+            <arg>-Xannotate</arg>
+            <arg>-Xguava</arg>
+          </args>
+          <plugins>
+            <!-- Required for immutable and builder pattern -->
+            <plugin>
+              <groupId>com.kscs.util</groupId>
+              <artifactId>jaxb2-rich-contract-plugin</artifactId>
+              <version>${jaxb2-rich-contract-plugin.version}</version>
+            </plugin>
+            <!-- Required for @XmlRootElement -->
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics-annotate</artifactId>
+              <version>${jaxb2_commons.version}</version>
+            </plugin>
+            <!-- Required for @XmlRootElement -->
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics</artifactId>
+              <version>${jaxb2_commons.version}</version>
+            </plugin>
+            <!-- Required for Guava based equals etc. -->
+            <plugin>
+              <groupId>com.github.danielwegener.xjc</groupId>
+              <artifactId>xjc-guava-plugin</artifactId>
+              <version>${xjc-guava-plugin.version}</version>
+            </plugin>
+          </plugins>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
+    <!-- GBIF -->
     <dependency>
       <groupId>org.gbif</groupId>
       <artifactId>gbif-api</artifactId>
@@ -65,6 +165,65 @@
       <groupId>org.gbif</groupId>
       <artifactId>gbif-httputils</artifactId>
       <version>${gbif-httputils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gbif</groupId>
+      <artifactId>gbif-common</artifactId>
+      <version>${gbif-common.version}</version>
+    </dependency>
+
+    <!-- OTHER -->
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>woodstox-core-asl</artifactId>
+      <version>4.4.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-xml</artifactId>
+      <version>${jackson2.version}</version>
+    </dependency>
+    <!--
+    cant use the guava jackson2 types cause they do conflict with the jackson 1.9 version
+    using the same fasterxml package names !
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-guava</artifactId>
+      <version>${jackson2.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    -->
+<!--
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-xc</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+-->
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>${validation-api.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -96,16 +255,8 @@
       <artifactId>freemarker</artifactId>
       <version>${freemarker.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.gbif</groupId>
-      <artifactId>gbif-common</artifactId>
-      <version>${gbif-common.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.gbif</groupId>
-      <artifactId>gbif-metadata-profile</artifactId>
-      <version>${gbif-metadata-profile.version}</version>
-    </dependency>
+
+    <!-- TEST -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
