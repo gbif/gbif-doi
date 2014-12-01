@@ -50,10 +50,17 @@
     <freemarker.version>2.3.21</freemarker.version>
     <gbif-common.version>0.16</gbif-common.version>
     <gbif-metadata-profile.version>1.98-SNAPSHOT</gbif-metadata-profile.version>
+    <gbif-api.version>0.16</gbif-api.version>
+    <jdkLevel>1.6</jdkLevel>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.gbif</groupId>
+      <artifactId>gbif-api</artifactId>
+      <version>${gbif-api.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.gbif</groupId>
       <artifactId>gbif-httputils</artifactId>
