@@ -1,7 +1,5 @@
 package org.gbif.doi.datacite.model;
 
-import org.gbif.doi.datacite.vocabulary.NameIdentifierScheme;
-
 import java.net.URI;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -18,10 +16,10 @@ public class NameIdentifier {
   public NameIdentifier() {
 
   }
-  public NameIdentifier(String nameIdentifier, NameIdentifierScheme scheme) {
+  public NameIdentifier(String nameIdentifier, String scheme, String uri) {
     this.nameIdentifier = nameIdentifier;
-    this.nameIdentifierScheme = scheme.getScheme();
-    this.schemeURI = scheme.getSchemaUri();
+    this.nameIdentifierScheme = scheme;
+    this.schemeURI = URI.create(uri);
   }
 
   public String getNameIdentifier() {

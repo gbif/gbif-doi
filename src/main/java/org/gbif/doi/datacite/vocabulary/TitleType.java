@@ -9,16 +9,19 @@ public enum TitleType {
   SUBTITLE("Subtitle"),
   TRANSLATED_TITLE("TranslatedTitle");
 
-  private final String printValue;
+  private final String value;
 
-   TitleType(String printValue) {
-     this.printValue = printValue;
+   TitleType(String value) {
+     this.value = value;
   }
 
+
   /**
-   * @return the TitleType as it should be printed in the XML document
+   * Return the appropriate XML value for the enum value.
+   * This allows us to configure Jackson directly to use this without special (de)serializers.
    */
-  public String getPrintValue() {
-    return printValue;
+  @Override
+  public String toString() {
+    return value;
   }
 }

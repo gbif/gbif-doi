@@ -1,14 +1,20 @@
 package org.gbif.doi.services;
 
+import org.gbif.api.vocabulary.Language;
 import org.gbif.doi.DoiRegistrarException;
 import org.gbif.doi.ErrorCode;
+import org.gbif.doi.datacite.LanguageSerde;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.net.MediaType;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -17,8 +23,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
@@ -32,6 +38,19 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseService {
 
   private static final Logger LOG = LoggerFactory.getLogger(BaseService.class);
+  @VisibleForTesting
+  protected final static XmlMapper xmlMapper;
+  static {
+    JacksonXmlModule module = new JacksonXmlModule();
+    module.setDefaultUseWrapper(true);
+    module.addSerializer(Language.class, LanguageSerde.serializer);
+    module.addDeserializer(Language.class, LanguageSerde.deserializer);
+    xmlMapper = new XmlMapper(module);
+    xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+    xmlMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+    xmlMapper.configure( ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+  }
+
   private final HttpClient httpClient;
   protected final UsernamePasswordCredentials credentials;
 
@@ -43,13 +62,13 @@ public abstract class BaseService {
   /**
    * Executes an HTTP POST request.
    *
-   * @param uri           to issue request against
-   * @param encodedEntity request body
+   * @param uri  to issue request against
+   * @param data request body content to be serialized as XML with jackson
    *
    * @throws org.gbif.doi.DoiRegistrarException in case anything goes wrong during the request, all underlying HTTP errors are mapped to
    *                          the appropriate {@link ErrorCode}s.
    */
-  public void postXml(URI uri, HttpEntity encodedEntity) throws DoiRegistrarException {
+  public void postXml(URI uri, Object data) throws DoiRegistrarException {
     LOG.info("Issuing POST request: {}", uri);
     HttpPost post = new HttpPost(uri);
 
@@ -58,8 +77,13 @@ public abstract class BaseService {
     post.addHeader(HTTP.CONTENT_TYPE, MediaType.APPLICATION_XML_UTF_8.toString());
 
     // body
-    if (encodedEntity != null) {
-      post.setEntity(encodedEntity);
+    if (data != null) {
+      try {
+        HttpEntity entity = new ByteArrayEntity(xmlMapper.writeValueAsBytes(data));
+        post.setEntity(entity);
+      } catch (JsonProcessingException e) {
+        throw new DoiRegistrarException(e, ErrorCode.IO_EXCEPTION);
+      }
     }
 
     // authentication
@@ -71,54 +95,8 @@ public abstract class BaseService {
       throw new DoiRegistrarException(e, ErrorCode.HTTP_ERROR);
     } catch (IOException e) {
       throw new DoiRegistrarException(e, ErrorCode.IO_EXCEPTION);
-    }
-
-    // Everything but HTTP status 201 is an error
-    if (response.getStatusLine().getStatusCode() != 201) {
-      LOG.debug("Received HTTP code[{}] cause[{}] for request: {}", response.getStatusLine().getStatusCode(),
-        response.getStatusLine().getReasonPhrase(), uri);
-      String cause = String.format("Received HTTP code[%d], phrase[%s]", response.getStatusLine().getStatusCode(),
-        response.getStatusLine().getReasonPhrase());
-      throw new DoiRegistrarException(cause, ErrorCode.HTTP_ERROR);
-    }
-  }
-
-  /**
-   * Executes an HTTP PUT request.
-   *
-   * @param uri           to issue request against
-   * @param headers       HTTP headers
-   * @param encodedEntity request body
-   *
-   * @throws org.gbif.doi.DoiRegistrarException in case anything goes wrong during the request, all underlying HTTP errors are mapped to
-   *                          the appropriate {@link ErrorCode}s.
-   */
-  public void doPut(URI uri, Map<String, String> headers, HttpEntity encodedEntity)
-    throws DoiRegistrarException {
-    LOG.info("Issuing PUT request: {}", uri);
-    HttpPut put = new HttpPut(uri);
-
-    // http header
-    if (headers != null) {
-      for (Map.Entry<String, String> header : headers.entrySet()) {
-        put.addHeader(StringUtils.trimToEmpty(header.getKey()), StringUtils.trimToEmpty(header.getValue()));
-      }
-    }
-
-    // body
-    if (encodedEntity != null) {
-      put.setEntity(encodedEntity);
-    }
-
-    // authentication
-    HttpResponse response;
-    try {
-      HttpContext authContext = buildContext(uri, credentials);
-      response = httpClient.execute(put, authContext);
-    } catch (ClientProtocolException e) {
-      throw new DoiRegistrarException(e, ErrorCode.HTTP_ERROR);
-    } catch (IOException e) {
-      throw new DoiRegistrarException(e, ErrorCode.IO_EXCEPTION);
+    } catch (Throwable e) {
+      throw new DoiRegistrarException(e, ErrorCode.OTHER_ERROR);
     }
 
     // Everything but HTTP status 201 is an error

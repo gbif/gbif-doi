@@ -15,16 +15,19 @@ public enum DateType {
   UPDATED("Updated"),
   VALID("Valid");
 
-  private final String printValue;
+  private final String value;
 
-  DateType(String printValue) {
-    this.printValue = printValue;
+  DateType(String value) {
+    this.value = value;
   }
 
+
   /**
-   * @return @return the DateType as it should be printed in the XML document
+   * Return the appropriate XML value for the enum value.
+   * This allows us to configure Jackson directly to use this without special (de)serializers.
    */
-  public String getPrintValue() {
-    return printValue;
+  @Override
+  public String toString() {
+    return value;
   }
 }

@@ -27,16 +27,18 @@ public enum ContributorType {
   WORK_PACKAGE_LEADER("WorkPackageLeader"),
   OTHER("Other");
 
-  private final String printValue;
+  private final String value;
 
-  ContributorType(String printValue) {
-    this.printValue = printValue;
+  ContributorType(String value) {
+    this.value = value;
   }
 
   /**
-   * @return the AgentType as it should be printed in the XML document
+   * Return the appropriate XML value for the enum value.
+   * This allows us to configure Jackson directly to use this without special (de)serializers.
    */
-  public String getPrintValue() {
-    return printValue;
+  @Override
+  public String toString() {
+    return value;
   }
 }

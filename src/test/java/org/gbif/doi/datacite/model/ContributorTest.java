@@ -1,7 +1,6 @@
 package org.gbif.doi.datacite.model;
 
 import org.gbif.doi.datacite.vocabulary.ContributorType;
-import org.gbif.doi.datacite.vocabulary.NameIdentifierScheme;
 
 import org.junit.Test;
 
@@ -12,7 +11,7 @@ public class ContributorTest {
   public static final Contributor contributer =
     (Contributor) Contributor.builder().type(ContributorType.DATA_MANAGER)
       .name("Thompson, Will")
-      .identifier(new NameIdentifier("http://orcid.org/0000-0002-1825-0066", NameIdentifierScheme.ORCID))
+      .identifier(new NameIdentifier("http://orcid.org/0000-0002-1825-0066", "ORCID", "orcid.org"))
       .appendAffiliation("NHM").build();
 
   @Test
@@ -26,7 +25,7 @@ public class ContributorTest {
   public static void verifyTypedAgent(Contributor agent) {
     assertEquals("Thompson, Will", agent.getName());
     assertEquals("http://orcid.org/0000-0002-1825-0066", agent.getNameIdentifier().getNameIdentifier());
-    assertEquals(NameIdentifierScheme.ORCID.getScheme(), agent.getNameIdentifier().getNameIdentifierScheme());
+    assertEquals("ORCID", agent.getNameIdentifier().getNameIdentifierScheme());
     assertEquals(ContributorType.DATA_MANAGER, agent.getType());
     assertEquals("NHM", agent.getAffiliations().get(0));
   }

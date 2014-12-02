@@ -11,17 +11,19 @@ public enum DescriptionType {
   TABLE_OF_CONTENTS("TableOfContents"),
   OTHER("Other");
 
-  private final String printType;
+  private final String value;
 
-  DescriptionType(String printType) {
-    this.printType = printType;
+  DescriptionType(String value) {
+    this.value = value;
 
   }
 
   /**
-   * @return the DescriptionType as it should be printed in the XML document
+   * Return the appropriate XML value for the enum value.
+   * This allows us to configure Jackson directly to use this without special (de)serializers.
    */
-  public String getPrintType() {
-    return printType;
+  @Override
+  public String toString() {
+    return value;
   }
 }

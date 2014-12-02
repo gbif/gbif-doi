@@ -6,9 +6,11 @@ package org.gbif.doi.datacite.vocabulary;
  */
 public enum RelatedIdentifierType {
   ARK("ARK"),
+  AR_XIV("arXiv"),
+  BIBCODE("bibcode"),
   DOI("DOI"),
-  EAN13("EAN13"),
-  EISN("EISN"),
+  EAN_13("EAN13"),
+  EISSN("EISSN"),
   HANDLE("Handle"),
   ISBN("ISBN"),
   ISSN("ISSN"),
@@ -21,16 +23,19 @@ public enum RelatedIdentifierType {
   URL("URL"),
   URN("URN");
 
-  private final String printType;
+  private final String value;
 
-   RelatedIdentifierType(String printType) {
-     this.printType = printType;
+   RelatedIdentifierType(String value) {
+     this.value = value;
   }
 
+
   /**
-   * @return the RelatedIdentifierType as it should be printed in the XML document
+   * Return the appropriate XML value for the enum value.
+   * This allows us to configure Jackson directly to use this without special (de)serializers.
    */
-  public String getPrintType() {
-    return printType;
+  @Override
+  public String toString() {
+    return value;
   }
 }

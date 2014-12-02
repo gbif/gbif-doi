@@ -2,9 +2,9 @@ package org.gbif.doi.datacite.vocabulary;
 
 /**
  * Enumeration representing the controlled vocabulary in the DataCite metadata schema version 3 for the different types
- * of general resource types.
+ * of resources.
  */
-public enum ResourceTypeGeneral {
+public enum ResourceType {
   AUDIOVISUAL("Audiovisual"),
   COLLECTION("Collection"),
   DATASET("Dataset"),
@@ -20,16 +20,18 @@ public enum ResourceTypeGeneral {
   WORKFLOW("Workflow"),
   OTHER("Other");
 
-  private final String printType;
+  private final String value;
 
-  ResourceTypeGeneral(String printType) {
-   this.printType = printType;
+  ResourceType(String value) {
+   this.value = value;
   }
 
   /**
-   * @return the ResourceTypeGeneral as it should be printed in the XML document
+   * Return the appropriate XML value for the enum value.
+   * This allows us to configure Jackson directly to use this without special (de)serializers.
    */
-  public String getPrintType() {
-    return printType;
+  @Override
+  public String toString() {
+    return value;
   }
 }

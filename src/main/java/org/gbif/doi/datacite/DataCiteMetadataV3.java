@@ -11,8 +11,8 @@ import org.gbif.doi.datacite.model.RelatedIdentifier;
 import org.gbif.doi.datacite.model.Subject;
 import org.gbif.doi.datacite.model.TypedDate;
 import org.gbif.doi.datacite.model.TypedDescription;
+import org.gbif.doi.datacite.model.TypedResource;
 import org.gbif.doi.datacite.model.TypedTitle;
-import org.gbif.doi.datacite.vocabulary.ResourceTypeGeneral;
 
 import java.net.URI;
 import java.util.List;
@@ -46,8 +46,7 @@ public class DataCiteMetadataV3 {
     private Integer publicationYear;
     private List<Subject> subjects = Lists.newArrayList();
     private Language language = Language.ENGLISH; // default
-    private ResourceTypeGeneral resourceTypeGeneral;
-    private String resourceType;
+    private TypedResource resourceType;
     private List<AlternateIdentifier> alternateIdentifiers = Lists.newArrayList();
     private List<RelatedIdentifier> relatedIdentifiers = Lists.newArrayList();
     private List<String> sizes = Lists.newArrayList();
@@ -168,12 +167,7 @@ public class DataCiteMetadataV3 {
       return this;
     }
 
-    public Builder resourceTypeGeneral(ResourceTypeGeneral resourceTypeGeneral) {
-      this.resourceTypeGeneral = resourceTypeGeneral;
-      return this;
-    }
-
-    public Builder resourceType(String resourceType) {
+    public Builder resourceType(TypedResource resourceType) {
       this.resourceType = resourceType;
       return this;
     }
@@ -207,10 +201,10 @@ public class DataCiteMetadataV3 {
 
   private static final IdentifierType IDENTIFIER_TYPE = IdentifierType.DOI;
 
-  @JsonProperty("identifier")
+  @JacksonXmlProperty(localName = "nameIdentifier")
   private DOI doi;
-  @JacksonXmlProperty(localName = "identifierType", isAttribute = true)
-  private String dummy = "DOI";
+  //@JacksonXmlProperty(localName = "identifierType", isAttribute = true)
+  //private String dummy = "DOI";
 
   @JacksonXmlElementWrapper(localName = "creators")
   @JsonProperty("creator")
@@ -241,8 +235,7 @@ public class DataCiteMetadataV3 {
   private String publisher;
   private Integer publicationYear;
   private Language language = Language.ENGLISH; // defaults to English
-  private ResourceTypeGeneral resourceTypeGeneral;
-  private String resourceType;
+  private TypedResource resourceType;
   private String version;
   private URI licenseUri;
   private String licenseTitle;
@@ -267,7 +260,7 @@ public class DataCiteMetadataV3 {
     this.publisher = builder.publisher;
     this.publicationYear = builder.publicationYear;
     this.language = builder.language;
-    this.resourceTypeGeneral = builder.resourceTypeGeneral;
+    this.resourceType = builder.resourceType;
     this.resourceType = builder.resourceType;
     this.version = builder.version;
     this.licenseUri = builder.licenseUri;
@@ -371,27 +364,14 @@ public class DataCiteMetadataV3 {
   }
 
   /**
-   * If ResourceType is used, resourceTypeGeneral is mandatory.
-   *
-   * @return the general type of a resource
-   */
-  public ResourceTypeGeneral getResourceTypeGeneral() {
-    return resourceTypeGeneral;
-  }
-
-  public void setResourceTypeGeneral(ResourceTypeGeneral resourceTypeGeneral) {
-    this.resourceTypeGeneral = resourceTypeGeneral;
-  }
-
-  /**
    * @return free text description of the resource, whose preferred format is a single term of some detail so that a
    * pair can be formed with the sub‐property, e.g. Dataset/Census Data.
    */
-  public String getResourceType() {
+  public TypedResource getResourceType() {
     return resourceType;
   }
 
-  public void setResourceType(String resourceType) {
+  public void setResourceType(TypedResource resourceType) {
     this.resourceType = resourceType;
   }
 

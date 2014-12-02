@@ -1,5 +1,7 @@
 package org.gbif.doi.datacite.model;
 
+import org.gbif.doi.datacite.vocabulary.DateType;
+
 import java.io.Serializable;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -15,14 +17,14 @@ public class TypedDate implements Serializable {
   public static class Builder {
 
     private String dates;
-    private String type;
+    private DateType type;
 
     public Builder dates(String dates) {
       this.dates = dates;
       return this;
     }
 
-    public Builder type(String type) {
+    public Builder type(DateType type) {
       this.type = type;
       return this;
     }
@@ -42,7 +44,7 @@ public class TypedDate implements Serializable {
   @JacksonXmlText()
   private String dates;
   @JacksonXmlProperty(localName = "dateType", isAttribute = true)
-  private String type;
+  private DateType type;
 
   public TypedDate() {
   }
