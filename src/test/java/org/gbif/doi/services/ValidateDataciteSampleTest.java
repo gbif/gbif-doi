@@ -20,7 +20,7 @@ public class ValidateDataciteSampleTest {
   @Test
   public void validateSample() throws IOException, SAXException {
     // DataCite metadata file to validate
-    DataciteValidator.validateMetadata(FileUtils.classpathStream("metadata/datacite_sample.xml"));
+    DataciteValidator.validateMetadata(FileUtils.classpathStream("metadata/datacite-example-full-v3.1.xml"));
   }
 
 }

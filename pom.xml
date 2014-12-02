@@ -32,7 +32,20 @@
       <id>gbif-all</id>
       <url>http://repository.gbif.org/content/groups/gbif</url>
     </repository>
+    <repository>
+      <id>jaxb2-plugins</id>
+      <name>JAXB2 XJC Plugin Repository</name>
+      <url>http://maven.klemm-scs.com/release</url>
+    </repository>
   </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jaxb2-plugins</id>
+      <name>JAXB2 XJC Plugin Repository</name>
+      <url>http://maven.klemm-scs.com/release</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <properties>
     <jdkLevel>1.6</jdkLevel>
@@ -60,68 +73,11 @@
     <mockito.version>1.10.8</mockito.version>
     <slf4j-api.version>1.7.7</slf4j-api.version>
     <validation-api.version>1.1.0.Final</validation-api.version>
-    <metadata.schema.url>http://schema.datacite.org/meta/kernel-3/metadata.xsd</metadata.schema.url>
-    <jaxb-xjc.distdir>${basedir}/src/main/jaxb-xjc</jaxb-xjc.distdir>
-    <internal.repo.path>file://${basedir}/../datacite-maven-repos/</internal.repo.path>
   </properties>
 
 
   <build>
-      <!--
-        Generates source from the XSD using plugins to provide immutable
-     classes, fluent builders, annotations for selected @XmlRootElement and guava
-     based equals, toString and hashcode.
-     See also:
-     - https://github.com/mklemm/jaxb2-rich-contract-plugin (immutable and builders)
-     - https://github.com/danielwegener/xjc-guava-plugin (guava helpers)
-   -->
-
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.7</version>
-        <executions>
-          <execution>
-            <id>clean-xjc-output</id>
-            <phase>clean</phase>
-            <configuration>
-              <target>
-                <delete dir="${jaxb-xjc.distdir}" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>xjc</id>
-            <phase>generate-sources</phase>
-            <configuration>
-              <target>
-                <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${jaxb-xjc.distdir}" />
-                <xjc schema="${metadata.schema.url}" destdir="${jaxb-xjc.distdir}" package="org.gbif.datacite.kernel3.metadata">
-                  <classpath refid="maven.compile.classpath" />
-                  <depends dir="${basedir}/src/main/resources" includes="metadata.xsd" />
-                  <produces dir="${jaxb-xjc.distdir}" includes="**/*" />
-                </xjc>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-xjc</artifactId>
-            <version>2.1.10</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <!-- Inform IDEs that the generated sources are on the CP -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -135,11 +91,81 @@
             </goals>
             <configuration>
               <sources>
-                <source>${jaxb-xjc.distdir}</source>
+                <source>${project.basedir}/src/main/java-generated</source>
               </sources>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <!--
+     Generates source from the XSD using plugins to provide immutable
+     classes, fluent builders, annotations for selected @XmlRootElement and guava
+     based equals, toString and hashcode.
+     See also:
+     - https://github.com/mklemm/jaxb2-rich-contract-plugin (immutable and builders)
+     - https://github.com/danielwegener/xjc-guava-plugin (guava helpers)
+   -->
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>${maven-jaxb2-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>xsd-generate-2.1</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <forceRegenerate>true</forceRegenerate>
+          <removeOldOutput>true</removeOldOutput>
+          <generatePackage>org.gbif.doi.datacite</generatePackage>
+          <generateDirectory>${project.basedir}/src/main/java-generated</generateDirectory>
+          <bindingDirectory>src/main/resources</bindingDirectory>
+          <schemas>
+            <schema>
+              <url>http://schema.datacite.org/meta/kernel-3/metadata.xsd</url>
+            </schema>
+          </schemas>
+          <args>
+            <!--
+            <arg>-Ximmutable</arg>
+            -->
+            <arg>-Xannotate</arg>
+            <arg>-Xfluent-builder</arg>
+            <arg>-Xguava</arg>
+          </args>
+          <plugins>
+            <!-- Required for immutable and builder pattern -->
+            <plugin>
+              <groupId>com.kscs.util</groupId>
+              <artifactId>jaxb2-rich-contract-plugin</artifactId>
+              <version>${jaxb2-rich-contract-plugin.version}</version>
+            </plugin>
+            <!-- Required for @XmlRootElement -->
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics-annotate</artifactId>
+              <version>${jaxb2_commons.version}</version>
+            </plugin>
+            <!-- Required for @XmlRootElement -->
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>jaxb2-basics</artifactId>
+              <version>${jaxb2_commons.version}</version>
+            </plugin>
+            <!-- Required for Guava based equals etc. -->
+            <plugin>
+              <groupId>com.github.danielwegener.xjc</groupId>
+              <artifactId>xjc-guava-plugin</artifactId>
+              <version>${xjc-guava-plugin.version}</version>
+            </plugin>
+          </plugins>
+        </configuration>
+
       </plugin>
     </plugins>
   </build>
