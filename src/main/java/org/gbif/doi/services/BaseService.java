@@ -1,19 +1,18 @@
 package org.gbif.doi.services;
 
-import org.gbif.api.vocabulary.Language;
 import org.gbif.doi.DoiRegistrarException;
 import org.gbif.doi.ErrorCode;
-import org.gbif.doi.datacite.LanguageSerde;
+import org.gbif.doi.datacite.DataCiteMetadataV3;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URI;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Charsets;
 import com.google.common.net.MediaType;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -38,25 +37,23 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseService {
 
   private static final Logger LOG = LoggerFactory.getLogger(BaseService.class);
-  @VisibleForTesting
-  protected final static XmlMapper xmlMapper;
-  static {
-    JacksonXmlModule module = new JacksonXmlModule();
-    module.setDefaultUseWrapper(true);
-    module.addSerializer(Language.class, LanguageSerde.serializer);
-    module.addDeserializer(Language.class, LanguageSerde.deserializer);
-    xmlMapper = new XmlMapper(module);
-    xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
-    xmlMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-    xmlMapper.configure( ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
-  }
 
   private final HttpClient httpClient;
   protected final UsernamePasswordCredentials credentials;
+  private final Unmarshaller deserilizer;
+  private final Marshaller serilizer;
 
   protected BaseService(HttpClient httpClient, String username, String password) {
     this.httpClient = httpClient;
     this.credentials = new UsernamePasswordCredentials(username, password);
+    try {
+      JAXBContext context = JAXBContext.newInstance(DataCiteMetadataV3.class);
+      deserilizer = context.createUnmarshaller();
+      serilizer = context.createMarshaller();
+      serilizer.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+    } catch (JAXBException e) {
+      throw new IllegalStateException("Fail to setup JAXB", e);
+    }
   }
 
   /**
@@ -79,9 +76,12 @@ public abstract class BaseService {
     // body
     if (data != null) {
       try {
-        HttpEntity entity = new ByteArrayEntity(xmlMapper.writeValueAsBytes(data));
+        StringWriter writer = new StringWriter();
+        serilizer.marshal(data, writer);
+        writer.close();
+        HttpEntity entity = new ByteArrayEntity(writer.toString().getBytes(Charsets.UTF_8));
         post.setEntity(entity);
-      } catch (JsonProcessingException e) {
+      } catch (Exception e) {
         throw new DoiRegistrarException(e, ErrorCode.IO_EXCEPTION);
       }
     }
