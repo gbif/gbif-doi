@@ -1,44 +1,41 @@
 package org.gbif.doi.services;
 
 import org.gbif.api.vocabulary.Language;
-import org.gbif.doi.datacite.DataCiteMetadataV3;
-import org.gbif.doi.datacite.model.Contributor;
-import org.gbif.doi.datacite.model.Creator;
-import org.gbif.doi.datacite.model.NameIdentifier;
-import org.gbif.doi.datacite.model.TypedDate;
-import org.gbif.doi.datacite.model.TypedTitle;
-import org.gbif.doi.datacite.vocabulary.ContributorType;
-import org.gbif.doi.datacite.vocabulary.DateType;
-import org.gbif.doi.datacite.vocabulary.TitleType;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata;
+import org.gbif.doi.metadata.datacite.ResourceType;
+import org.gbif.doi.metadata.datacite.TitleType;
 
+import junit.framework.TestCase;
 import org.junit.Test;
 
-public class BaseServiceTest {
+public class BaseServiceTest extends TestCase {
+
+  static class FakeService extends BaseService {
+    protected FakeService() {
+      super(null, "", "");
+    }
+  }
 
   @Test
-  public void testXmlSerde() throws Exception {
+  public void testToXml() throws Exception {
+    BaseService bs = new FakeService();
 
-    DataCiteMetadataV3 d = DataCiteMetadataV3.builder().doi("doi:10.1038/nature01851").appendCreator(
-      Creator.builder().identifier(new NameIdentifier("me23", "ORCID", "orcid.org")).appendAffiliation("GBIF")
-        .appendAffiliation("TDWG").name("Markus").build()).appendCreator(
-      Creator.builder().identifier(new NameIdentifier("him24", "ORCID", "orcid.org")).name("Klaas").build())
-      .appendFormat("xml").appendFormat("json").appendSize("10MB").appendTypedTitle(
-        TypedTitle.builder().title("Hau chanit").language(Language.AFRIKAANS).type(TitleType.TRANSLATED_TITLE).build())
-      .appendTypedTitle(
-        TypedTitle.builder().title("Hallo").language(Language.ENGLISH).type(TitleType.ALTERNATIVE_TITLE).build())
-      .appendContributor(
-        Contributor.builder().identifier(new NameIdentifier("me23", "ORCID", "orcid.org")).appendAffiliation("GBIF")
-          .appendAffiliation("TDWG").name("Markus").type(ContributorType.DATA_MANAGER).build()).appendContributor(
-        Contributor.builder().identifier(new NameIdentifier("him24", "ORCID", "orcid.org")).name("Klaas")
-          .type(ContributorType.CONTACT_PERSON).build())
-      .appendTypedDate(TypedDate.builder().dates("2014").type(DateType.UPDATED).build())
-      .appendTypedDate(TypedDate.builder().dates("1987-03-01").type(DateType.CREATED).build())
-      .language(Language.AFRIKAANS).build();
+    DataCiteMetadata d = DataCiteMetadata.builder()
+      .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
+      .withCreators()
+      .addCreator().withCreatorName("Markus")
+      .withNameIdentifier().withNameIdentifierScheme("ORCID").withSchemeURI("orcid.org").withValue("12445322").end()
+      .end()
+      .end()
+      .withTitles()
+      .addTitle().withValue("My Title").withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(
+        TitleType.TRANSLATED_TITLE).end()
+      .end()
+      .build();
 
-    String xml = BaseService.xmlMapper.writeValueAsString(d);
+    String xml = bs.toXml(d);
     System.out.println(xml);
 
     DataciteValidator.validateMetadata(xml);
-
   }
 }

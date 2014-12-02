@@ -1,7 +1,7 @@
 .DS_Store
 .idea/
 *.iml
-java-generated/
+java-xjc/
 logs/
 *.class
 target/

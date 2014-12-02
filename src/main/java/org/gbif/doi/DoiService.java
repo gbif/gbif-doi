@@ -1,13 +1,33 @@
 package org.gbif.doi;
 
-import org.gbif.doi.datacite.DataCiteMetadataV3;
-
 import org.gbif.api.model.common.DOI;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata;
+
+import java.net.URI;
 
 public interface DoiService {
 
   /**
-   * Reserves an identifier. The identifier status is set to RESERVED.
+   * Resolves the identifier to its URL.
+   * @param doi the identifier to get metadata for
+   * @return the URL the DOI is backed by
+   *
+   * @throws DoiException if the operation failed for any reason
+   */
+  URI get(DOI doi) throws DoiException;
+
+  /**
+   * Get the metadata for an identifier. If possible a DataCiteMetadata instance is returned, otherwise just
+   * the XML String of whatever other format.
+   *
+   * @param doi the identifier to get metadata for
+   *
+   * @throws DoiException if the operation failed for any reason
+   */
+  Object getMetadata(DOI doi) throws DoiException;
+
+  /**
+   * Reserves a new identifier. The identifier status is set to RESERVED.
    * </br>
    * With DataCite, this is done by sending a POST request with the XML metadata (as the request body) to
    * https://mds.xsd.datacite.org/metadata. The DOI is specified inside the metadata.
@@ -15,18 +35,27 @@ public interface DoiService {
    * With EZID, this is done by sending a PUT request to http://ezid.cdlib.org/id/{id} where {id} is a unique id
    * with shoulder/namespace prefix, and by setting the "_status" metadata element to "reserved".
    *
-   * @param metadata the metadata to be associated with the doi
+   * @param metadata the metadata to be associated with the doi. The identifier inside the metadata will be overwritten
+   *                 by the doi parameter given
    * @param doi the identifier to reserve
-   * @param publisher the publishing organisation name
-   * @param resourceType term describing what type of data set is described
    *
-   * @throws DoiRegistrarException if the operation failed for any reason
+   * @throws DoiException if the operation failed for any reason
    */
-  void reserve(DOI doi, DataCiteMetadataV3 metadata, String publisher, String resourceType) throws
-    DoiRegistrarException;
+  void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException;
 
   /**
-   * Registers (makes public) an identifier that has been reserved, causing it to be registered with resolvers and
+   * Mints a new random identifier with the given DOI prefix and reserves it.
+   *
+   * @param metadata the metadata to be associated with the doi. The identifier inside the metadata will be overwritten
+   *                 by the generated DOI
+   * @param prefix the identifier prefix to use to generate the random DOI
+   *
+   * @throws DoiException if the operation failed for any reason
+   */
+  DOI reserveRandom(String prefix, DataCiteMetadata metadata) throws DoiException;
+
+  /**
+   * Registers an identifier that has been reserved, causing it to be publicly registered with resolvers and
    * other external services.
    * </br>
    * With DataCite, this is done by sending a POST request with the  DOI and URL (as the request body) to
@@ -34,72 +63,33 @@ public interface DoiService {
    * </br>
    * With EZID, this can be done by updating the "_status" metadata element from "reserved" to "public".
    *
-   * @param doi the identifier to make public
+   * @param doi the identifier to register
    *
-   * @throws DoiRegistrarException if the operation failed for any reason
+   * @throws DoiException if the operation failed for any reason
    */
-  void makePublic(DOI doi) throws DoiRegistrarException;
+  void register(DOI doi, DataCiteMetadata metadata) throws DoiException;
 
   /**
-   * Get the metadata for an identifier.
-   * </br>
-   * With DataCite, this is done by sending a GET request to https://mds.xsd.datacite.org/metadata.
-   * </br>
-   * With EZID, this is done by sending a GET request to http://ezid.cdlib.org/id/{id}.
-   *
-   * @param doi the identifier to get metadata for
-   *
-   * @throws DoiRegistrarException if the operation failed for any reason
-   */
-  DataCiteMetadataV3 getMetadata(DOI doi) throws DoiRegistrarException;
-
-  /**
-   * Deletes an identifier that has only been reserved.
+   * Tries to delete an identifier. If the DOI has only been reserved it will be fully deleted,
+   * if it was registered before it's status will become unavailable.
+   * You can register an unavailable DOI again if needed.
    * </br>
    * With DataCite, this is done by sending a DELETE request to https://mds.xsd.datacite.org/metadata, which inactivates
    * the DOI.
    * </br>
-   * With EZID, this is done by sending a DELETE request to http://ezid.cdlib.org/id/{id}.
+   * With EZID, this is done by sending a DELETE request to http://ezid.cdlib.org/id/{id}
+   * or by setting the "_status" metadata element to "unavailable" for registered DOIs.
    *
    * @param doi the identifier to delete
+   * @return true if the DOI was fully deleted, false if it became unavailable
    *
-   * @throws DoiRegistrarException if the operation failed for any reason
+   * @throws DoiException if the operation failed for any reason
    */
-  void delete(DOI doi) throws DoiRegistrarException;
+  boolean delete(DOI doi) throws DoiException;
 
   /**
-   * Makes a public identifier unavailable, causing the identifier to be removed from any external services. The
-   * identifier is still public, but the object referenced by the identifier is not available any longer.
-   * </p>
-   * With DataCite, this is done by sending a DELETE request to https://mds.xsd.datacite.org/metadata, which inactivates
-   * the DOI.
-   * </br>
-   * With EZID, this is done by setting the "_status" metadata element to "unavailable".
-   *
-   * @param doi the identifier to make unavailable
-   *
-   * @throws DoiRegistrarException if the operation failed for any reason
-   */
-  void makeUnavailable(DOI doi) throws DoiRegistrarException;
-
-  /**
-   * Makes an unavailable identifier public again, causing the identifier to be re-registered with external services.
-   * The object referenced by the identifier becomes available again.
-   * </br>
-   * With DataCite, this is done by sending a POST request with XML metadata (as the request body) to
-   * https://mds.xsd.datacite.org/metadata.
-   * </br>
-   * With EZID, this is done by switching the "_status" metadata element from "unavailable" to "public".
-   *
-   * @param doi the identifier to make available
-   *
-   * @throws DoiRegistrarException if the operation failed for any reason
-   */
-  void makeAvailable(DOI doi) throws DoiRegistrarException;
-
-  /**
-   * Updates the identifier metadata. This method must be called every time the object referenced by the identifier
-   * changes (e.g. a gets republished, a data set is replaced by a new major version, etc).
+   * Updates the identifier metadata. This method must be called every time the object or metadata referenced by
+   * the identifier changes (e.g. a gets republished, a data set is replaced by a new major version, etc).
    * </br>
    * With DataCite, this is done by sending a POST request with XML metadata (as the request body) to
    * https://mds.xsd.datacite.org/metadata.
@@ -109,7 +99,7 @@ public interface DoiService {
    *
    * @param doi the identifier of metadata to update
    *
-   * @throws DoiRegistrarException if the operation failed for any reason
+   * @throws DoiException if the operation failed for any reason
    */
-  void updateMetadata(DOI doi, DataCiteMetadataV3 metadata) throws DoiRegistrarException;
+  void updateMetadata(DOI doi, DataCiteMetadata metadata) throws DoiException;
 }

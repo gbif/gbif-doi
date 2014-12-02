@@ -1,9 +1,9 @@
 package org.gbif.doi.services.ezid;
 
 import org.gbif.api.model.common.DOI;
-import org.gbif.doi.DoiRegistrarException;
+import org.gbif.doi.DoiException;
 import org.gbif.doi.DoiService;
-import org.gbif.doi.datacite.DataCiteMetadataV3;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.services.BaseService;
 
 import java.net.URI;
@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import org.apache.http.client.HttpClient;
 import org.slf4j.Logger;
@@ -30,68 +29,6 @@ public class EzidService extends BaseService implements DoiService {
     super(httpClient, username, password);
   }
 
-  @Override
-  public void reserve(DOI doi, DataCiteMetadataV3 metadata, String publisher, String resourceType) throws DoiRegistrarException {
-    LOG.info("Reserving identifier: {}", doi);
-/*    try {
-      // write metadata file
-      MetadataWriter.writeMetadataFile(f, eml, doi, publisher, resourceType);
-
-      // headers
-      Map<String, String> headers = Maps.newHashMap();
-      headers.put(HTTP.CONTENT_TYPE, CONTENT_TYPE);
-      headers.put("Accept", "text/plain");
-
-      // metadata (map) as body
-      HashMap<String, String> data = Maps.newHashMap();
-      String fromFile = FileUtils.readFileToString(f);
-      data.put("xsd.datacite", fromFile);
-      data.put("_status", StringUtils.lowerCase(IdentifierStatus.RESERVED.toString())); // must be lower case!
-      String anvl = serializeAsANVL(data);
-      StringEntity myEntity = new StringEntity(anvl, "UTF-8");
-
-      doPut(createEzidUri(doi), headers, myEntity);
-    } catch (IOException e) {
-      throw new DoiRegistrarException(e, ErrorCode.IO_EXCEPTION);
-    } catch (TemplateException e) {
-      throw new DoiRegistrarException(e, ErrorCode.IO_EXCEPTION);
-    } catch (URISyntaxException e) {
-      throw new DoiRegistrarException(e, ErrorCode.HTTP_ERROR);
-    }*/
-    throw new UnsupportedOperationException("Not Implemenented Yet");
-  }
-
-  @Override
-  public void makePublic(DOI doi) throws DoiRegistrarException {
-    // TODO
-  }
-
-  @Override
-  public DataCiteMetadataV3 getMetadata(DOI doi) throws DoiRegistrarException {
-    // TODO
-    return null;
-  }
-
-  @Override
-  public void delete(DOI doi) throws DoiRegistrarException {
-    // TODO
-  }
-
-  @Override
-  public void makeUnavailable(DOI doi) throws DoiRegistrarException {
-    // TODO
-  }
-
-  @Override
-  public void makeAvailable(DOI doi) throws DoiRegistrarException {
-    // TODO
-  }
-
-  @Override
-  public void updateMetadata(DOI doi, DataCiteMetadataV3 metadata) throws DoiRegistrarException {
-    // TODO
-  }
-
   /**
    * This creates the EZID URI, and ensures that it is formatted correctly, e.g.
    * E.g. http://ezid.cdlib.org/id/doi:10.nnnn/suffix Notice the DOI must start with the DOI access schema ("doi:").
@@ -99,14 +36,17 @@ public class EzidService extends BaseService implements DoiService {
    * The EZID URI is used to manipulate the identifier and is used as the address in the HTTP request.
    *
    * @param doi identifier
-   *
    * @return EZID URI
-   *
-   * @throws URISyntaxException if the the target URI could not be parsed
    */
-  @VisibleForTesting
-  protected URI createEzidUri(DOI doi) throws URISyntaxException {
-    return new URI(ID_ENDPOINT_URI + doi.toString());
+  public static URI ezidUri(DOI doi) {
+    if (doi != null) {
+      try {
+        return new URI(ID_ENDPOINT_URI + doi.toString());
+      } catch (URISyntaxException e) {
+        // can this happen?
+      }
+    }
+    return null;
   }
 
   /**
@@ -148,5 +88,47 @@ public class EzidService extends BaseService implements DoiService {
       return str.replace("%", "%25").replace("\n", "%0A").replace("\r", "%0D").replace(":", "%3A");
     }
     return "";
+  }
+
+  @Override
+  public URI get(DOI doi) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+  @Override
+  public Object getMetadata(DOI doi) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+  @Override
+  public void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+  @Override
+  public DOI reserveRandom(String prefix, DataCiteMetadata metadata) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+  @Override
+  public void register(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+  @Override
+  public boolean delete(DOI doi) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+  @Override
+  public void updateMetadata(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
   }
 }
