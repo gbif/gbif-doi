@@ -78,33 +78,16 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.7</version>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>${project.basedir}/src/main/java-generated</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <!--
-     Generates source from the XSD using plugins to provide immutable
+     Generates source from the XSD using plugins to provide
      classes, fluent builders, annotations for selected @XmlRootElement and guava
      based equals, toString and hashcode.
      See also:
      - https://github.com/mklemm/jaxb2-rich-contract-plugin (immutable and builders)
      - https://github.com/danielwegener/xjc-guava-plugin (guava helpers)
+
+     The plugin is not bound to any default lifecycle and needs to be executed manually to generate the code:
+     $mvn clean jaxb2:generate
    -->
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -113,13 +96,16 @@
         <executions>
           <execution>
             <id>xsd-generate-2.1</id>
-            <phase>generate-sources</phase>
+            <phase>none</phase>
             <goals>
               <goal>generate</goal>
             </goals>
           </execution>
         </executions>
         <configuration>
+          <!--
+          <verbose>true</verbose>
+          -->
           <forceRegenerate>true</forceRegenerate>
           <removeOldOutput>true</removeOldOutput>
           <generatePackage>org.gbif.doi.metadata.datacite</generatePackage>
