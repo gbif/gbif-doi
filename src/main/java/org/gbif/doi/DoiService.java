@@ -4,27 +4,19 @@ import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 
 import java.net.URI;
+import javax.annotation.Nullable;
 
 public interface DoiService {
 
   /**
-   * Resolves the identifier to its URL.
+   * Resolves the registered identifier to its URL.
    * @param doi the identifier to get metadata for
-   * @return the URL the DOI is backed by
+   * @return the URL the DOI is backed by or null if DOI does not exist or is only reserved
    *
    * @throws DoiException if the operation failed for any reason
    */
+  @Nullable
   URI get(DOI doi) throws DoiException;
-
-  /**
-   * Get the metadata for an identifier. If possible a DataCiteMetadata instance is returned, otherwise just
-   * the XML String of whatever other format.
-   *
-   * @param doi the identifier to get metadata for
-   *
-   * @throws DoiException if the operation failed for any reason
-   */
-  Object getMetadata(DOI doi) throws DoiException;
 
   /**
    * Reserves a new identifier. The identifier status is set to RESERVED.
@@ -49,25 +41,24 @@ public interface DoiService {
    * @param metadata the metadata to be associated with the doi. The identifier inside the metadata will be overwritten
    *                 by the generated DOI
    * @param prefix the identifier prefix to use to generate the random DOI
+   * @param length the length of the randomly generated suffix string. minimum 3, 5-10 is recommended.
    *
    * @throws DoiException if the operation failed for any reason
    */
-  DOI reserveRandom(String prefix, DataCiteMetadata metadata) throws DoiException;
+  DOI reserveRandom(String prefix, int length, DataCiteMetadata metadata) throws DoiException;
 
   /**
-   * Registers an identifier that has been reserved, causing it to be publicly registered with resolvers and
-   * other external services.
-   * </br>
-   * With DataCite, this is done by sending a POST request with the  DOI and URL (as the request body) to
-   * https://mds.xsd.datacite.org/doi.
-   * </br>
-   * With EZID, this can be done by updating the "_status" metadata element from "reserved" to "public".
+   * Registers an identifier that has been reserved and assigns it a URL for resolution.
+   * This causes the DOI to be publicly registered with resolvers and other external services.
+   * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain
+   * matching your account permissions.
    *
    * @param doi the identifier to register
+   * @param target the URL the DOI should resolve to
    *
    * @throws DoiException if the operation failed for any reason
    */
-  void register(DOI doi, DataCiteMetadata metadata) throws DoiException;
+  void register(DOI doi, URI target) throws DoiException;
 
   /**
    * Tries to delete an identifier. If the DOI has only been reserved it will be fully deleted,
@@ -101,5 +92,17 @@ public interface DoiService {
    *
    * @throws DoiException if the operation failed for any reason
    */
-  void updateMetadata(DOI doi, DataCiteMetadata metadata) throws DoiException;
+  void update(DOI doi, DataCiteMetadata metadata) throws DoiException;
+
+  /**
+   * Updates the registered identifiers target URL.
+   * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain
+   * matching your account permissions.
+   *
+   * @param doi the identifier of metadata to update
+   * @param target the new URL the DOI should resolve to
+   *
+   * @throws DoiException if the operation failed for any reason
+   */
+  void update(DOI doi, URI target) throws DoiException;
 }

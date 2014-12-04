@@ -1,11 +1,34 @@
 package org.gbif.doi.metadata.datacite;
 
+import org.gbif.api.model.common.DOI;
 import org.gbif.api.vocabulary.Language;
 
 import org.junit.Test;
 
 public class DataCiteMetadataTest {
-  
+
+  public static DataCiteMetadata testMetadata() {
+    return testMetadata(new DOI("10.5072/WDCC/CCSRNIES_SRES_B2"), "My Title");
+  }
+  public static DataCiteMetadata testMetadata(DOI doi, String title) {
+    return DataCiteMetadata.builder()
+      .withIdentifier().withValue(doi.getDoiName()).withIdentifierType("DOI").end()
+      .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
+      .withCreators()
+      .addCreator().withCreatorName("Markus")
+      .withNameIdentifier().withNameIdentifierScheme("ORCID").withSchemeURI("orcid.org").withValue("0000-0001-7757-1889").end()
+      .end()
+      .end()
+      .withTitles()
+      .addTitle().withValue(title).withLang(Language.ENGLISH.getIso3LetterCode()).end()
+      .addTitle().withValue("Meine Übersetzung").withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(
+        TitleType.TRANSLATED_TITLE).end()
+      .end()
+      .withPublicationYear("2014")
+      .withPublisher("Pensoft")
+      .build();
+  }
+
   @Test
   public void testObjectFactory() throws Exception {
     ObjectFactory of = new ObjectFactory();
@@ -39,18 +62,7 @@ public class DataCiteMetadataTest {
 
   @Test
   public void testBuilder() throws Exception {
-    DataCiteMetadata r = DataCiteMetadata.builder()
-      .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
-      .withCreators()
-      .addCreator().withCreatorName("Markus")
-      .withNameIdentifier().withNameIdentifierScheme("ORCID").withSchemeURI("orcid.org").withValue("12445322").end()
-      .end()
-      .end()
-      .withTitles()
-      .addTitle().withValue("My Title").withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(
-        TitleType.TRANSLATED_TITLE).end()
-      .end()
-      .build();
+    DataCiteMetadata r = testMetadata();
     System.out.print(r);
   }
 }

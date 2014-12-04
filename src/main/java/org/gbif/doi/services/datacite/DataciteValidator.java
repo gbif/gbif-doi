@@ -1,4 +1,4 @@
-package org.gbif.doi.services;
+package org.gbif.doi.services.datacite;
 
 import java.io.IOException;
 import java.io.InputStream;

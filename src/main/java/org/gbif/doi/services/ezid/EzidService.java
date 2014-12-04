@@ -5,6 +5,7 @@ import org.gbif.doi.DoiException;
 import org.gbif.doi.DoiService;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.services.BaseService;
+import org.gbif.doi.services.ServiceConfig;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.base.Strings;
-import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +26,8 @@ public class EzidService extends BaseService implements DoiService {
   private static final String CONTENT_TYPE = "text/plain;charset=UTF-8";
   private static final String ID_ENDPOINT_URI = "https://ezid.cdlib.org/id/";
 
-  public EzidService(HttpClient httpClient, String username, String password) {
-    super(httpClient, username, password);
+  public EzidService(CloseableHttpClient httpClient, ServiceConfig cfg) {
+    super(httpClient, cfg);
   }
 
   /**
@@ -97,25 +98,19 @@ public class EzidService extends BaseService implements DoiService {
   }
 
   @Override
-  public Object getMetadata(DOI doi) throws DoiException {
-    // TODO: Write implementation
-    throw new UnsupportedOperationException("Not implemented yet");
-  }
-
-  @Override
   public void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException {
     // TODO: Write implementation
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
   @Override
-  public DOI reserveRandom(String prefix, DataCiteMetadata metadata) throws DoiException {
+  public DOI reserveRandom(String prefix, int length, DataCiteMetadata metadata) throws DoiException {
     // TODO: Write implementation
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
   @Override
-  public void register(DOI doi, DataCiteMetadata metadata) throws DoiException {
+  public void register(DOI doi, URI target) throws DoiException {
     // TODO: Write implementation
     throw new UnsupportedOperationException("Not implemented yet");
   }
@@ -127,7 +122,13 @@ public class EzidService extends BaseService implements DoiService {
   }
 
   @Override
-  public void updateMetadata(DOI doi, DataCiteMetadata metadata) throws DoiException {
+  public void update(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    // TODO: Write implementation
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+  @Override
+  public void update(DOI doi, URI target) throws DoiException {
     // TODO: Write implementation
     throw new UnsupportedOperationException("Not implemented yet");
   }

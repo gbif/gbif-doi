@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<resource xmlns="http://datacite.org/schema/kernel-3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://datacite.org/schema/kernel-3 http://schema.datacite.org/meta/kernel-3/metadata.xsd">
+    <identifier identifierType="DOI">10.5072/GBIF-1417618682118093000</identifier>
+    <creators>
+        <creator>
+            <creatorName>Markus</creatorName>
+            <nameIdentifier nameIdentifierScheme="ORCID" schemeURI="orcid.org">0000-0001-7757-1889</nameIdentifier>
+        </creator>
+    </creators>
+    <titles>
+        <title xml:lang="eng">reserve test</title>
+        <title titleType="TranslatedTitle" xml:lang="deu">Meine Übersetzung</title>
+    </titles>
+    <publisher>Pensoft</publisher>
+    <publicationYear>2014</publicationYear>
+    <resourceType resourceTypeGeneral="Dataset"/>
+</resource>
