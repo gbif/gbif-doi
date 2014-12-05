@@ -1,4 +1,4 @@
-package org.gbif.doi.services.datacite;
+package org.gbif.doi.service.datacite;
 
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;

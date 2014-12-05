@@ -1,0 +1,16 @@
+success: doi:10.6084/M9.FIGSHARE.821213
+datacite.publisher: Figshare
+datacite: <?xml version="1.0"?>%0A<resource xmlns="http://datacite.org/schema/kernel-3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://datacite.org/schema/kernel-3 http://schema.datacite.org/meta/kernel-3/metadata.xsd"><identifier identifierType="DOI">10.6084/M9.FIGSHARE.821213</identifier><titles><title>5000 random journal article CrossRef DOIs from 2012</title></titles><publisher>Figshare</publisher><publicationYear>2013</publicationYear><resourceType resourceTypeGeneral="Dataset">Dataset</resourceType><rightsList><rights rightsURI="http://creativecommons.org/licenses/by/3.0/us/">CC-BY</rights></rightsList><creators><creator><creatorName>Martin Fenner</creatorName><nameIdentifier nameIdentifierScheme="ORCID">0000-0002-2184-6094</nameIdentifier></creator><creator><creatorName>Zohreh Zahedi</creatorName></creator></creators></resource>
+_profile: datacite
+_export: yes
+datacite.creator: Martin Fenner; Zohreh Zahedi
+datacite.publicationyear: 2013
+_datacenter: CDL.DIGSCI
+_updated: 1404458801
+_target: http://figshare.com/articles/5000_random_journal_article_CrossRef_DOIs_from_2012/821213
+datacite.title: 5000 random journal article CrossRef DOIs from 2012
+_ownergroup: digitalsci
+_owner: figshare
+_shadowedby: ark:/b6084/m9.figshare.821213
+_created: 1381610390
+_status: public

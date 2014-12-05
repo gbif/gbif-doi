@@ -1,4 +1,4 @@
-package org.gbif.doi.services.datacite;
+package org.gbif.doi.service.datacite;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +31,7 @@ public class DataciteValidator {
     if (DATACITE_VALIDATOR == null) {
       // define the type of schema - we use W3C:
       String schemaLang = "http://www.w3.org/2001/XMLSchema";
-      // get validation driver:
+      // resolve validation driver:
       SchemaFactory factory = SchemaFactory.newInstance(schemaLang);
       // create schema by reading it from an URL:
       //File f = FileUtils.getClasspathFile("datacite/metadata.xsd");

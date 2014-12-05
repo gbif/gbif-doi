@@ -1,4 +1,4 @@
-package org.gbif.doi.services;
+package org.gbif.doi.service;
 
 import java.net.URI;
 import javax.annotation.Nullable;
@@ -7,6 +7,14 @@ public class ServiceConfig {
   private URI api;
   private String username;
   private String password;
+
+  public ServiceConfig() {
+  }
+
+  public ServiceConfig(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
 
   /**
    * The base URL of the API the service implementation works against.
