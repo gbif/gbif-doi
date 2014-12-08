@@ -67,7 +67,7 @@ public class DataciteServiceIT extends DoiServiceIT {
     status = service.resolve(doi);
     System.out.println(status);
 
-    service.register(doi, TEST_TARGET);
+    service.register(doi, TEST_TARGET, meta);
     status = service.resolve(doi);
     System.out.println(status);
   }

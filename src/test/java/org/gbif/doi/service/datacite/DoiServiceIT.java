@@ -45,26 +45,20 @@ public abstract class DoiServiceIT {
     service.reserve(doi, meta);
     assertEquals(new DoiStatus(DoiStatus.Status.RESERVED, null), service.resolve(doi));
 
-    service.register(doi, TEST_TARGET);
+    service.register(doi, TEST_TARGET, meta);
     assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
 
     service.delete(doi);
     assertEquals(DoiStatus.Status.DELETED, service.resolve(doi).getStatus());
+
+    service.register(doi, TEST_TARGET, meta);
+    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
   }
 
   @Test
   public void test404() throws Exception {
     final DOI doi = newDoi();
     assertNull(service.resolve(doi));
-  }
-
-  @Test
-  public void testGet() throws Exception {
-    final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
-    service.reserve(doi, meta);
-    service.register(doi, TEST_TARGET);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
   }
 
   @Test
@@ -102,15 +96,14 @@ public abstract class DoiServiceIT {
   public void testDeleteRegistered() throws Exception {
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
-    service.reserve(doi, meta);
-    service.register(doi, TEST_TARGET);
+    service.register(doi, TEST_TARGET, meta);
     assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
     // now delete it to mark inactive (datacite) or set to unavailable (ezid)
     service.delete(doi);
     assertEquals(DoiStatus.Status.DELETED, service.resolve(doi).getStatus());
     // registering again should work
-    service.register(doi, TEST_TARGET);
-    assertEquals(TEST_TARGET, service.resolve(doi).getTarget());
+    service.register(doi, TEST_TARGET, meta);
+    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
   }
 
   @Test
@@ -119,7 +112,7 @@ public abstract class DoiServiceIT {
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
     service.reserve(doi, meta);
     assertEquals(new DoiStatus(DoiStatus.Status.RESERVED, null), service.resolve(doi));
-    service.register(doi, TEST_TARGET);
+    service.register(doi, TEST_TARGET, meta);
     assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
 
     final URI target2 = TEST_TARGET.resolve("subsub");
@@ -127,35 +120,51 @@ public abstract class DoiServiceIT {
     assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, target2), service.resolve(doi));
   }
 
-  @Test(expected = DoiException.class)
-  public void testRegister404() throws Exception {
+  @Test(expected = NullPointerException.class)
+  public void testRegisterNPE1() throws Exception {
     final DOI doi = newDoi();
-    service.register(doi, TEST_TARGET);
+    service.register(doi, null, null);
   }
 
+  @Test(expected = NullPointerException.class)
+  public void testRegisterNPE2() throws Exception {
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+    service.register(null, TEST_TARGET, meta);
+  }
 
+  @Test(expected = DoiException.class)
+  public void testDelete404() throws Exception {
+    final DOI doi = newDoi();
+    service.delete(doi);
+  }
+
+  @Test(expected = DoiException.class)
+  public void testUpdate404() throws Exception {
+    final DOI doi = newDoi();
+    service.update(doi, TEST_TARGET);
+  }
+
+  @Test(expected = DoiException.class)
+  public void testUpdateMeta404() throws Exception {
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+    service.update(doi, meta);
+  }
 
   @Test
   public void testRegister() throws Exception {
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
-    service.reserve(doi, meta);
-    service.register(doi, TEST_TARGET);
+    service.register(doi, TEST_TARGET, meta);
     assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
     try {
       // try again, this should fail!
-      service.register(doi, TEST_TARGET);
+      service.register(doi, TEST_TARGET, meta);
       fail("DOI was registered already, expected DoiExistsException");
     } catch (DoiException e) {
       System.out.println(e);
     }
-  }
-
-  @Test(expected = DoiException.class)
-  public void testRegisterFail() throws Exception {
-    final DOI doi = newDoi();
-    // registering without previous reservation should throw an error
-    service.register(doi, TEST_TARGET);
   }
 
 }

@@ -26,9 +26,6 @@ import org.slf4j.LoggerFactory;
 /**
  * This DataCite service implementation.
  * https://mds.datacite.org/static/apidoc
- *
- * Warning! The datacite implementation does not re-activate previously deleted DOIs when calling register() again.
- * You also need to update the DOI with new metadata to re-activate the DOI!!!
  */
 public class DataciteService extends BaseService {
 
@@ -125,18 +122,21 @@ public class DataciteService extends BaseService {
   }
 
   @Override
-  public void register(DOI doi, URI target) throws DoiException {
+  public void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(target);
+    Preconditions.checkNotNull(metadata);
     DoiStatus status = resolve(doi);
-    if (status == null) {
-      throw new DoiException("DOI does not exist");
-    }
-    if (DoiStatus.Status.REGISTERED == status.getStatus()) {
+    if (status != null && DoiStatus.Status.REGISTERED == status.getStatus()) {
       throw new DoiExistsException(doi);
     }
+    post(doi, metadataWs, metadata);
     authCall(buildDoiUrlPost(doi, target));
-    LOG.info("Registered {}", doi);
+    if (status != null && DoiStatus.Status.DELETED == status.getStatus()) {
+      LOG.info("Re-registered {}", doi);
+    } else {
+      LOG.info("Registered {}", doi);
+    }
   }
 
   @Override
@@ -151,6 +151,11 @@ public class DataciteService extends BaseService {
   public void update(DOI doi, DataCiteMetadata metadata) throws DoiException {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(metadata);
+
+    DoiStatus status = resolve(doi);
+    if (status == null || DoiStatus.Status.REGISTERED != status.getStatus()) {
+      throw new DoiException("DOI was not registered yet");
+    }
     post(doi, metadataWs, metadata);
     LOG.info("Updated metadata for {}", doi);
   }

@@ -46,30 +46,36 @@ public interface DoiService {
   DOI reserveRandom(String prefix, String shoulder, int length, DataCiteMetadata metadata) throws DoiException;
 
   /**
-   * Registers an identifier that has been reserved and assigns it a URL for resolution.
+   * Registers an identifier that is either brand new, has been reserved or is currently marked as deleted.
+   * It assigns the latest metadata and a URL for resolution.
    * This causes the DOI to be publicly registered with resolvers and other external services.
+   * <br/>
    * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain
    * matching your account permissions.
-   *
+   * <br/>
    * You can also call this method to re-register previously deleted, registered DOIs
-   * that are currently marked as inactive (DataCite) or unavailable (EZID).
+   * that are currently marked as inactive (DataCite) or unavailable (EZID). Because the API of these 2 implementations
+   * differ in how to re-register deleted DOIs (DataCite requires new metadata, EZID needs a new terget URL),
+   * we have to take both the metadata and the target URL as params.
    *
    * @param doi the identifier to register
    * @param target the URL the DOI should resolve to
+   * @param metadata the metadata to be associated with the doi. The identifier inside the metadata will be overwritten
+   *                 by the explicitly given DOI
    *
    * @throws DoiException if the operation failed for any reason
    * @throws DoiExistsException if the DOI was already registered
    */
-  void register(DOI doi, URI target) throws DoiExistsException, DoiException;
+  void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiExistsException, DoiException;
 
   /**
    * Tries to delete an identifier. If the DOI has only been reserved it will be fully deleted,
    * if it was registered before it cannot be deleted as DOIs are permanent identifier.
    * In DataCite a DOI will be marked as "inactive" though, in EZID as "unavailable".
-   * You can register an unavailable DOI again if needed.
+   * You can re-register a deleted DOI again if needed.
    *
    * @param doi the identifier to delete
-   * @return true if the DOI was fully deleted, false if it became unavailable
+   * @return true if the reserved DOI was fully deleted, false if it was only marked as deleted
    *
    * @throws DoiException if the operation failed for any reason
    */

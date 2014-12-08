@@ -108,16 +108,19 @@ public class EzidService extends BaseService {
   }
 
   @Override
-  public void register(DOI doi, URI target) throws DoiException {
+  public void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(target);
 
     DoiStatus status = resolve(doi);
-    if (status != null && DoiStatus.Status.REGISTERED == status.getStatus()) {
+    if (status == null) {
+      reserve(doi, metadata);
+    } else if (DoiStatus.Status.REGISTERED == status.getStatus()) {
       throw new DoiExistsException(doi);
     }
     Map<String, String> data = AnvlUtils.builder()
       .target(target)
+      .datacite(toXml(doi, metadata))
       .status(DoiStatus.Status.REGISTERED)
       .build();
     postOrPut(doi, data, new HttpPost(idUri(doi)));
