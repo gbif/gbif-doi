@@ -2,7 +2,7 @@ package org.gbif.doi.service;
 
 import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
-import org.gbif.doi.service.datacite.DataciteValidator;
+import org.gbif.doi.service.datacite.DataCiteValidator;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -91,7 +91,7 @@ public abstract class BaseService implements DoiService {
     final String xml = writer.toString();
     // validate the xml before we send it to datacite
     try {
-      DataciteValidator.validateMetadata(xml);
+      DataCiteValidator.validateMetadata(xml);
       LOG.debug("Metadata XML passed validation", doi);
 
     } catch (SAXException e) {
