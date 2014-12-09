@@ -21,12 +21,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class DataciteServiceIT extends DoiServiceIT {
-  private static final String GBIF_PREFIX = "10.15468";
-  private static DataciteService service;
+public class DataCiteServiceIT extends DoiServiceIT {
+  private static DataCiteService service;
 
   // test prefix for DataCite, behaving like normal DOIs and occasionally purged
-  public DataciteServiceIT() {
+  public DataCiteServiceIT() {
     super("10.5072", "gbif.", setup());
   }
 
@@ -36,7 +35,7 @@ public class DataciteServiceIT extends DoiServiceIT {
       InputStream dc = FileUtils.classpathStream("datacite.yaml");
       ServiceConfig cfg = mapper.readValue(dc, ServiceConfig.class);
       System.out.println(cfg);
-      service = new DataciteService(HttpUtil.newMultithreadedClient(10000, 3, 2), cfg);
+      service = new DataCiteService(HttpUtil.newMultithreadedClient(10000, 3, 2), cfg);
       return service;
     } catch (IOException e) {
       throw new IllegalStateException(e);
@@ -57,7 +56,7 @@ public class DataciteServiceIT extends DoiServiceIT {
   @Ignore("This is only to manually test the real prefix behavior. Only use the test prefix for regular tests")
   public void testRealGBIFPrefix() throws Exception {
 
-    final DOI doi = new DOI(GBIF_PREFIX, "test."+System.nanoTime());
+    final DOI doi = new DOI(DOI.GBIF_PREFIX, "test."+System.nanoTime());
     System.out.println(doi);
     DoiStatus status = service.resolve(doi);
     System.out.println(status);

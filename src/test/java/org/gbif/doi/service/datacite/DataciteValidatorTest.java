@@ -11,7 +11,7 @@ import javax.xml.bind.Marshaller;
 
 import org.junit.Test;
 
-public class DataciteValidatorTest {
+public class DataCiteValidatorTest {
   // we only use this to serialize XML
   private static final JAXBContext context;
   static {
@@ -36,12 +36,12 @@ public class DataciteValidatorTest {
 
   @Test
   public void testValidateMetadata() throws Exception {
-    DataciteValidator.validateMetadata(FileUtils.classpathStream("metadata/datacite-example-full-v3.1.xml"));
-    DataciteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal.xml"));
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/datacite-example-full-v3.1.xml"));
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal.xml"));
   }
 
   @Test
   public void testValidateMetadataBean() throws Exception {
-    DataciteValidator.validateMetadata(toXml(DataCiteMetadataTest.testMetadata()));
+    DataCiteValidator.validateMetadata(toXml(DataCiteMetadataTest.testMetadata()));
   }
 }

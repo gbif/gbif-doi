@@ -32,9 +32,14 @@ import com.kscs.util.jaxb.PropertyTreeUse;
 
 
 /**
- * No content in this wrapper element.
- * 
- * <p>Java class for resource element declaration.
+ * DataCite requires at least the following metadata properties:
+ * <ul>
+ *   <li>Identifier</li>
+ *   <li>Creator</li>
+ *   <li>Title</li>
+ *   <li>Publisher</li>
+ *   <li>PublicationYear</li>
+ * </ul>
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
