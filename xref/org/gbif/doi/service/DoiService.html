@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">   * @param metadata the metadata to be associated with the doi. The identifier inside the metadata will be overwritten</em>
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">   *                 by the generated DOI</em>
 <a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">   * @param prefix the identifier prefix to use to generate the random DOI</em>
-<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">   * @param prefix the optional fixed beginning of the suffix to be prepended to the generated random suffix</em>
+<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">   * @param shoulder the optional fixed beginning of the suffix to be prepended to the generated random suffix</em>
 <a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_javadoccomment">   * @param length the length of the randomly generated suffix string. minimum 3, 5-10 is recommended.</em>
 <a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment">   *</em>
 <a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment">   * @throws DoiException if the operation failed for any reason</em>
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="70" href="#70">70</a>  
 <a class="jxr_linenumber" name="71" href="#71">71</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="72" href="#72">72</a>  <em class="jxr_javadoccomment">   * Tries to delete an identifier. If the DOI has only been reserved it will be fully deleted,</em>
-<a class="jxr_linenumber" name="73" href="#73">73</a>  <em class="jxr_javadoccomment">   * if it was registered before it cannot be deleted as DOIs are permanent identifier.</em>
+<a class="jxr_linenumber" name="73" href="#73">73</a>  <em class="jxr_javadoccomment">   * if it was registered before it cannot be deleted as DOIs are permanent identifiers.</em>
 <a class="jxr_linenumber" name="74" href="#74">74</a>  <em class="jxr_javadoccomment">   * In DataCite a DOI will be marked as "inactive" though, in EZID as "unavailable".</em>
 <a class="jxr_linenumber" name="75" href="#75">75</a>  <em class="jxr_javadoccomment">   * You can re-register a deleted DOI again if needed.</em>
 <a class="jxr_linenumber" name="76" href="#76">76</a>  <em class="jxr_javadoccomment">   *</em>
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="83" href="#83">83</a>  
 <a class="jxr_linenumber" name="84" href="#84">84</a>    <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="85" href="#85">85</a>  <em class="jxr_javadoccomment">   * Updates the identifier metadata. This method must be called every time the object or metadata referenced by</em>
-<a class="jxr_linenumber" name="86" href="#86">86</a>  <em class="jxr_javadoccomment">   * the identifier changes (e.g. a gets republished, a data set is replaced by a new major version, etc).</em>
+<a class="jxr_linenumber" name="86" href="#86">86</a>  <em class="jxr_javadoccomment">   * the identifier changes (e.g. a dataset gets republished, a dataset is replaced by a new major version, etc).</em>
 <a class="jxr_linenumber" name="87" href="#87">87</a>  <em class="jxr_javadoccomment">   *</em>
 <a class="jxr_linenumber" name="88" href="#88">88</a>  <em class="jxr_javadoccomment">   * @param doi the identifier of metadata to update</em>
 <a class="jxr_linenumber" name="89" href="#89">89</a>  <em class="jxr_javadoccomment">   *</em>
@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="92" href="#92">92</a>    <strong class="jxr_keyword">void</strong> update(DOI doi, <a href="../../../../org/gbif/doi/metadata/datacite/DataCiteMetadata.html">DataCiteMetadata</a> metadata) <strong class="jxr_keyword">throws</strong> DoiException;
 <a class="jxr_linenumber" name="93" href="#93">93</a>  
 <a class="jxr_linenumber" name="94" href="#94">94</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_javadoccomment">   * Updates the registered identifiers target URL.</em>
+<a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_javadoccomment">   * Updates the registered identifier's target URL.</em>
 <a class="jxr_linenumber" name="96" href="#96">96</a>  <em class="jxr_javadoccomment">   * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain</em>
 <a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment">   * matching your account permissions.</em>
 <a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment">   *</em>
