@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 /**
  * For the validation of DataCite metadata files.
  */
-public class DataciteValidator {
+public class DataCiteValidator {
   private static Validator DATACITE_VALIDATOR;
 
   /**
