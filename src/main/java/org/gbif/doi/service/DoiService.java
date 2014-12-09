@@ -38,7 +38,7 @@ public interface DoiService {
    * @param metadata the metadata to be associated with the doi. The identifier inside the metadata will be overwritten
    *                 by the generated DOI
    * @param prefix the identifier prefix to use to generate the random DOI
-   * @param prefix the optional fixed beginning of the suffix to be prepended to the generated random suffix
+   * @param shoulder the optional fixed beginning of the suffix to be prepended to the generated random suffix
    * @param length the length of the randomly generated suffix string. minimum 3, 5-10 is recommended.
    *
    * @throws DoiException if the operation failed for any reason
@@ -70,7 +70,7 @@ public interface DoiService {
 
   /**
    * Tries to delete an identifier. If the DOI has only been reserved it will be fully deleted,
-   * if it was registered before it cannot be deleted as DOIs are permanent identifier.
+   * if it was registered before it cannot be deleted as DOIs are permanent identifiers.
    * In DataCite a DOI will be marked as "inactive" though, in EZID as "unavailable".
    * You can re-register a deleted DOI again if needed.
    *
@@ -83,7 +83,7 @@ public interface DoiService {
 
   /**
    * Updates the identifier metadata. This method must be called every time the object or metadata referenced by
-   * the identifier changes (e.g. a gets republished, a data set is replaced by a new major version, etc).
+   * the identifier changes (e.g. a dataset gets republished, a dataset is replaced by a new major version, etc).
    *
    * @param doi the identifier of metadata to update
    *
@@ -92,7 +92,7 @@ public interface DoiService {
   void update(DOI doi, DataCiteMetadata metadata) throws DoiException;
 
   /**
-   * Updates the registered identifiers target URL.
+   * Updates the registered identifier's target URL.
    * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain
    * matching your account permissions.
    *
