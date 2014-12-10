@@ -213,7 +213,7 @@ public class DataCiteService extends BaseService {
     // body
     if (data != null) {
       try {
-        String xml = toXml(doi, data);
+        String xml = DataCiteValidator.toXml(doi, data);
         HttpEntity entity = new StringEntity(xml, APPLICATION_XML_UTF8);
         req.setEntity(entity);
         authCall(req);

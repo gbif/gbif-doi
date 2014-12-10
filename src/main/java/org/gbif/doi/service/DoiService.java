@@ -33,19 +33,6 @@ public interface DoiService {
   void reserve(DOI doi, DataCiteMetadata metadata) throws DoiExistsException, DoiException;
 
   /**
-   * Mints a new random identifier with the given DOI prefix and reserves it.
-   *
-   * @param metadata the metadata to be associated with the doi. The identifier inside the metadata will be overwritten
-   *                 by the generated DOI
-   * @param prefix the identifier prefix to use to generate the random DOI
-   * @param shoulder the optional fixed beginning of the suffix to be prepended to the generated random suffix
-   * @param length the length of the randomly generated suffix string. minimum 3, 5-10 is recommended.
-   *
-   * @throws DoiException if the operation failed for any reason
-   */
-  DOI reserveRandom(String prefix, String shoulder, int length, DataCiteMetadata metadata) throws DoiException;
-
-  /**
    * Registers an identifier that is either brand new, has been reserved or is currently marked as deleted.
    * It assigns the latest metadata and a URL for resolution.
    * This causes the DOI to be publicly registered with resolvers and other external services.

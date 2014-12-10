@@ -2,8 +2,14 @@ package org.gbif.doi.metadata.datacite;
 
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.vocabulary.Language;
+import org.gbif.doi.service.datacite.DataCiteValidator;
+import org.gbif.utils.file.FileUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class DataCiteMetadataTest {
 
@@ -64,5 +70,15 @@ public class DataCiteMetadataTest {
   public void testBuilder() throws Exception {
     DataCiteMetadata r = testMetadata();
     System.out.print(r);
+  }
+
+  @Test
+  @Ignore("This fails and serves as a test only to try to serde the full datacite object into JSON for messaging")
+  public void testJsonSerde() throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream("metadata/datacite-example-full-v3.1.xml"));
+    String json = mapper.writeValueAsString(m);
+    DataCiteMetadata m2 = mapper.readValue(json, DataCiteMetadata.class);
+    assertEquals(m, m2);
   }
 }

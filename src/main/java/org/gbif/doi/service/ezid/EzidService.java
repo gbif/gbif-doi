@@ -8,6 +8,7 @@ import org.gbif.doi.service.DoiExistsException;
 import org.gbif.doi.service.DoiHttpException;
 import org.gbif.doi.service.DoiStatus;
 import org.gbif.doi.service.ServiceConfig;
+import org.gbif.doi.service.datacite.DataCiteValidator;
 
 import java.net.URI;
 import java.util.Map;
@@ -100,7 +101,7 @@ public class EzidService extends BaseService {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(metadata);
     Map<String, String> data = AnvlUtils.builder()
-      .datacite(toXml(doi, metadata))
+      .datacite(DataCiteValidator.toXml(doi, metadata))
       .status(DoiStatus.Status.RESERVED)
       .build();
     postOrPut(doi, data, new HttpPut(idUri(doi)));
@@ -120,7 +121,7 @@ public class EzidService extends BaseService {
     }
     Map<String, String> data = AnvlUtils.builder()
       .target(target)
-      .datacite(toXml(doi, metadata))
+      .datacite(DataCiteValidator.toXml(doi, metadata))
       .status(DoiStatus.Status.REGISTERED)
       .build();
     postOrPut(doi, data, new HttpPost(idUri(doi)));
@@ -155,7 +156,7 @@ public class EzidService extends BaseService {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(metadata);
     Map<String, String> data = AnvlUtils.builder()
-      .datacite(toXml(doi, metadata))
+      .datacite(DataCiteValidator.toXml(doi, metadata))
       .build();
     postOrPut(doi, data, new HttpPost(idUri(doi)));
     LOG.info("Updated metadata for {}", doi);

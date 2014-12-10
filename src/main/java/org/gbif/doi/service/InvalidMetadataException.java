@@ -9,8 +9,18 @@ import org.gbif.api.model.common.DOI;
 public class InvalidMetadataException extends DoiException {
   private final DOI doi;
 
-  public InvalidMetadataException(DOI doi, Throwable sax) {
-    super("Invalid metadata for " + doi, sax);
+  public InvalidMetadataException(DOI doi, String message, Throwable e) {
+    super(message, e);
+    this.doi = doi;
+  }
+
+  public InvalidMetadataException(DOI doi, String message) {
+    super(message);
+    this.doi = doi;
+  }
+
+  public InvalidMetadataException(DOI doi, Throwable e) {
+    super("Invalid metadata for " + doi, e);
     this.doi = doi;
   }
 

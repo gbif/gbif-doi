@@ -75,13 +75,6 @@ public abstract class DoiServiceIT {
   }
 
   @Test
-  public void testReserveRandom() throws Exception {
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata();
-    DOI doi = service.reserveRandom(prefix, shoulder, 4, meta);
-    System.out.println("Reserved random id " + doi);
-  }
-
-  @Test
   public void testDeleteReserved() throws Exception {
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");

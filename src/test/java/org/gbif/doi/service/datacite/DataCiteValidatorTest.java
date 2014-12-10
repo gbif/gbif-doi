@@ -1,38 +1,15 @@
 package org.gbif.doi.service.datacite;
 
+import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
 import org.gbif.utils.file.FileUtils;
 
-import java.io.StringWriter;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class DataCiteValidatorTest {
-  // we only use this to serialize XML
-  private static final JAXBContext context;
-  static {
-    try {
-      context = JAXBContext.newInstance(DataCiteMetadata.class);
-    } catch (JAXBException e) {
-      throw new IllegalStateException("Fail to setup JAXB", e);
-    }
-  }
-
-
-  public static String toXml(DataCiteMetadata data) throws JAXBException {
-    // (un)marshaller are not thread safe and need to be created on each postOrPut
-    Marshaller m = context.createMarshaller();
-    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-    StringWriter writer = new StringWriter();
-    m.marshal(data, writer);
-    writer.flush();
-    return writer.toString();
-  }
 
   @Test
   public void testValidateMetadata() throws Exception {
@@ -42,6 +19,20 @@ public class DataCiteValidatorTest {
 
   @Test
   public void testValidateMetadataBean() throws Exception {
-    DataCiteValidator.validateMetadata(toXml(DataCiteMetadataTest.testMetadata()));
+    final DOI doi = new DOI("10.1234/gbif");
+    DataCiteValidator.validateMetadata(DataCiteValidator.toXml(doi, DataCiteMetadataTest.testMetadata()));
+  }
+
+  @Test
+  public void testRoundtrip() throws Exception {
+    final DOI doi = new DOI("10.1234/gbif");
+
+    DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream("metadata/datacite-example-full-v3.1.xml"));
+    String xml = DataCiteValidator.toXml(doi, m);
+
+    DataCiteMetadata m2 = DataCiteValidator.fromXml(xml);
+    String xml2 = DataCiteValidator.toXml(doi, m2);
+
+    assertEquals(xml, xml2);
   }
 }
