@@ -12,70 +12,86 @@
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
 <a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.model.common.DOI;
 <a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.vocabulary.Language;
-<a class="jxr_linenumber" name="5" href="#5">5</a>   
-<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.service.datacite.DataCiteValidator;
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> org.gbif.utils.file.FileUtils;
 <a class="jxr_linenumber" name="7" href="#7">7</a>   
-<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadataTest.html">DataCiteMetadataTest</a> {
-<a class="jxr_linenumber" name="9" href="#9">9</a>   
-<a class="jxr_linenumber" name="10" href="#10">10</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> DataCiteMetadata testMetadata() {
-<a class="jxr_linenumber" name="11" href="#11">11</a>      <strong class="jxr_keyword">return</strong> testMetadata(<strong class="jxr_keyword">new</strong> DOI(<span class="jxr_string">"10.5072/WDCC/CCSRNIES_SRES_B2"</span>), <span class="jxr_string">"My Title"</span>);
-<a class="jxr_linenumber" name="12" href="#12">12</a>    }
-<a class="jxr_linenumber" name="13" href="#13">13</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> DataCiteMetadata testMetadata(DOI doi, String title) {
-<a class="jxr_linenumber" name="14" href="#14">14</a>      <strong class="jxr_keyword">return</strong> DataCiteMetadata.builder()
-<a class="jxr_linenumber" name="15" href="#15">15</a>        .withIdentifier().withValue(doi.getDoiName()).withIdentifierType(<span class="jxr_string">"DOI"</span>).end()
-<a class="jxr_linenumber" name="16" href="#16">16</a>        .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
-<a class="jxr_linenumber" name="17" href="#17">17</a>        .withCreators()
-<a class="jxr_linenumber" name="18" href="#18">18</a>        .addCreator().withCreatorName(<span class="jxr_string">"Markus"</span>)
-<a class="jxr_linenumber" name="19" href="#19">19</a>        .withNameIdentifier().withNameIdentifierScheme(<span class="jxr_string">"ORCID"</span>).withSchemeURI(<span class="jxr_string">"orcid.org"</span>).withValue(<span class="jxr_string">"0000-0001-7757-1889"</span>).end()
-<a class="jxr_linenumber" name="20" href="#20">20</a>        .end()
-<a class="jxr_linenumber" name="21" href="#21">21</a>        .end()
-<a class="jxr_linenumber" name="22" href="#22">22</a>        .withTitles()
-<a class="jxr_linenumber" name="23" href="#23">23</a>        .addTitle().withValue(title).withLang(Language.ENGLISH.getIso3LetterCode()).end()
-<a class="jxr_linenumber" name="24" href="#24">24</a>        .addTitle().withValue(<span class="jxr_string">"Meine Übersetzung"</span>).withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(
-<a class="jxr_linenumber" name="25" href="#25">25</a>          TitleType.TRANSLATED_TITLE).end()
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> com.fasterxml.jackson.databind.ObjectMapper;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> org.junit.Ignore;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadataTest.html">DataCiteMetadataTest</a> {
+<a class="jxr_linenumber" name="15" href="#15">15</a>  
+<a class="jxr_linenumber" name="16" href="#16">16</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> DataCiteMetadata testMetadata() {
+<a class="jxr_linenumber" name="17" href="#17">17</a>      <strong class="jxr_keyword">return</strong> testMetadata(<strong class="jxr_keyword">new</strong> DOI(<span class="jxr_string">"10.5072/WDCC/CCSRNIES_SRES_B2"</span>), <span class="jxr_string">"My Title"</span>);
+<a class="jxr_linenumber" name="18" href="#18">18</a>    }
+<a class="jxr_linenumber" name="19" href="#19">19</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> DataCiteMetadata testMetadata(DOI doi, String title) {
+<a class="jxr_linenumber" name="20" href="#20">20</a>      <strong class="jxr_keyword">return</strong> DataCiteMetadata.builder()
+<a class="jxr_linenumber" name="21" href="#21">21</a>        .withIdentifier().withValue(doi.getDoiName()).withIdentifierType(<span class="jxr_string">"DOI"</span>).end()
+<a class="jxr_linenumber" name="22" href="#22">22</a>        .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
+<a class="jxr_linenumber" name="23" href="#23">23</a>        .withCreators()
+<a class="jxr_linenumber" name="24" href="#24">24</a>        .addCreator().withCreatorName(<span class="jxr_string">"Markus"</span>)
+<a class="jxr_linenumber" name="25" href="#25">25</a>        .withNameIdentifier().withNameIdentifierScheme(<span class="jxr_string">"ORCID"</span>).withSchemeURI(<span class="jxr_string">"orcid.org"</span>).withValue(<span class="jxr_string">"0000-0001-7757-1889"</span>).end()
 <a class="jxr_linenumber" name="26" href="#26">26</a>        .end()
-<a class="jxr_linenumber" name="27" href="#27">27</a>        .withPublicationYear(<span class="jxr_string">"2014"</span>)
-<a class="jxr_linenumber" name="28" href="#28">28</a>        .withPublisher(<span class="jxr_string">"Pensoft"</span>)
-<a class="jxr_linenumber" name="29" href="#29">29</a>        .build();
-<a class="jxr_linenumber" name="30" href="#30">30</a>    }
-<a class="jxr_linenumber" name="31" href="#31">31</a>  
-<a class="jxr_linenumber" name="32" href="#32">32</a>    @Test
-<a class="jxr_linenumber" name="33" href="#33">33</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testObjectFactory() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="34" href="#34">34</a>      ObjectFactory of = <strong class="jxr_keyword">new</strong> ObjectFactory();
-<a class="jxr_linenumber" name="35" href="#35">35</a>      DataCiteMetadata res = of.createDataCiteMetadata();
-<a class="jxr_linenumber" name="36" href="#36">36</a>  
-<a class="jxr_linenumber" name="37" href="#37">37</a>      DataCiteMetadata.Creators creators = of.createDataCiteMetadataCreators();
-<a class="jxr_linenumber" name="38" href="#38">38</a>      DataCiteMetadata.Creators.Creator creator = of.createDataCiteMetadataCreatorsCreator();
-<a class="jxr_linenumber" name="39" href="#39">39</a>      creator.setCreatorName(<span class="jxr_string">"Piyapong"</span>);
-<a class="jxr_linenumber" name="40" href="#40">40</a>      DataCiteMetadata.Creators.Creator.NameIdentifier nid = of.createDataCiteMetadataCreatorsCreatorNameIdentifier();
-<a class="jxr_linenumber" name="41" href="#41">41</a>      nid.setValue(<span class="jxr_string">"pc1405"</span>);
-<a class="jxr_linenumber" name="42" href="#42">42</a>      creator.setNameIdentifier(nid);
-<a class="jxr_linenumber" name="43" href="#43">43</a>      creators.getCreator().add(creator);
-<a class="jxr_linenumber" name="44" href="#44">44</a>      res.setCreators(creators);
-<a class="jxr_linenumber" name="45" href="#45">45</a>  
-<a class="jxr_linenumber" name="46" href="#46">46</a>      DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();
-<a class="jxr_linenumber" name="47" href="#47">47</a>      id.setIdentifierType(<span class="jxr_string">"DOI"</span>);
-<a class="jxr_linenumber" name="48" href="#48">48</a>      id.setValue(<span class="jxr_string">"10.5072/WDCC/CCSRNIES_SRES_B2"</span>);
-<a class="jxr_linenumber" name="49" href="#49">49</a>      res.setIdentifier(id);
-<a class="jxr_linenumber" name="50" href="#50">50</a>  
-<a class="jxr_linenumber" name="51" href="#51">51</a>      DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();
-<a class="jxr_linenumber" name="52" href="#52">52</a>      DataCiteMetadata.Titles.Title title = of.createDataCiteMetadataTitlesTitle();
-<a class="jxr_linenumber" name="53" href="#53">53</a>      title.setValue(<span class="jxr_string">"National Institute for Environmental Studies and Center for Climate System Research Japan"</span>);
-<a class="jxr_linenumber" name="54" href="#54">54</a>      titles.getTitle().add(title);
-<a class="jxr_linenumber" name="55" href="#55">55</a>      res.setTitles(titles);
+<a class="jxr_linenumber" name="27" href="#27">27</a>        .end()
+<a class="jxr_linenumber" name="28" href="#28">28</a>        .withTitles()
+<a class="jxr_linenumber" name="29" href="#29">29</a>        .addTitle().withValue(title).withLang(Language.ENGLISH.getIso3LetterCode()).end()
+<a class="jxr_linenumber" name="30" href="#30">30</a>        .addTitle().withValue(<span class="jxr_string">"Meine Übersetzung"</span>).withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(
+<a class="jxr_linenumber" name="31" href="#31">31</a>          TitleType.TRANSLATED_TITLE).end()
+<a class="jxr_linenumber" name="32" href="#32">32</a>        .end()
+<a class="jxr_linenumber" name="33" href="#33">33</a>        .withPublicationYear(<span class="jxr_string">"2014"</span>)
+<a class="jxr_linenumber" name="34" href="#34">34</a>        .withPublisher(<span class="jxr_string">"Pensoft"</span>)
+<a class="jxr_linenumber" name="35" href="#35">35</a>        .build();
+<a class="jxr_linenumber" name="36" href="#36">36</a>    }
+<a class="jxr_linenumber" name="37" href="#37">37</a>  
+<a class="jxr_linenumber" name="38" href="#38">38</a>    @Test
+<a class="jxr_linenumber" name="39" href="#39">39</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testObjectFactory() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="40" href="#40">40</a>      ObjectFactory of = <strong class="jxr_keyword">new</strong> ObjectFactory();
+<a class="jxr_linenumber" name="41" href="#41">41</a>      DataCiteMetadata res = of.createDataCiteMetadata();
+<a class="jxr_linenumber" name="42" href="#42">42</a>  
+<a class="jxr_linenumber" name="43" href="#43">43</a>      DataCiteMetadata.Creators creators = of.createDataCiteMetadataCreators();
+<a class="jxr_linenumber" name="44" href="#44">44</a>      DataCiteMetadata.Creators.Creator creator = of.createDataCiteMetadataCreatorsCreator();
+<a class="jxr_linenumber" name="45" href="#45">45</a>      creator.setCreatorName(<span class="jxr_string">"Piyapong"</span>);
+<a class="jxr_linenumber" name="46" href="#46">46</a>      DataCiteMetadata.Creators.Creator.NameIdentifier nid = of.createDataCiteMetadataCreatorsCreatorNameIdentifier();
+<a class="jxr_linenumber" name="47" href="#47">47</a>      nid.setValue(<span class="jxr_string">"pc1405"</span>);
+<a class="jxr_linenumber" name="48" href="#48">48</a>      creator.setNameIdentifier(nid);
+<a class="jxr_linenumber" name="49" href="#49">49</a>      creators.getCreator().add(creator);
+<a class="jxr_linenumber" name="50" href="#50">50</a>      res.setCreators(creators);
+<a class="jxr_linenumber" name="51" href="#51">51</a>  
+<a class="jxr_linenumber" name="52" href="#52">52</a>      DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();
+<a class="jxr_linenumber" name="53" href="#53">53</a>      id.setIdentifierType(<span class="jxr_string">"DOI"</span>);
+<a class="jxr_linenumber" name="54" href="#54">54</a>      id.setValue(<span class="jxr_string">"10.5072/WDCC/CCSRNIES_SRES_B2"</span>);
+<a class="jxr_linenumber" name="55" href="#55">55</a>      res.setIdentifier(id);
 <a class="jxr_linenumber" name="56" href="#56">56</a>  
-<a class="jxr_linenumber" name="57" href="#57">57</a>      res.setPublicationYear(<span class="jxr_string">"2014"</span>);
-<a class="jxr_linenumber" name="58" href="#58">58</a>      res.setPublisher(<span class="jxr_string">"Piyapong"</span>);
-<a class="jxr_linenumber" name="59" href="#59">59</a>  
-<a class="jxr_linenumber" name="60" href="#60">60</a>      System.out.print(res);
-<a class="jxr_linenumber" name="61" href="#61">61</a>    }
+<a class="jxr_linenumber" name="57" href="#57">57</a>      DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();
+<a class="jxr_linenumber" name="58" href="#58">58</a>      DataCiteMetadata.Titles.Title title = of.createDataCiteMetadataTitlesTitle();
+<a class="jxr_linenumber" name="59" href="#59">59</a>      title.setValue(<span class="jxr_string">"National Institute for Environmental Studies and Center for Climate System Research Japan"</span>);
+<a class="jxr_linenumber" name="60" href="#60">60</a>      titles.getTitle().add(title);
+<a class="jxr_linenumber" name="61" href="#61">61</a>      res.setTitles(titles);
 <a class="jxr_linenumber" name="62" href="#62">62</a>  
-<a class="jxr_linenumber" name="63" href="#63">63</a>    @Test
-<a class="jxr_linenumber" name="64" href="#64">64</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBuilder() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="65" href="#65">65</a>      DataCiteMetadata r = testMetadata();
-<a class="jxr_linenumber" name="66" href="#66">66</a>      System.out.print(r);
+<a class="jxr_linenumber" name="63" href="#63">63</a>      res.setPublicationYear(<span class="jxr_string">"2014"</span>);
+<a class="jxr_linenumber" name="64" href="#64">64</a>      res.setPublisher(<span class="jxr_string">"Piyapong"</span>);
+<a class="jxr_linenumber" name="65" href="#65">65</a>  
+<a class="jxr_linenumber" name="66" href="#66">66</a>      System.out.print(res);
 <a class="jxr_linenumber" name="67" href="#67">67</a>    }
-<a class="jxr_linenumber" name="68" href="#68">68</a>  }
+<a class="jxr_linenumber" name="68" href="#68">68</a>  
+<a class="jxr_linenumber" name="69" href="#69">69</a>    @Test
+<a class="jxr_linenumber" name="70" href="#70">70</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBuilder() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="71" href="#71">71</a>      DataCiteMetadata r = testMetadata();
+<a class="jxr_linenumber" name="72" href="#72">72</a>      System.out.print(r);
+<a class="jxr_linenumber" name="73" href="#73">73</a>    }
+<a class="jxr_linenumber" name="74" href="#74">74</a>  
+<a class="jxr_linenumber" name="75" href="#75">75</a>    @Test
+<a class="jxr_linenumber" name="76" href="#76">76</a>    @Ignore(<span class="jxr_string">"This fails and serves as a test only to try to serde the full datacite object into JSON for messaging"</span>)
+<a class="jxr_linenumber" name="77" href="#77">77</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testJsonSerde() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="78" href="#78">78</a>      ObjectMapper mapper = <strong class="jxr_keyword">new</strong> ObjectMapper();
+<a class="jxr_linenumber" name="79" href="#79">79</a>      DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream(<span class="jxr_string">"metadata/datacite-example-full-v3.1.xml"</span>));
+<a class="jxr_linenumber" name="80" href="#80">80</a>      String json = mapper.writeValueAsString(m);
+<a class="jxr_linenumber" name="81" href="#81">81</a>      DataCiteMetadata m2 = mapper.readValue(json, DataCiteMetadata.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="82" href="#82">82</a>      assertEquals(m, m2);
+<a class="jxr_linenumber" name="83" href="#83">83</a>    }
+<a class="jxr_linenumber" name="84" href="#84">84</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
