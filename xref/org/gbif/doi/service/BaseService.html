@@ -12,7 +12,7 @@
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
 <a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.model.common.DOI;
 <a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.metadata.datacite.DataCiteMetadata;
-<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.service.datacite.DataciteValidator;
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.service.datacite.DataCiteValidator;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> java.io.StringWriter;
@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="91" href="#91">91</a>      <strong class="jxr_keyword">final</strong> String xml = writer.toString();
 <a class="jxr_linenumber" name="92" href="#92">92</a>      <em class="jxr_comment">// validate the xml before we send it to datacite</em>
 <a class="jxr_linenumber" name="93" href="#93">93</a>      <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="94" href="#94">94</a>        DataciteValidator.validateMetadata(xml);
+<a class="jxr_linenumber" name="94" href="#94">94</a>        DataCiteValidator.validateMetadata(xml);
 <a class="jxr_linenumber" name="95" href="#95">95</a>        LOG.debug(<span class="jxr_string">"Metadata XML passed validation"</span>, doi);
 <a class="jxr_linenumber" name="96" href="#96">96</a>  
 <a class="jxr_linenumber" name="97" href="#97">97</a>      } <strong class="jxr_keyword">catch</strong> (SAXException e) {
