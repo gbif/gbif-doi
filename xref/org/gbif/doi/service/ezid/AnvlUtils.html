@@ -10,7 +10,7 @@
 
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> org.gbif.doi.service.ezid;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
-<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.service.DoiStatus;
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.model.common.DoiStatus;
 <a class="jxr_linenumber" name="4" href="#4">4</a>   
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.io.BufferedReader;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="163" href="#163">163</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="164" href="#164">164</a>     }
 <a class="jxr_linenumber" name="165" href="#165">165</a> 
-<a class="jxr_linenumber" name="166" href="#166">166</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/doi/service/ezid/AnvlUtils.html">Builder</a> status(DoiStatus.Status status) {
+<a class="jxr_linenumber" name="166" href="#166">166</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/doi/service/ezid/AnvlUtils.html">Builder</a> status(DoiStatus status) {
 <a class="jxr_linenumber" name="167" href="#167">167</a>       <strong class="jxr_keyword">this</strong>.map.put(AnvlUtils.STATUS, status.getEzid());
 <a class="jxr_linenumber" name="168" href="#168">168</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="169" href="#169">169</a>     }
