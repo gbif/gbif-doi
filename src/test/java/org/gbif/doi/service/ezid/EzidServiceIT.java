@@ -1,7 +1,8 @@
 package org.gbif.doi.service.ezid;
 
 import org.gbif.api.model.common.DOI;
-import org.gbif.doi.service.DoiStatus;
+import org.gbif.api.model.common.DoiData;
+import org.gbif.api.model.common.DoiStatus;
 import org.gbif.doi.service.ServiceConfig;
 import org.gbif.doi.service.datacite.DoiServiceIT;
 import org.gbif.utils.HttpUtil;
@@ -34,7 +35,7 @@ public class EzidServiceIT extends DoiServiceIT {
   public void testGetForeign() throws Exception {
     // this DOI does not belong to GBIF and we cannot read it...
     assertEquals(
-      new DoiStatus(DoiStatus.Status.REGISTERED, URI.create("http://figshare.com/articles/5000_random_journal_article_CrossRef_DOIs_from_2012/821213")),
+      new DoiData(DoiStatus.REGISTERED, URI.create("http://figshare.com/articles/5000_random_journal_article_CrossRef_DOIs_from_2012/821213")),
       service.resolve(FOREIGN_DOI));
   }
 

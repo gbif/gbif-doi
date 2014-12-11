@@ -1,6 +1,6 @@
 package org.gbif.doi.service.ezid;
 
-import org.gbif.doi.service.DoiStatus;
+import org.gbif.api.model.common.DoiStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -163,7 +163,7 @@ public class AnvlUtils {
       return this;
     }
 
-    public Builder status(DoiStatus.Status status) {
+    public Builder status(DoiStatus status) {
       this.map.put(AnvlUtils.STATUS, status.getEzid());
       return this;
     }

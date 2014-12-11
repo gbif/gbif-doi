@@ -1,12 +1,13 @@
 package org.gbif.doi.service.ezid;
 
 import org.gbif.api.model.common.DOI;
+import org.gbif.api.model.common.DoiData;
+import org.gbif.api.model.common.DoiStatus;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.service.BaseService;
 import org.gbif.doi.service.DoiException;
 import org.gbif.doi.service.DoiExistsException;
 import org.gbif.doi.service.DoiHttpException;
-import org.gbif.doi.service.DoiStatus;
 import org.gbif.doi.service.ServiceConfig;
 import org.gbif.doi.service.datacite.DataCiteValidator;
 
@@ -63,7 +64,7 @@ public class EzidService extends BaseService {
   }
 
   @Override
-  public DoiStatus resolve(DOI doi) throws DoiException {
+  public DoiData resolve(DOI doi) throws DoiException {
     Preconditions.checkNotNull(doi);
     Map<String, String> meta = getANVL(doi);
     if (meta.containsKey(AnvlUtils.STATUS)) {
@@ -77,7 +78,7 @@ public class EzidService extends BaseService {
           LOG.debug("Invalid DOI URL", e.getMessage());
         }
       }
-      return new DoiStatus(meta.get(AnvlUtils.STATUS), target);
+      return new DoiData(meta.get(AnvlUtils.STATUS), target);
     }
     return null;
   }
@@ -102,7 +103,7 @@ public class EzidService extends BaseService {
     Preconditions.checkNotNull(metadata);
     Map<String, String> data = AnvlUtils.builder()
       .datacite(DataCiteValidator.toXml(doi, metadata))
-      .status(DoiStatus.Status.RESERVED)
+      .status(DoiStatus.RESERVED)
       .build();
     postOrPut(doi, data, new HttpPut(idUri(doi)));
     LOG.info("Reserved {}", doi);
@@ -113,16 +114,16 @@ public class EzidService extends BaseService {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(target);
 
-    DoiStatus status = resolve(doi);
+    DoiData status = resolve(doi);
     if (status == null) {
       reserve(doi, metadata);
-    } else if (DoiStatus.Status.REGISTERED == status.getStatus()) {
+    } else if (DoiStatus.REGISTERED == status.getStatus()) {
       throw new DoiExistsException(doi);
     }
     Map<String, String> data = AnvlUtils.builder()
       .target(target)
       .datacite(DataCiteValidator.toXml(doi, metadata))
-      .status(DoiStatus.Status.REGISTERED)
+      .status(DoiStatus.REGISTERED)
       .build();
     postOrPut(doi, data, new HttpPost(idUri(doi)));
     LOG.info("Registered {}", doi);
@@ -130,9 +131,9 @@ public class EzidService extends BaseService {
 
   @Override
   public boolean delete(DOI doi) throws DoiException {
-    DoiStatus status = resolve(doi);
+    DoiData status = resolve(doi);
     if (status != null) {
-      if (DoiStatus.Status.RESERVED == status.getStatus()) {
+      if (DoiStatus.RESERVED == status.getStatus()) {
         delete(idUri(doi));
         LOG.info("Deleted {}", doi);
         return true;
@@ -141,7 +142,7 @@ public class EzidService extends BaseService {
         // this is a registered DOI, we can only change the status to unavailable
         Map<String, String> data = AnvlUtils.builder()
           .target(null)
-          .status(DoiStatus.Status.DELETED)
+          .status(DoiStatus.DELETED)
           .build();
         postOrPut(doi, data, new HttpPost(idUri(doi)));
         LOG.info("Made {} unavailable", doi);

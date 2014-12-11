@@ -1,10 +1,10 @@
 package org.gbif.doi.service.datacite;
 
 import org.gbif.api.model.common.DOI;
+import org.gbif.api.model.common.DoiData;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
 import org.gbif.doi.service.DoiService;
-import org.gbif.doi.service.DoiStatus;
 import org.gbif.doi.service.ServiceConfig;
 import org.gbif.utils.HttpUtil;
 import org.gbif.utils.file.FileUtils;
@@ -58,7 +58,7 @@ public class DataCiteServiceIT extends DoiServiceIT {
 
     final DOI doi = new DOI(DOI.GBIF_PREFIX, "test."+System.nanoTime());
     System.out.println(doi);
-    DoiStatus status = service.resolve(doi);
+    DoiData status = service.resolve(doi);
     System.out.println(status);
 
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");

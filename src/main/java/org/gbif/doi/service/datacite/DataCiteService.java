@@ -1,12 +1,13 @@
 package org.gbif.doi.service.datacite;
 
 import org.gbif.api.model.common.DOI;
+import org.gbif.api.model.common.DoiData;
+import org.gbif.api.model.common.DoiStatus;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata;
+import org.gbif.doi.service.BaseService;
 import org.gbif.doi.service.DoiException;
 import org.gbif.doi.service.DoiExistsException;
 import org.gbif.doi.service.DoiHttpException;
-import org.gbif.doi.metadata.datacite.DataCiteMetadata;
-import org.gbif.doi.service.BaseService;
-import org.gbif.doi.service.DoiStatus;
 import org.gbif.doi.service.ServiceConfig;
 
 import java.net.URI;
@@ -52,19 +53,19 @@ public class DataCiteService extends BaseService {
    * A deleted but registered DOI returns a http 410 for the metadata and still the target URI.
    */
   @Override
-  public DoiStatus resolve(DOI doi) throws DoiException {
+  public DoiData resolve(DOI doi) throws DoiException {
     Preconditions.checkNotNull(doi);
     try {
 
       final URI target = getTargetUrl(doi);
       try {
         get(metadataUri(doi));
-        return target == null ? new DoiStatus(DoiStatus.Status.RESERVED, null) : new DoiStatus(DoiStatus.Status.REGISTERED, target);
+        return target == null ? new DoiData(DoiStatus.RESERVED, null) : new DoiData(DoiStatus.REGISTERED, target);
 
       } catch (DoiHttpException e) {
         // we only see a 410 for the metadata when a registered DOI was deleted
         if (e.getStatus() == 410) {
-          return new DoiStatus(DoiStatus.Status.DELETED, target);
+          return new DoiData(DoiStatus.DELETED, target);
         }
       }
 
@@ -126,13 +127,13 @@ public class DataCiteService extends BaseService {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(metadata);
-    DoiStatus status = resolve(doi);
-    if (status != null && DoiStatus.Status.REGISTERED == status.getStatus()) {
+    DoiData status = resolve(doi);
+    if (status != null && DoiStatus.REGISTERED == status.getStatus()) {
       throw new DoiExistsException(doi);
     }
     post(doi, metadataWs, metadata);
     authCall(buildDoiUrlPost(doi, target));
-    if (status != null && DoiStatus.Status.DELETED == status.getStatus()) {
+    if (status != null && DoiStatus.DELETED == status.getStatus()) {
       LOG.info("Re-registered {}", doi);
     } else {
       LOG.info("Registered {}", doi);
@@ -152,8 +153,8 @@ public class DataCiteService extends BaseService {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(metadata);
 
-    DoiStatus status = resolve(doi);
-    if (status == null || DoiStatus.Status.REGISTERED != status.getStatus()) {
+    DoiData status = resolve(doi);
+    if (status == null || DoiStatus.REGISTERED != status.getStatus()) {
       throw new DoiException("DOI was not registered yet");
     }
     post(doi, metadataWs, metadata);
@@ -165,8 +166,8 @@ public class DataCiteService extends BaseService {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(target);
 
-    DoiStatus status = resolve(doi);
-    if (status == null || DoiStatus.Status.REGISTERED != status.getStatus()) {
+    DoiData status = resolve(doi);
+    if (status == null || DoiStatus.REGISTERED != status.getStatus()) {
       throw new DoiException("DOI was not registered yet");
     }
     authCall(buildDoiUrlPost(doi, target));

@@ -1,11 +1,12 @@
 package org.gbif.doi.service.datacite;
 
 import org.gbif.api.model.common.DOI;
-import org.gbif.doi.service.DoiException;
-import org.gbif.doi.service.DoiService;
+import org.gbif.api.model.common.DoiData;
+import org.gbif.api.model.common.DoiStatus;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
-import org.gbif.doi.service.DoiStatus;
+import org.gbif.doi.service.DoiException;
+import org.gbif.doi.service.DoiService;
 
 import java.net.URI;
 
@@ -43,16 +44,16 @@ public abstract class DoiServiceIT {
     assertNull(service.resolve(doi));
 
     service.reserve(doi, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.RESERVED, null), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.RESERVED, null), service.resolve(doi));
 
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
 
     service.delete(doi);
-    assertEquals(DoiStatus.Status.DELETED, service.resolve(doi).getStatus());
+    assertEquals(DoiStatus.DELETED, service.resolve(doi).getStatus());
 
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
   }
 
   @Test
@@ -90,13 +91,13 @@ public abstract class DoiServiceIT {
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
     // now delete it to mark inactive (datacite) or set to unavailable (ezid)
     service.delete(doi);
-    assertEquals(DoiStatus.Status.DELETED, service.resolve(doi).getStatus());
+    assertEquals(DoiStatus.DELETED, service.resolve(doi).getStatus());
     // registering again should work
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
   }
 
   @Test
@@ -104,13 +105,13 @@ public abstract class DoiServiceIT {
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
     service.reserve(doi, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.RESERVED, null), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.RESERVED, null), service.resolve(doi));
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
 
     final URI target2 = TEST_TARGET.resolve("subsub");
     service.update(doi, target2);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, target2), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.REGISTERED, target2), service.resolve(doi));
   }
 
   @Test(expected = NullPointerException.class)
@@ -150,7 +151,7 @@ public abstract class DoiServiceIT {
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiStatus(DoiStatus.Status.REGISTERED, TEST_TARGET), service.resolve(doi));
+    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
     try {
       // try again, this should fail!
       service.register(doi, TEST_TARGET, meta);

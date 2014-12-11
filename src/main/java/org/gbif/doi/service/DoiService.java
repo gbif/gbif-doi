@@ -1,6 +1,7 @@
 package org.gbif.doi.service;
 
 import org.gbif.api.model.common.DOI;
+import org.gbif.api.model.common.DoiData;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 
 import java.net.URI;
@@ -17,7 +18,7 @@ public interface DoiService {
    * @throws DoiException if the operation failed for any reason
    */
   @Nullable
-  DoiStatus resolve(DOI doi) throws DoiException;
+  DoiData resolve(DOI doi) throws DoiException;
 
   /**
    * Reserves a new identifier and defines its initial metadata.
