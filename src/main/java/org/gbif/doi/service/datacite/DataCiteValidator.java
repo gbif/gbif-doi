@@ -13,6 +13,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -64,22 +65,13 @@ public class DataCiteValidator {
       m.marshal(data, writer);
       writer.flush();
     } catch (JAXBException e) {
-      throw new InvalidMetadataException(doi, e);
+      throw new InvalidMetadataException(e);
     }
 
     final String xml = writer.toString();
     // validate the xml before we return it
-    try {
-      validateMetadata(xml);
-      LOG.debug("Metadata XML passed validation", doi);
-
-    } catch (SAXException e) {
-      throw new InvalidMetadataException(doi, e);
-
-    } catch (IOException e) {
-      // cant happen, we had a string in memory already!
-      throw new IllegalStateException(e);
-    }
+    validateMetadata(xml);
+    LOG.debug("Metadata XML passed validation", doi);
     return xml;
   }
 
@@ -96,12 +88,26 @@ public class DataCiteValidator {
   /**
    * @return an xml validator based on the DataCite metadata schema version 3
    */
-  public static void validateMetadata(String xml) throws IOException, SAXException {
-    getValidator().validate(new StreamSource(new StringReader(xml)));
+  public static void validateMetadata(String xml) throws InvalidMetadataException {
+    validateMetadata(new StreamSource(new StringReader(xml)));
   }
 
-  public static void validateMetadata(InputStream xml) throws IOException, SAXException {
-    getValidator().validate(new StreamSource(xml));
+  public static void validateMetadata(InputStream xml) throws InvalidMetadataException {
+    validateMetadata(new StreamSource(xml));
+  }
+
+  public static void validateMetadata(Source source) throws InvalidMetadataException {
+    try {
+      getValidator().validate(source);
+      LOG.debug("Metadata XML passed validation");
+
+    } catch (SAXException e) {
+      throw new InvalidMetadataException(e);
+
+    } catch (IOException e) {
+      // cant happen, we had a string in memory already!
+      throw new IllegalStateException(e);
+    }
   }
 
   private static Validator getValidator() throws IOException, SAXException {

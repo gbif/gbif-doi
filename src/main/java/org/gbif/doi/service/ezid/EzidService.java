@@ -98,11 +98,21 @@ public class EzidService extends BaseService {
   }
 
   @Override
+  public void reserve(DOI doi, String metadata) throws DoiException {
+    DataCiteValidator.validateMetadata(metadata);
+    reserveWithoutValidation(doi, metadata);
+  }
+
+  @Override
   public void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    reserveWithoutValidation(doi, DataCiteValidator.toXml(doi, metadata));
+  }
+
+  private void reserveWithoutValidation(DOI doi, String xml) throws DoiException {
     Preconditions.checkNotNull(doi);
-    Preconditions.checkNotNull(metadata);
+    Preconditions.checkNotNull(xml);
     Map<String, String> data = AnvlUtils.builder()
-      .datacite(DataCiteValidator.toXml(doi, metadata))
+      .datacite(xml)
       .status(DoiStatus.RESERVED)
       .build();
     postOrPut(doi, data, new HttpPut(idUri(doi)));
@@ -110,21 +120,29 @@ public class EzidService extends BaseService {
   }
 
   @Override
+  public void register(DOI doi, URI target, String metadata) throws DoiException {
+    DataCiteValidator.validateMetadata(metadata);
+    registerWithoutValidation(doi, target, metadata);
+  }
+
+  @Override
   public void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException {
+    registerWithoutValidation(doi, target, DataCiteValidator.toXml(doi, metadata));
+  }
+
+  private void registerWithoutValidation(DOI doi, URI target, String xml) throws DoiException {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(target);
 
     DoiData status = resolve(doi);
     if (status == null) {
-      reserve(doi, metadata);
+      reserve(doi, xml);
     } else if (DoiStatus.REGISTERED == status.getStatus()) {
       throw new DoiExistsException(doi);
     }
     Map<String, String> data = AnvlUtils.builder()
       .target(target)
-      .datacite(DataCiteValidator.toXml(doi, metadata))
-      .status(DoiStatus.REGISTERED)
-      .build();
+      .datacite(xml).status(DoiStatus.REGISTERED).build();
     postOrPut(doi, data, new HttpPost(idUri(doi)));
     LOG.info("Registered {}", doi);
   }
@@ -153,11 +171,21 @@ public class EzidService extends BaseService {
   }
 
   @Override
+  public void update(DOI doi, String metadata) throws DoiException {
+    DataCiteValidator.validateMetadata(metadata);
+    updateWithoutValidation(doi, metadata);
+  }
+
+  @Override
   public void update(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    updateWithoutValidation(doi, DataCiteValidator.toXml(doi, metadata));
+  }
+
+  private void updateWithoutValidation(DOI doi, String xml) throws DoiException {
     Preconditions.checkNotNull(doi);
-    Preconditions.checkNotNull(metadata);
+    Preconditions.checkNotNull(xml);
     Map<String, String> data = AnvlUtils.builder()
-      .datacite(DataCiteValidator.toXml(doi, metadata))
+      .datacite(xml)
       .build();
     postOrPut(doi, data, new HttpPost(idUri(doi)));
     LOG.info("Updated metadata for {}", doi);

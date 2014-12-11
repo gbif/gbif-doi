@@ -112,7 +112,17 @@ public class DataCiteService extends BaseService {
   }
 
   @Override
+  public void reserve(DOI doi, String metadata) throws DoiException {
+    DataCiteValidator.validateMetadata(metadata);
+    reserveWithoutValidation(doi, metadata);
+  }
+
+  @Override
   public void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    reserveWithoutValidation(doi, DataCiteValidator.toXml(doi, metadata));
+  }
+
+  private void reserveWithoutValidation(DOI doi, String metadata) throws DoiException {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(metadata);
     if (exists(doi)) {
@@ -123,7 +133,17 @@ public class DataCiteService extends BaseService {
   }
 
   @Override
+  public void register(DOI doi, URI target, String metadata) throws DoiException {
+    DataCiteValidator.validateMetadata(metadata);
+    registerWithoutValidation(doi, target, metadata);
+  }
+
+  @Override
   public void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException {
+    registerWithoutValidation(doi, target, DataCiteValidator.toXml(doi, metadata));
+  }
+
+  private void registerWithoutValidation(DOI doi, URI target, String metadata) throws DoiException {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(metadata);
@@ -149,7 +169,17 @@ public class DataCiteService extends BaseService {
   }
 
   @Override
+  public void update(DOI doi, String metadata) throws DoiException {
+    DataCiteValidator.validateMetadata(metadata);
+    updateWithoutValidation(doi, metadata);
+  }
+
+  @Override
   public void update(DOI doi, DataCiteMetadata metadata) throws DoiException {
+    updateWithoutValidation(doi, DataCiteValidator.toXml(doi, metadata));
+  }
+
+  private void updateWithoutValidation(DOI doi, String metadata) throws DoiException {
     Preconditions.checkNotNull(doi);
     Preconditions.checkNotNull(metadata);
 
@@ -204,24 +234,21 @@ public class DataCiteService extends BaseService {
    * Executes an HTTP POST request.
    *
    * @param uri  to issue request against
-   * @param data request body content to be serialized as XML with jackson
+   * @param metadata request body content to be serialized as XML with jackson
    *
    * @throws org.gbif.doi.service.DoiException in case anything goes wrong during the request.
    */
-  private void post(DOI doi, URI uri, DataCiteMetadata data) throws DoiException {
+  private void post(DOI doi, URI uri, String metadata) throws DoiException {
     LOG.debug("POST: {}", uri);
     HttpPost req = new HttpPost(uri);
     // body
-    if (data != null) {
-      try {
-        String xml = DataCiteValidator.toXml(doi, data);
-        HttpEntity entity = new StringEntity(xml, APPLICATION_XML_UTF8);
-        req.setEntity(entity);
-        authCall(req);
+    try {
+      HttpEntity entity = new StringEntity(metadata, APPLICATION_XML_UTF8);
+      req.setEntity(entity);
+      authCall(req);
 
-      } catch (Exception e) {
-        throw new DoiException(e);
-      }
+    } catch (Exception e) {
+      throw new DoiException(e);
     }
   }
 }

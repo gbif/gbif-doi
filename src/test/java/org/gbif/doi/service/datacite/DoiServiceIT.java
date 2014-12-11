@@ -117,7 +117,7 @@ public abstract class DoiServiceIT {
   @Test(expected = NullPointerException.class)
   public void testRegisterNPE1() throws Exception {
     final DOI doi = newDoi();
-    service.register(doi, null, null);
+    service.register(doi, null, (DataCiteMetadata) null);
   }
 
   @Test(expected = NullPointerException.class)
