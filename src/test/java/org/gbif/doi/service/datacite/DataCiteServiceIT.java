@@ -73,7 +73,7 @@ public class DataCiteServiceIT extends DoiServiceIT {
 
   @Test
   public void testDataCiteUri() throws Exception {
-    assertEquals(URI.create("https://mds.datacite.org/doi/10.1234/TNG7Y"), service.doiUri(new DOI("10.1234/TNG7Y")));
-    assertEquals(URI.create("https://mds.datacite.org/metadata/10.1234/TNG7Y"), service.metadataUri(new DOI("10.1234/TNG7Y")));
+    assertEquals(URI.create("https://mds.datacite.org/doi/10.1234/tng7y"), service.doiUri(new DOI("10.1234/TNG7Y")));
+    assertEquals(URI.create("https://mds.datacite.org/metadata/10.1234/tng7y"), service.metadataUri(new DOI("10.1234/TNG7Y")));
   }
 }

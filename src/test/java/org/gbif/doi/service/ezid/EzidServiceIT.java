@@ -41,7 +41,7 @@ public class EzidServiceIT extends DoiServiceIT {
 
   @Test
   public void testFormatEzidUri() throws Exception {
-    assertEquals(URI.create("https://ezid.cdlib.org/id/doi:10.1234/TNG7Y"), service.idUri(new DOI("10.1234/TNG7Y")));
-    assertEquals(URI.create("https://ezid.cdlib.org/id/doi:10.1234/TNG7Y"), service.idUri(new DOI("doi:10.1234/TNG7Y")));
+    assertEquals(URI.create("https://ezid.cdlib.org/id/doi:10.1234/tng7y"), service.idUri(new DOI("10.1234/TNG7Y")));
+    assertEquals(URI.create("https://ezid.cdlib.org/id/doi:10.1234/tng7y"), service.idUri(new DOI("doi:10.1234/TNG7Y")));
   }
 }
