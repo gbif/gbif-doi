@@ -1,0 +1,5 @@
+org.gbif.doi.metadata.datacite
+org.gbif.doi.service
+org.gbif.doi.service.ezid
+org.gbif.doi.service.datacite
+com.kscs.util.jaxb
