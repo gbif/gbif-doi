@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>19</version>
+    <version>23-SNAPSHOT</version>
   </parent>
 
   <artifactId>gbif-doi</artifactId>
@@ -47,6 +47,7 @@
   </pluginRepositories>
 
   <properties>
+    <!-- The IPT depends on this project and so this must stay at java 6 until IPT is upgraded -->
     <jdkLevel>1.6</jdkLevel>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
