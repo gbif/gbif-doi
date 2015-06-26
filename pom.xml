@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>23-SNAPSHOT</version>
+    <version>23</version>
   </parent>
 
   <artifactId>gbif-doi</artifactId>
@@ -59,17 +59,17 @@
 
     <!-- libs -->
     <findbugs-jsr305.version>3.0.0</findbugs-jsr305.version>
-    <gbif-api.version>0.17</gbif-api.version>
-    <gbif-common.version>0.16</gbif-common.version>
-    <gbif-httputils.version>0.5</gbif-httputils.version>
+    <gbif-api.version>0.23</gbif-api.version>
+    <gbif-common.version>0.18</gbif-common.version>
+    <gbif-httputils.version>0.7</gbif-httputils.version>
     <guava.version>18.0</guava.version>
-    <httpclient.version>4.3.4</httpclient.version>
-    <httpcore.version>4.3.2</httpcore.version>
-    <jackson2.version>2.4.2</jackson2.version>
-    <junit.version>4.11</junit.version>
-    <logback.version>1.1.2</logback.version>
-    <mockito.version>1.10.8</mockito.version>
-    <slf4j-api.version>1.7.7</slf4j-api.version>
+    <httpclient.version>4.3.6</httpclient.version>
+    <httpcore.version>4.3.3</httpcore.version>
+    <jackson2.version>2.5.4</jackson2.version>
+    <junit.version>4.12</junit.version>
+    <logback.version>1.1.3</logback.version>
+    <mockito.version>1.10.19</mockito.version>
+    <slf4j-api.version>1.7.12</slf4j-api.version>
     <validation-api.version>1.1.0.Final</validation-api.version>
   </properties>
 
