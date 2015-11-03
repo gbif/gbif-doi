@@ -15,6 +15,5 @@ Execute the Maven command passing as parameter GBIF's datacite password.
 
 ##How to use this library
 
-The consumer of this library must decide which provider of the service [DoiService](/src/main/java/org/gbif/doi/service/DoiService.java) prefer to use,
-the provided implementations are [DataCiteService](/src/main/java/org/gbif/doi/service/datacite/DataCiteService.java) and [EzidService](/src/main/java/org/gbif/doi/service/ezid/EzidService.java);
+The consumer of this library must decide which provider of the service [DoiService](/src/main/java/org/gbif/doi/service/DoiService.java) that they prefer to use. The provided implementations are [DataCiteService](/src/main/java/org/gbif/doi/service/datacite/DataCiteService.java) and [EzidService](/src/main/java/org/gbif/doi/service/ezid/EzidService.java);
 both implementations require an username and password to connect to the specific service.
