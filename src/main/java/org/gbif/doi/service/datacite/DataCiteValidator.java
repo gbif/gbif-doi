@@ -29,9 +29,12 @@ import org.xml.sax.SAXException;
  */
 public class DataCiteValidator {
   private static final Logger LOG = LoggerFactory.getLogger(DataCiteValidator.class);
-  private static final String DATACITE_SCHEMA_LOCATION = "http://datacite.org/schema/kernel-3 http://schema.datacite.org/meta/kernel-3/metadata.xsd";
-  private static Validator DATACITE_VALIDATOR;
+  private static final String DATACITE_XSD_LOCATION = "http://schema.datacite.org/meta/kernel-3/metadata.xsd";
+  private static final String DATACITE_SCHEMA_LOCATION = "http://datacite.org/schema/kernel-3 " + DATACITE_XSD_LOCATION;
+  //lazy initialized
+  private static Schema DATACITE_SCHEMA;
   private static final JAXBContext context;
+
   static {
     try {
       context = JAXBContext.newInstance(DataCiteMetadata.class);
@@ -39,7 +42,6 @@ public class DataCiteValidator {
       throw new IllegalStateException("Fail to setup JAXB", e);
     }
   }
-
 
   /**
    * Produces a validated xml representation of the data cite metadata.
@@ -110,18 +112,28 @@ public class DataCiteValidator {
     }
   }
 
+  /**
+   * Lazy create the DATACITE_SCHEMA and return a new instance of validator on each call.
+   * Validator instances are NOT thread-safe.
+   *
+   * @return
+   * @throws IOException
+   * @throws SAXException
+   */
   private static Validator getValidator() throws IOException, SAXException {
-    if (DATACITE_VALIDATOR == null) {
-      // define the type of schema - we use W3C:
-      String schemaLang = "http://www.w3.org/2001/XMLSchema";
-      // resolve validation driver:
-      SchemaFactory factory = SchemaFactory.newInstance(schemaLang);
-      // create schema by reading it from an URL:
-      //File f = FileUtils.getClasspathFile("datacite/metadata.xsd");
-      Schema schema = factory.newSchema(new StreamSource("http://schema.datacite.org/meta/kernel-3/metadata.xsd"));
-      DATACITE_VALIDATOR = schema.newValidator();
+    if (DATACITE_SCHEMA == null) {
+      synchronized (DATACITE_SCHEMA_LOCATION) {
+        if (DATACITE_SCHEMA == null) {
+          String schemaLang = "http://www.w3.org/2001/XMLSchema";
+          // resolve validation driver:
+          SchemaFactory factory = SchemaFactory.newInstance(schemaLang);
+          // create schema by reading it from an URL:
+          DATACITE_SCHEMA = factory.newSchema(new StreamSource(DATACITE_XSD_LOCATION));
+        }
+      }
     }
-    return DATACITE_VALIDATOR;
+    //A validator object is not thread-safe and not reentrant (Validator JavaDoc).
+    return DATACITE_SCHEMA.newValidator();
   }
 
 }
