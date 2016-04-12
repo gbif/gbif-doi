@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>35</version>
+    <version>37</version>
   </parent>
 
   <artifactId>gbif-doi</artifactId>
@@ -21,6 +21,13 @@
     <developerConnection>scm:git:git@github.com:gbif/gbif-doi.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
+
+  <distributionManagement>
+    <site>
+      <id>gh-pages</id>
+      <url>http://gbif.github.io/gbif-doi/</url>
+    </site>
+  </distributionManagement>
 
   <repositories>
     <repository>
@@ -59,8 +66,8 @@
 
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
-    <gbif-api.version>0.36</gbif-api.version>
-    <gbif-common.version>0.23</gbif-common.version>
+    <gbif-api.version>0.37</gbif-api.version>
+    <gbif-common.version>0.26</gbif-common.version>
     <gbif-httputils.version>0.9</gbif-httputils.version>
     <guava.version>19.0</guava.version>
     <httpclient.version>4.3.6</httpclient.version>
