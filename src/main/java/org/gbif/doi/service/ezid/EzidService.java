@@ -83,6 +83,12 @@ public class EzidService extends BaseService {
     return null;
   }
 
+  @Override
+  public String getMetadata(DOI doi) throws DoiException {
+    // this operation is only implemented for DataCite
+    throw new UnsupportedOperationException();
+  }
+
   private Map<String, String> getANVL(DOI doi) throws DoiException {
     Preconditions.checkNotNull(doi);
     try {

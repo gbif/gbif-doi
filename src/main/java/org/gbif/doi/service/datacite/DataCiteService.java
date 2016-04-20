@@ -75,6 +75,11 @@ public class DataCiteService extends BaseService {
     return null;
   }
 
+  @Override
+  public String getMetadata(DOI doi) throws DoiException {
+    return get(metadataUri(doi));
+  }
+
   private URI getTargetUrl(DOI doi) throws DoiHttpException {
     // get target URI
     String content = null;
@@ -222,7 +227,7 @@ public class DataCiteService extends BaseService {
   }
 
   @VisibleForTesting
-  protected  URI metadataUri(DOI doi) throws DoiException {
+  protected URI metadataUri(DOI doi) throws DoiException {
     try {
       return URI.create(metadataWs.toString() + doi.getDoiName());
     } catch (IllegalArgumentException e) {

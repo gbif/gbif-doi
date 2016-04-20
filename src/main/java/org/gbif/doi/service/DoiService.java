@@ -21,6 +21,14 @@ public interface DoiService {
   DoiData resolve(DOI doi) throws DoiException;
 
   /**
+   * Get the metadata associated with the doi.
+   * @param doi the identifier to resolve
+   * @return
+   * @throws DoiException if the operation failed for any reason
+   */
+  String getMetadata(DOI doi) throws DoiException;
+
+  /**
    * Reserves a new identifier and defines its initial metadata.
    * Reserved ids are not known to resolvers yet and can still be fully deleted.
    *
