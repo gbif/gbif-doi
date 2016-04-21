@@ -84,6 +84,17 @@ public class EzidService extends BaseService {
   }
 
   @Override
+  public boolean exists(DOI doi) throws DoiException {
+    Map<String, String> result = null;
+    try {
+      result = getANVL(doi);
+    } catch (DoiHttpException e) {
+      return false;
+    }
+    return (result != null && !result.isEmpty());
+  }
+
+  @Override
   public String getMetadata(DOI doi) throws DoiException {
     // this operation is only implemented for DataCite
     throw new UnsupportedOperationException();
@@ -93,7 +104,6 @@ public class EzidService extends BaseService {
     Preconditions.checkNotNull(doi);
     try {
       return AnvlUtils.read(get(idUri(doi)));
-
     } catch (DoiHttpException e) {
       if (Math.round( e.getStatus() / 100.0) == 4) {
         LOG.debug("Non existing DOI", e.getMessage());

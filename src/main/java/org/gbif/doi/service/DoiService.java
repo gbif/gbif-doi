@@ -21,6 +21,14 @@ public interface DoiService {
   DoiData resolve(DOI doi) throws DoiException;
 
   /**
+   * Check if a DOI is reserved or registered.
+   * @param doi
+   * @return
+   * @throws DoiException
+   */
+  boolean exists(DOI doi) throws DoiException;
+
+  /**
    * Get the metadata associated with the doi.
    * @param doi the identifier to resolve
    * @return

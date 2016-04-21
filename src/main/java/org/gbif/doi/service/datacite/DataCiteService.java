@@ -107,10 +107,11 @@ public class DataCiteService extends BaseService {
   /**
    * @return true if the DOI is reserved or registered
    */
-  private boolean exists(DOI doi) throws DoiException {
+  public boolean exists(DOI doi) throws DoiException {
     try {
       get(metadataUri(doi));
     } catch (DoiHttpException e) {
+      //probably not a good idea to swallow exceptions like 401 and 403
       return false;
     }
     return true;
