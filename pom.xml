@@ -66,9 +66,9 @@
 
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
-    <gbif-api.version>0.37</gbif-api.version>
+    <gbif-api.version>0.39</gbif-api.version>
     <gbif-common.version>0.26</gbif-common.version>
-    <gbif-httputils.version>0.9</gbif-httputils.version>
+    <gbif-httputils.version>0.10</gbif-httputils.version>
     <guava.version>19.0</guava.version>
     <httpclient.version>4.3.6</httpclient.version>
     <httpcore.version>4.3.3</httpcore.version>
