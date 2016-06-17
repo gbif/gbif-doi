@@ -105,6 +105,7 @@ public class DataCiteService extends BaseService {
   }
 
   /**
+   *
    * @return true if the DOI is reserved or registered
    */
   public boolean exists(DOI doi) throws DoiException {
@@ -247,14 +248,9 @@ public class DataCiteService extends BaseService {
   private void post(DOI doi, URI uri, String metadata) throws DoiException {
     LOG.debug("POST: {}", uri);
     HttpPost req = new HttpPost(uri);
-    // body
-    try {
-      HttpEntity entity = new StringEntity(metadata, APPLICATION_XML_UTF8);
-      req.setEntity(entity);
-      authCall(req);
+    HttpEntity entity = new StringEntity(metadata, APPLICATION_XML_UTF8);
+    req.setEntity(entity);
 
-    } catch (Exception e) {
-      throw new DoiException(e);
-    }
+    authCall(req);
   }
 }
