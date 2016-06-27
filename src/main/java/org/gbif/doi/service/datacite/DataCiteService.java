@@ -158,7 +158,9 @@ public class DataCiteService extends BaseService {
     if (status != null && DoiStatus.REGISTERED == status.getStatus()) {
       throw new DoiExistsException(doi);
     }
+    // POST metadata first
     post(doi, metadataWs, metadata);
+    // POST the DOI after
     authCall(buildDoiUrlPost(doi, target));
     if (status != null && DoiStatus.DELETED == status.getStatus()) {
       LOG.info("Re-registered {}", doi);

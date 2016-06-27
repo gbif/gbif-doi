@@ -41,7 +41,7 @@ public abstract class BaseService implements DoiService {
   }
 
   /**
-   * Does an authenticated call and throws a DoiHttpException for nun successful responses other than 2xx.
+   * Does an authenticated call and throws a DoiHttpException for non successful responses other than 2xx.
    * If successful return the entities body as a string.
    * @throws DoiException
    */
