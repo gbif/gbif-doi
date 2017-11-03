@@ -57,6 +57,17 @@ public class DataCiteValidator {
         .withIdentifierType("DOI")
         .build()
     );
+    LOG.debug("Metadata XML passed validation", doi);
+    return toXml(data);
+  }
+
+  /**
+   * Produces a validated xml representation of the data cite metadata.
+   * The generated XML is validated according to the datacite xsd schema.
+   * @return xml string
+   * @throws InvalidMetadataException if the generated xml failed validation, e.g. missing mandatory elements
+   */
+  public static String toXml(DataCiteMetadata data) throws InvalidMetadataException {
     // (un)marshaller are not thread safe and need to be created on each authCall
     StringWriter writer = new StringWriter();
     try {
@@ -70,10 +81,9 @@ public class DataCiteValidator {
       throw new InvalidMetadataException(e);
     }
 
-    final String xml = writer.toString();
+    String xml = writer.toString();
     // validate the xml before we return it
     validateMetadata(xml);
-    LOG.debug("Metadata XML passed validation", doi);
     return xml;
   }
 
