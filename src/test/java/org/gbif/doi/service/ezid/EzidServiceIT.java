@@ -9,10 +9,12 @@ import org.gbif.utils.HttpUtil;
 
 import java.net.URI;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore("Ezid test IDs are not found")
 public class EzidServiceIT extends DoiServiceIT {
   private static final String TEST_PREFIX = "10.5072";
   private static final String TEST_SHOULDER = "FK2";
