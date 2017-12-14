@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  @XmlType(name = <span class="jxr_string">"resourceType"</span>)
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  @XmlEnum
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">public</strong> enum <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadata.html">ResourceType</a> {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">public</strong> enum <a href="../../../../../org/gbif/doi/metadata/datacite/ResourceType.html">ResourceType</a> {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      @XmlEnumValue(<span class="jxr_string">"Audiovisual"</span>)
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      AUDIOVISUAL(<span class="jxr_string">"Audiovisual"</span>),
@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      OTHER(<span class="jxr_string">"Other"</span>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String value;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadata.html">ResourceType</a>(String v) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <a href="../../../../../org/gbif/doi/metadata/datacite/ResourceType.html">ResourceType</a>(String v) {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          value = v;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">return</strong> value;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadata.html">ResourceType</a> fromValue(String v) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../org/gbif/doi/metadata/datacite/ResourceType.html">ResourceType</a> fromValue(String v) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">for</strong> (ResourceType c: ResourceType.values()) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>              <strong class="jxr_keyword">if</strong> (c.value.equals(v)) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>                  <strong class="jxr_keyword">return</strong> c;
@@ -102,6 +102,6 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>
