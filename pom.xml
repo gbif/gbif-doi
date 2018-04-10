@@ -13,7 +13,7 @@
 
   <name>GBIF DOI Service</name>
   <description>This project provides DOI services wrapping DataCite and EZID used by the IPT and Portal</description>
-  <url>http://github.org/gbif/gbif-doi</url>
+  <url>https://github.org/gbif/gbif-doi</url>
 
   <scm>
     <connection>scm:git:git@github.com:gbif/gbif-doi.git</connection>
@@ -25,15 +25,11 @@
   <distributionManagement>
     <site>
       <id>gh-pages</id>
-      <url>http://gbif.github.io/gbif-doi/</url>
+      <url>https://gbif.github.io/gbif-doi/</url>
     </site>
   </distributionManagement>
 
   <repositories>
-    <repository>
-      <id>central</id>
-      <url>http://repo1.maven.org/maven2/</url>
-    </repository>
     <repository>
       <id>gbif-all</id>
       <url>http://repository.gbif.org/content/groups/gbif</url>
@@ -54,8 +50,7 @@
   </pluginRepositories>
 
   <properties>
-    <!-- The IPT depends on this project and so this must stay at java 6 until IPT is upgraded -->
-    <jdkLevel>1.6</jdkLevel>
+    <jdkLevel>1.8</jdkLevel>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- plugins -->
@@ -66,8 +61,8 @@
 
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
-    <gbif-api.version>0.58</gbif-api.version>
-    <gbif-common.version>0.26</gbif-common.version>
+    <gbif-api.version>0.62</gbif-api.version>
+    <gbif-common.version>0.37</gbif-common.version>
     <gbif-httputils.version>0.10</gbif-httputils.version>
     <guava.version>19.0</guava.version>
     <httpclient.version>4.3.6</httpclient.version>

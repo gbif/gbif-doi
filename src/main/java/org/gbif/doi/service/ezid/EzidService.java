@@ -57,7 +57,7 @@ public class EzidService extends BaseService {
   @VisibleForTesting
   protected URI idUri(DOI doi) throws DoiException {
     try {
-      return URI.create(idWs.toString() + doi);
+      return URI.create(idWs.toString() + doi.getDoiString());
     } catch (IllegalArgumentException e) {
       throw new DoiException("Unable to convert DOI to EZID URI", e);
     }
