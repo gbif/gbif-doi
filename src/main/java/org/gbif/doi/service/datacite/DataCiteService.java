@@ -11,13 +11,17 @@ import org.gbif.doi.service.DoiHttpException;
 import org.gbif.doi.service.ServiceConfig;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -32,18 +36,22 @@ public class DataCiteService extends BaseService {
 
   private static final Logger LOG = LoggerFactory.getLogger(DataCiteService.class);
   private static final ContentType APPLICATION_XML_UTF8 = ContentType.create("application/xml", Charsets.UTF_8);
+  private static final ContentType APPLICATION_JSON_UTF8 = ContentType.create("application/vnd.api+json", Charsets.UTF_8);
   private static final URI DEFAULT_API = URI.create("https://mds.datacite.org/");
   // god knows why, but datacite assigns this URI to all reserved test DOIs as target URLs
   private static final URI TEST_404_TARGET = URI.create("http://www.datacite.org/testprefix");
-  private final URI apiWs;
   private final URI doiWs;
   private final URI metadataWs;
+  private final String restApiWs;
+  private final ServiceConfig cfg;
 
   public DataCiteService(CloseableHttpClient httpClient, ServiceConfig cfg) {
     super(httpClient, cfg);
-    apiWs = cfg.getApi() == null ? DEFAULT_API : cfg.getApi();
+    this.cfg = cfg;
+    URI apiWs = cfg.getApi() == null ? DEFAULT_API : cfg.getApi();
     doiWs = apiWs.resolve("/doi/");
     metadataWs = apiWs.resolve("/metadata/");
+    restApiWs = DEFAULT_API.toString().contains("test") ? "https://api.test.datacite.org/dois/" : "https://api.datacite.org/dois/";
   }
 
   /**
@@ -59,7 +67,13 @@ public class DataCiteService extends BaseService {
 
       final URI target = getTargetUrl(doi);
       try {
-        get(metadataUri(doi));
+
+        String metadata = get(metadataUri(doi));
+        metadata = metadata != null ? metadata.trim() : "";
+        if (metadata.isEmpty()) {
+          return new DoiData(DoiStatus.DELETED, target);
+        }
+
         return target == null ? new DoiData(DoiStatus.RESERVED, null) : new DoiData(DoiStatus.REGISTERED, target);
 
       } catch (DoiHttpException e) {
@@ -172,9 +186,31 @@ public class DataCiteService extends BaseService {
   @Override
   public boolean delete(DOI doi) throws DoiException {
     Preconditions.checkNotNull(doi);
-    delete(metadataUri(doi));
+
+    URI url = getTargetUrl(doi);
+    if (url == null) {
+      delete(doiUri(doi));
+    } else {
+      deleteMetadata(doi);
+    }
+
     LOG.info("Deleted {}", doi);
-    return resolve(doi) != null;
+    return resolve(doi) == null;
+  }
+
+  // WORKAROUND, DIRTY TRICK HOW TO DELETE METADATA AND SUPPORT THE EXISTING LIBRARY BEHAVIOR
+  private void deleteMetadata(DOI doi) throws DoiException{
+    HttpPut request = new HttpPut(restApiWs + doi.getDoiName());
+    String body = String.format("{\"data\":{\"type\":\"dois\",\"attributes\":{\"doi\":\"%s\",\"xml\":null}}}", doi.getDoiName());
+    HttpEntity entity = new StringEntity(body, APPLICATION_JSON_UTF8);
+    request.setEntity(entity);
+
+    String auth = cfg.getUsername() + ":" + cfg.getPassword();
+    byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
+    String authHeader = "Basic " + new String(encodedAuth);
+    request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+
+    authCall(request);
   }
 
   @Override

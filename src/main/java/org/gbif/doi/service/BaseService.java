@@ -95,10 +95,7 @@ public abstract class BaseService implements DoiService {
   }
 
   protected static boolean isSuccess(HttpResponse resp) {
-    if (Math.round( resp.getStatusLine().getStatusCode() / 100.0) == 2) {
-      return true;
-    }
-    return false;
+    return Math.round(resp.getStatusLine().getStatusCode() / 100.0) == 2;
   }
 
   private HttpContext buildAuthContext() {

@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -81,9 +82,12 @@ public abstract class DoiServiceIT {
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
     service.reserve(doi, meta);
     // now delete it and reserving again should work
-    service.delete(doi);
+    boolean isDeletedOne = service.delete(doi);
     service.reserve(doi, meta);
-    service.delete(doi);
+    boolean isDeletedTwo = service.delete(doi);
+
+    assertTrue(isDeletedOne);
+    assertTrue(isDeletedTwo);
   }
 
   @Test
