@@ -8,10 +8,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -45,7 +46,14 @@ public abstract class BaseService implements DoiService {
    * If successful return the entities body as a string.
    * @throws DoiException
    */
-  protected String authCall(HttpUriRequest req) throws DoiException {
+  protected String authCall(HttpRequestBase req) throws DoiException {
+
+    RequestConfig.Builder requestConfig = RequestConfig.custom();
+    requestConfig.setConnectTimeout(60 * 1000);
+    requestConfig.setConnectionRequestTimeout(60 * 1000);
+    requestConfig.setSocketTimeout(60 * 1000);
+    req.setConfig(requestConfig.build());
+
     CloseableHttpResponse resp = null;
     try {
       // authentication
