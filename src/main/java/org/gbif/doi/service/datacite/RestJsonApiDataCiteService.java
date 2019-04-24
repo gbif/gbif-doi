@@ -2,7 +2,6 @@ package org.gbif.doi.service.datacite;
 
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.google.common.base.Preconditions;
-import org.apache.commons.lang3.NotImplementedException;
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
 import org.gbif.api.model.common.DoiStatus;
@@ -76,11 +75,11 @@ public class RestJsonApiDataCiteService implements DoiService {
     /**
      * DataCiteClient does not provide the explicit method to retrieve metadata
      * @param doi the identifier
-     * @return not implemented
+     * @return unsupported operation
      */
     @Override
     public String getMetadata(DOI doi) {
-        throw new NotImplementedException("Method not implemented");
+        throw new UnsupportedOperationException("Unsupported operation");
     }
 
     /**
@@ -161,7 +160,7 @@ public class RestJsonApiDataCiteService implements DoiService {
     public boolean delete(DOI doi) {
         Preconditions.checkNotNull(doi);
         Response<Void> deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());
-        return deleteResponse.code() == 204;
+        return deleteResponse.isSuccessful();
     }
 
     /**
@@ -195,12 +194,12 @@ public class RestJsonApiDataCiteService implements DoiService {
     }
 
     /**
-     * Not implemented
+     * Unsupported operation.
      * @param doi the identifier of metadata to update
      * @param target the new URL the DOI should resolve to
      */
     @Override
     public void update(DOI doi, URI target) {
-        throw new NotImplementedException("Method not implemented");
+        throw new UnsupportedOperationException("Unsupported operation");
     }
 }
