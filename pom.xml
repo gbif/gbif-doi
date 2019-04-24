@@ -61,7 +61,7 @@
 
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
-    <gbif-api.version>0.62</gbif-api.version>
+    <gbif-api.version>0.81-SNAPSHOT</gbif-api.version>
     <gbif.datacite.rest.client.version>1.0-SNAPSHOT</gbif.datacite.rest.client.version>
     <gbif-common.version>0.37</gbif-common.version>
     <gbif-httputils.version>0.10</gbif-httputils.version>

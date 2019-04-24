@@ -43,21 +43,21 @@ public class RestJsonApiDataCiteService implements DoiService {
         JSONAPIDocument<Datacite42Schema> bodyJsonApiWrapper = doiResponse.body();
 
         if (!doiResponse.isSuccessful() || bodyJsonApiWrapper == null) {
-            return new DoiData(DoiStatus.FAILED, null);
+            return new DoiData(DoiStatus.FAILED);
         }
 
         Datacite42Schema body = bodyJsonApiWrapper.get();
         String doiState = body.getState();
 
         if ("draft".equals(doiState)) {
-            return new DoiData(DoiStatus.RESERVED, null);
+            return new DoiData(DoiStatus.RESERVED);
         }
 
         if ("findable".equals(doiState)) {
-            return new DoiData(DoiStatus.REGISTERED, null);
+            return new DoiData(DoiStatus.REGISTERED);
         }
 
-        return new DoiData(DoiStatus.FAILED, null);
+        return new DoiData(DoiStatus.FAILED);
     }
 
     /**
