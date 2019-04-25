@@ -21,6 +21,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+@Ignore
 public class DataCiteServiceIT extends DoiServiceIT {
   private static DataCiteService service;
 
