@@ -61,13 +61,14 @@
 
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
-    <gbif-api.version>0.62</gbif-api.version>
+    <gbif-api.version>0.81-SNAPSHOT</gbif-api.version>
+    <gbif.datacite.rest.client.version>1.0-SNAPSHOT</gbif.datacite.rest.client.version>
     <gbif-common.version>0.37</gbif-common.version>
     <gbif-httputils.version>0.10</gbif-httputils.version>
     <guava.version>19.0</guava.version>
     <httpclient.version>4.3.6</httpclient.version>
     <httpcore.version>4.3.3</httpcore.version>
-    <jackson2.version>2.6.3</jackson2.version>
+    <jackson2.version>2.9.8</jackson2.version>
     <junit.version>4.12</junit.version>
     <logback.version>1.1.5</logback.version>
     <mockito.version>1.10.19</mockito.version>
@@ -173,6 +174,11 @@
       <groupId>org.gbif</groupId>
       <artifactId>gbif-api</artifactId>
       <version>${gbif-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gbif.datacite</groupId>
+      <artifactId>datacite-rest-client</artifactId>
+      <version>${gbif.datacite.rest.client.version}</version>
     </dependency>
 
     <!-- OTHER -->
