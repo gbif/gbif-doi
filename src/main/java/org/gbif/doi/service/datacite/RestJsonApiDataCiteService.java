@@ -145,7 +145,6 @@ public class RestJsonApiDataCiteService implements DoiService {
      */
     private DoiSimplifiedModel prepareDoiCreateModel(DOI doi, String metadata) {
         DoiSimplifiedModel model = new DoiSimplifiedModel();
-        model.setId(doi.getDoiName());
         model.setDoi(doi.getDoiName());
         model.setXml(Base64.getEncoder().encodeToString(metadata.getBytes()));
         return model;
