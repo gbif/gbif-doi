@@ -120,6 +120,7 @@ public class RestJsonApiDataCiteService implements DoiService {
         Preconditions.checkNotNull(metadata);
         DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
         model.setEvent(EventType.PUBLISH.getValue());
+        model.setUrl(target.toString());
         JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
         dataCiteClient.createDoi(jsonApiWrapper);
     }
@@ -172,6 +173,7 @@ public class RestJsonApiDataCiteService implements DoiService {
         Preconditions.checkNotNull(doi);
         Preconditions.checkNotNull(metadata);
         DoiSimplifiedModel model = new DoiSimplifiedModel();
+        model.setDoi(doi.getDoiName());
         model.setXml(Base64.getEncoder().encodeToString(metadata.getBytes()));
         JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
         dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper);
@@ -193,12 +195,18 @@ public class RestJsonApiDataCiteService implements DoiService {
     }
 
     /**
-     * Unsupported operation.
+     * Update with a new URL.
      * @param doi the identifier of metadata to update
      * @param target the new URL the DOI should resolve to
      */
     @Override
     public void update(DOI doi, URI target) {
-        throw new UnsupportedOperationException("Unsupported operation");
+        Preconditions.checkNotNull(doi);
+        Preconditions.checkNotNull(target);
+        DoiSimplifiedModel model = new DoiSimplifiedModel();
+        model.setDoi(doi.getDoiName());
+        model.setUrl(target.toString());
+        JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
+        dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper);
     }
 }
