@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>gbif-doi</artifactId>
-  <version>1.10-SNAPSHOT</version>
+  <version>1.10</version>
   <packaging>jar</packaging>
 
   <name>GBIF DOI Service</name>
@@ -19,7 +19,7 @@
     <connection>scm:git:git@github.com:gbif/gbif-doi.git</connection>
     <url>https://github.com/gbif/gbif-doi</url>
     <developerConnection>scm:git:git@github.com:gbif/gbif-doi.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>gbif-doi-1.10</tag>
   </scm>
 
   <distributionManagement>
@@ -182,8 +182,7 @@
             <configuration>
               <shadedArtifactAttached>false</shadedArtifactAttached>
               <transformers>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
               </transformers>
               <relocations>
                 <relocation>
