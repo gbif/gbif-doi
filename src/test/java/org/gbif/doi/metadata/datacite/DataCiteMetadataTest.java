@@ -20,9 +20,9 @@ public class DataCiteMetadataTest {
     return DataCiteMetadata.builder()
       .withIdentifier().withValue(doi.getDoiName()).withIdentifierType("DOI").end()
       .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
-      .withCreators()
-      .addCreator().withCreatorName("Markus")
-      .withNameIdentifier().withNameIdentifierScheme("ORCID").withSchemeURI("orcid.org").withValue("0000-0001-7757-1889").end()
+      .withCreators().addCreator().withCreatorName().withValue("Markus").end()
+      .withNameIdentifier().addNameIdentifier().withNameIdentifierScheme("ORCID")
+      .withSchemeURI("orcid.org").withValue("0000-0001-7757-1889").end()
       .end()
       .end()
       .withTitles()
@@ -31,7 +31,7 @@ public class DataCiteMetadataTest {
         TitleType.TRANSLATED_TITLE).end()
       .end()
       .withPublicationYear("2014")
-      .withPublisher("Pensoft")
+      .withPublisher().withValue("Pensoft").end()
       .build();
   }
 
@@ -42,10 +42,12 @@ public class DataCiteMetadataTest {
 
     DataCiteMetadata.Creators creators = of.createDataCiteMetadataCreators();
     DataCiteMetadata.Creators.Creator creator = of.createDataCiteMetadataCreatorsCreator();
-    creator.setCreatorName("Piyapong");
+    DataCiteMetadata.Creators.Creator.CreatorName cn = of.createDataCiteMetadataCreatorsCreatorCreatorName();
+    cn.setValue("Piyapong");
+    creator.setCreatorName(cn);
     DataCiteMetadata.Creators.Creator.NameIdentifier nid = of.createDataCiteMetadataCreatorsCreatorNameIdentifier();
     nid.setValue("pc1405");
-    creator.setNameIdentifier(nid);
+    creator.getNameIdentifier().add(nid);
     creators.getCreator().add(creator);
     res.setCreators(creators);
 
@@ -61,7 +63,9 @@ public class DataCiteMetadataTest {
     res.setTitles(titles);
 
     res.setPublicationYear("2014");
-    res.setPublisher("Piyapong");
+    DataCiteMetadata.Publisher pub = of.createDataCiteMetadataPublisher();
+    pub.setValue("Piyapong");
+    res.setPublisher(pub);
 
     System.out.print(res);
   }
@@ -76,7 +80,7 @@ public class DataCiteMetadataTest {
   @Ignore("This fails and serves as a test only to try to serde the full datacite object into JSON for messaging")
   public void testJsonSerde() throws Exception {
     ObjectMapper mapper = new ObjectMapper();
-    DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream("metadata/datacite-example-full-v3.1.xml"));
+    DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream("metadata/datacite-example-full-v4.xml"));
     String json = mapper.writeValueAsString(m);
     DataCiteMetadata m2 = mapper.readValue(json, DataCiteMetadata.class);
     assertEquals(m, m2);

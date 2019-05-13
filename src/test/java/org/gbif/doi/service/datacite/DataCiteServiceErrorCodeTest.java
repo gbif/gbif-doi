@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class DataCiteServiceErrorCodeTest {
 
   public final static URI TEST_TARGET = URI.create("http://www.gbif.org/datasets");
-  private File TEST_METADATA = FileUtils.getClasspathFile("metadata/minimal.xml");
+  private File TEST_METADATA = FileUtils.getClasspathFile("metadata/minimal-v4.xml");
   private DOI TEST_DOI = new DOI(DOI.TEST_PREFIX, "test");
 
   private int REQUEST_ENTITY_TOO_LARGE = 413;

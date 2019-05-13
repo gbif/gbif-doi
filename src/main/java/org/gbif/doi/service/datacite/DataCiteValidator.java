@@ -29,8 +29,8 @@ import org.xml.sax.SAXException;
  */
 public class DataCiteValidator {
   private static final Logger LOG = LoggerFactory.getLogger(DataCiteValidator.class);
-  private static final String DATACITE_XSD_LOCATION = "http://schema.datacite.org/meta/kernel-3/metadata.xsd";
-  private static final String DATACITE_SCHEMA_LOCATION = "http://datacite.org/schema/kernel-3 " + DATACITE_XSD_LOCATION;
+  private static final String DATACITE_XSD_LOCATION = "http://schema.datacite.org/meta/kernel-4/metadata.xsd";
+  private static final String DATACITE_SCHEMA_LOCATION = "http://datacite.org/schema/kernel-4 " + DATACITE_XSD_LOCATION;
   //lazy initialized
   private static Schema DATACITE_SCHEMA;
   private static final JAXBContext context;
@@ -57,7 +57,7 @@ public class DataCiteValidator {
         .withIdentifierType("DOI")
         .build()
     );
-    LOG.debug("Metadata XML passed validation", doi);
+    LOG.debug("Metadata XML passed validation {}", doi);
     return toXml(data, true);
   }
 

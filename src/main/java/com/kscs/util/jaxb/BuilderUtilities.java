@@ -27,6 +27,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
+ * Retrieves a dependent builder instance.
  * @author mirko 2014-04-02
  */
 @SuppressWarnings("unchecked")

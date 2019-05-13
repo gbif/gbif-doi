@@ -23,34 +23,47 @@
  */
 package com.kscs.util.jaxb;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
- * @author mirko 2014-06-04
+ * Helper class acting as base class for all selectors and
+ * concrete implementation of leaf selectors.
+ * @author mirko 2014-04-04
  */
-public interface PartialCloneable<T extends PartialCloneable<T>> {
+public class Selector<TRoot extends Selector<TRoot, ?>, TParent> {
+	public final TRoot _root;
+	public final TParent _parent;
+	protected final String _propertyName;
+	protected final boolean _include;
+
+	@SuppressWarnings("unchecked")
+	public Selector(final TRoot root, final TParent parent, final String propertyName, final boolean include) {
+			this._root = root == null ? (TRoot) this : root;
+			this._parent = parent;
+			this._propertyName = propertyName;
+			this._include = include;
+	}
+
+	public Selector(final TRoot root, final TParent parent, final String propertyName) {
+		this(root, parent, propertyName, true);
+	}
 
 	/**
-	 * Clones this instances partially, the parts
-	 * will be defined by {@param propertyTree}
-	 * @param propertyTree Defines which parts of the object tree will be cloned or excluded
-	 * @param propertyTreeUse Defines how the clone graph will be used: To include or to exclude properties.
-	 * @return A copy of the original object.
+	 * This is only used by builders and other implementational details
 	 */
-	T clone(final PropertyTree propertyTree, final PropertyTreeUse propertyTreeUse);
+	public Map<String, PropertyTree> buildChildren() {
+		return Collections.emptyMap();
+	}
+
+	public PropertyTree build() {
+		return this._root.init();
+	}
 
 	/**
-	 * Clones this instances partially, the parts
-	 * to be EXCLUDED will be defined by {@param propertyTree}
-	 * @param propertyTree Defines which parts of the object tree will be excluded
-	 * @return A copy of the original object.
+	 * This is only used by builders and other implementational details
 	 */
-	T cloneExcept(final PropertyTree propertyTree);
-
-	/**
-	 * Clones this instances partially, the parts
-	 * to be INCLUDED will be defined by {@param propertyTree},
-	 * all other parts will be excluded.
-	 * @param propertyTree Defines which parts of the object tree will be included in the clone
-	 * @return A copy of the original object.
-	 */
-	T cloneOnly(final PropertyTree propertyTree);
+	public PropertyTree init() {
+		return new PropertyTree(this._propertyName, buildChildren());
+	}
 }
