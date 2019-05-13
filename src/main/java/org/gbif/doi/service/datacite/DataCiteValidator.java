@@ -57,7 +57,7 @@ public class DataCiteValidator {
         .withIdentifierType("DOI")
         .build()
     );
-    LOG.debug("Metadata XML passed validation", doi);
+    LOG.debug("Metadata XML passed validation {}", doi);
     return toXml(data, true);
   }
 
