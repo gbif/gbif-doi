@@ -14,43 +14,35 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for descriptionType.
+ * <p>Java class for funderIdentifierType.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="descriptionType">
+ * &lt;simpleType name="funderIdentifierType">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="Abstract"/>
- *     &lt;enumeration value="Methods"/>
- *     &lt;enumeration value="SeriesInformation"/>
- *     &lt;enumeration value="TableOfContents"/>
- *     &lt;enumeration value="TechnicalInfo"/>
+ *     &lt;enumeration value="ISNI"/>
+ *     &lt;enumeration value="GRID"/>
+ *     &lt;enumeration value="Crossref Funder ID"/>
  *     &lt;enumeration value="Other"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "descriptionType")
+@XmlType(name = "funderIdentifierType")
 @XmlEnum
-public enum DescriptionType {
+public enum FunderIdentifierType {
 
-    @XmlEnumValue("Abstract")
-    ABSTRACT("Abstract"),
-    @XmlEnumValue("Methods")
-    METHODS("Methods"),
-    @XmlEnumValue("SeriesInformation")
-    SERIES_INFORMATION("SeriesInformation"),
-    @XmlEnumValue("TableOfContents")
-    TABLE_OF_CONTENTS("TableOfContents"),
-    @XmlEnumValue("TechnicalInfo")
-    TECHNICAL_INFO("TechnicalInfo"),
+    ISNI("ISNI"),
+    GRID("GRID"),
+    @XmlEnumValue("Crossref Funder ID")
+    CROSSREF_FUNDER_ID("Crossref Funder ID"),
     @XmlEnumValue("Other")
     OTHER("Other");
     private final String value;
 
-    DescriptionType(String v) {
+    FunderIdentifierType(String v) {
         value = v;
     }
 
@@ -58,8 +50,8 @@ public enum DescriptionType {
         return value;
     }
 
-    public static DescriptionType fromValue(String v) {
-        for (DescriptionType c: DescriptionType.values()) {
+    public static FunderIdentifierType fromValue(String v) {
+        for (FunderIdentifierType c: FunderIdentifierType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

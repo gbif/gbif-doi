@@ -127,7 +127,7 @@
           <bindingDirectory>src/main/resources</bindingDirectory>
           <schemas>
             <schema>
-              <url>http://schema.datacite.org/meta/kernel-3/metadata.xsd</url>
+              <url>http://schema.datacite.org/meta/kernel-4/metadata.xsd</url>
             </schema>
           </schemas>
           <args>

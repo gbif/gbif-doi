@@ -22,12 +22,12 @@ import static org.junit.Assert.assertEquals;
 
 public class DataCiteValidatorTest {
 
-  private static final String DATACITE_FULL_EXAMPLE_PATH = "metadata/datacite-example-full-v3.1.xml";
+  private static final String DATACITE_FULL_EXAMPLE_PATH = "metadata/datacite-example-full-v4.xml";
 
   @Test
   public void testValidateMetadata() throws Exception {
     DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal.xml"));
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4.xml"));
   }
 
   @Test

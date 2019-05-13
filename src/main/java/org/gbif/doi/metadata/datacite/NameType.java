@@ -14,43 +14,31 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for descriptionType.
+ * <p>Java class for nameType.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="descriptionType">
+ * &lt;simpleType name="nameType">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="Abstract"/>
- *     &lt;enumeration value="Methods"/>
- *     &lt;enumeration value="SeriesInformation"/>
- *     &lt;enumeration value="TableOfContents"/>
- *     &lt;enumeration value="TechnicalInfo"/>
- *     &lt;enumeration value="Other"/>
+ *     &lt;enumeration value="Organizational"/>
+ *     &lt;enumeration value="Personal"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "descriptionType")
+@XmlType(name = "nameType")
 @XmlEnum
-public enum DescriptionType {
+public enum NameType {
 
-    @XmlEnumValue("Abstract")
-    ABSTRACT("Abstract"),
-    @XmlEnumValue("Methods")
-    METHODS("Methods"),
-    @XmlEnumValue("SeriesInformation")
-    SERIES_INFORMATION("SeriesInformation"),
-    @XmlEnumValue("TableOfContents")
-    TABLE_OF_CONTENTS("TableOfContents"),
-    @XmlEnumValue("TechnicalInfo")
-    TECHNICAL_INFO("TechnicalInfo"),
-    @XmlEnumValue("Other")
-    OTHER("Other");
+    @XmlEnumValue("Organizational")
+    ORGANIZATIONAL("Organizational"),
+    @XmlEnumValue("Personal")
+    PERSONAL("Personal");
     private final String value;
 
-    DescriptionType(String v) {
+    NameType(String v) {
         value = v;
     }
 
@@ -58,8 +46,8 @@ public enum DescriptionType {
         return value;
     }
 
-    public static DescriptionType fromValue(String v) {
-        for (DescriptionType c: DescriptionType.values()) {
+    public static NameType fromValue(String v) {
+        for (NameType c: NameType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
