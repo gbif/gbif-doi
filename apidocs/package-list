@@ -4,6 +4,7 @@ org.gbif.api.jackson
 org.gbif.api.model
 org.gbif.api.model.checklistbank
 org.gbif.api.model.checklistbank.search
+org.gbif.api.model.collections
 org.gbif.api.model.common
 org.gbif.api.model.common.messaging
 org.gbif.api.model.common.paging
@@ -14,6 +15,8 @@ org.gbif.api.model.metrics.cube
 org.gbif.api.model.occurrence
 org.gbif.api.model.occurrence.predicate
 org.gbif.api.model.occurrence.search
+org.gbif.api.model.occurrence.sql
+org.gbif.api.model.occurrence.sql.serde
 org.gbif.api.model.registry
 org.gbif.api.model.registry.eml
 org.gbif.api.model.registry.eml.curatorial
@@ -21,7 +24,9 @@ org.gbif.api.model.registry.eml.geospatial
 org.gbif.api.model.registry.eml.temporal
 org.gbif.api.model.registry.metasync
 org.gbif.api.model.registry.search
+org.gbif.api.model.registry.search.collections
 org.gbif.api.service.checklistbank
+org.gbif.api.service.collections
 org.gbif.api.service.common
 org.gbif.api.service.crawler
 org.gbif.api.service.metrics
@@ -32,6 +37,7 @@ org.gbif.api.util.formatter
 org.gbif.api.util.iterables
 org.gbif.api.v2
 org.gbif.api.vocabulary
+org.gbif.api.vocabulary.collections
 org.gbif.doi.metadata.datacite
 org.gbif.doi.service
 org.gbif.doi.service.datacite
