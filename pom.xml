@@ -63,7 +63,7 @@
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
     <gbif-api.version>0.81</gbif-api.version>
-    <gbif.datacite.rest.client.version>1.1</gbif.datacite.rest.client.version>
+    <gbif.datacite.rest.client.version>1.2-SNAPSHOT</gbif.datacite.rest.client.version>
     <gbif-common.version>0.37</gbif-common.version>
     <gbif-httputils.version>0.10</gbif-httputils.version>
     <guava.version>19.0</guava.version>
