@@ -31,6 +31,7 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Resolves the registered identifier to its status and target URL.
+     *
      * @param doi the identifier to resolve
      * @return the status object with the target URL the DOI is backed by or null if DOI does not exist at all
      */
@@ -38,8 +39,13 @@ public class RestJsonApiDataCiteService implements DoiService {
     @Override
     public DoiData resolve(DOI doi) {
         Preconditions.checkNotNull(doi);
+        Response<JSONAPIDocument<Datacite42Schema>> doiResponse;
 
-        Response<JSONAPIDocument<Datacite42Schema>> doiResponse = dataCiteClient.getDoi(doi.getDoiName());
+        try {
+            doiResponse = dataCiteClient.getDoi(doi.getDoiName());
+        } catch (Exception e) {
+            return new DoiData(DoiStatus.FAILED);
+        }
         JSONAPIDocument<Datacite42Schema> bodyJsonApiWrapper = doiResponse.body();
 
         if (!doiResponse.isSuccessful() || bodyJsonApiWrapper == null) {
@@ -62,29 +68,40 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Check if a DOI is reserved or registered.
+     *
      * @param doi the identifier
      * @return exists DOI or not
      */
     @Override
     public boolean exists(DOI doi) {
         Preconditions.checkNotNull(doi);
-        Response<JSONAPIDocument<Datacite42Schema>> doiResponse = dataCiteClient.getDoi(doi.getDoiName());
+        Response<JSONAPIDocument<Datacite42Schema>> doiResponse;
+        try {
+            doiResponse = dataCiteClient.getDoi(doi.getDoiName());
+        } catch (Exception e) {
+            return false;
+        }
+
         return doiResponse.isSuccessful();
     }
 
     /**
-     * DataCiteClient does not provide the explicit method to retrieve metadata
+     * Get metadata by doi.
+     *
      * @param doi the identifier
-     * @return unsupported operation
+     * @return xml metadata
      */
     @Override
     public String getMetadata(DOI doi) {
-        throw new UnsupportedOperationException("Unsupported operation");
+        Response<JSONAPIDocument<Datacite42Schema>> response = dataCiteClient.getDoi(doi.getDoiName());
+        String encodedXmlMetadata = response.body().get().getXml();
+        return new String(Base64.getDecoder().decode(encodedXmlMetadata));
     }
 
     /**
      * Reserve a doi. Uses createDoi method without the event type.
-     * @param doi the identifier
+     *
+     * @param doi      the identifier
      * @param metadata the metadata to be associated with the doi
      */
     @Override
@@ -98,7 +115,8 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Reserve a doi. Uses createDoi method without the event type.
-     * @param doi the identifier
+     *
+     * @param doi      the identifier
      * @param metadata the metadata to be associated with the doi
      */
     @Override
@@ -111,23 +129,31 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Register a doi. Uses createDoi method with the event type 'PUBLISH'.
-     * @param doi the identifier
+     *
+     * @param doi      the identifier
      * @param metadata the metadata to be associated with the doi
      */
     @Override
     public void register(DOI doi, URI target, String metadata) {
         Preconditions.checkNotNull(doi);
         Preconditions.checkNotNull(metadata);
+
         DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
         model.setEvent(EventType.PUBLISH.getValue());
         model.setUrl(target.toString());
         JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
-        dataCiteClient.createDoi(jsonApiWrapper);
+
+        if (exists(doi)) {
+            dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper);
+        } else {
+            dataCiteClient.createDoi(jsonApiWrapper);
+        }
     }
 
     /**
      * Register a doi. Uses createDoi method with the event type 'PUBLISH'.
-     * @param doi the identifier
+     *
+     * @param doi      the identifier
      * @param metadata the metadata to be associated with the doi
      */
     @Override
@@ -140,7 +166,8 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Creates DoiSimplifiedModel which can be passed as an argument to dataCiteClient's create method.
-     * @param doi the identifier
+     *
+     * @param doi      the identifier
      * @param metadata the metadata to be associated with the doi
      * @return doi model which can be registered or reserved
      */
@@ -153,6 +180,7 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Delete a doi.
+     *
      * @param doi the identifier to delete
      * @return true if successfully deleted, false otherwise
      */
@@ -165,7 +193,8 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Update with metadata.
-     * @param doi the identifier
+     *
+     * @param doi      the identifier
      * @param metadata the datacite metadata
      */
     @Override
@@ -181,9 +210,9 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Update with metadata.
-     * @param doi the identifier
-     * @param metadata the datacite metadata
      *
+     * @param doi      the identifier
+     * @param metadata the datacite metadata
      * @throws DoiException if some problems occur while xml serializing
      */
     @Override
@@ -196,7 +225,8 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     /**
      * Update with a new URL.
-     * @param doi the identifier of metadata to update
+     *
+     * @param doi    the identifier of metadata to update
      * @param target the new URL the DOI should resolve to
      */
     @Override
