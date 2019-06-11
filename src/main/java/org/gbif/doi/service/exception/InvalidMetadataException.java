@@ -1,4 +1,4 @@
-package org.gbif.doi.service;
+package org.gbif.doi.service.exception;
 
 /**
  * Exception thrown if the used (datacite) metadata was not valid.

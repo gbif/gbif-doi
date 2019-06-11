@@ -1,3 +1,8 @@
+[![Build Status](https://builds.gbif.org/job/gbif-doi/badge/icon?plastic)](https://builds.gbif.org/job/gbif-doi/)
+[![Quality Gate Status](https://sonar.gbif.org/api/project_badges/measure?project=org.gbif%3Agbif-doi&metric=alert_status)](https://sonar.gbif.org/dashboard?id=org.gbif%3Agbif-doi) 
+[![Coverage](https://sonar.gbif.org/api/project_badges/measure?project=org.gbif%3Agbif-doi&metric=coverage)](https://sonar.gbif.org/dashboard?id=org.gbif%3Agbif-doi)
+
+
 # gbif-doi
 
 This project provides [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier) services used by the IPT, Portal and Registry web services. 

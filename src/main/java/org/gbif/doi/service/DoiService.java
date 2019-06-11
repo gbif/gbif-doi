@@ -3,9 +3,11 @@ package org.gbif.doi.service;
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
+import org.gbif.doi.service.exception.DoiException;
+import org.gbif.doi.service.exception.DoiExistsException;
 
 import java.net.URI;
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 public interface DoiService {
 
@@ -17,21 +19,23 @@ public interface DoiService {
    *
    * @throws DoiException if the operation failed for any reason
    */
-  @Nullable
+  @Nonnull
   DoiData resolve(DOI doi) throws DoiException;
 
   /**
    * Check if a DOI is reserved or registered.
-   * @param doi
-   * @return
-   * @throws DoiException
+   *
+   * @param doi the identifier to check
+   * @return true if exists or null if not
+   * @throws DoiException if the operation failed for any reason
    */
   boolean exists(DOI doi) throws DoiException;
 
   /**
    * Get the metadata associated with the doi.
+   *
    * @param doi the identifier to resolve
-   * @return
+   * @return String XML metadata
    * @throws DoiException if the operation failed for any reason
    */
   String getMetadata(DOI doi) throws DoiException;
@@ -60,20 +64,12 @@ public interface DoiService {
    * @throws DoiExistsException if the DOI existed already regardless of its status
    * @throws DoiException if the operation failed for any reason
    */
-  void reserve(DOI doi, DataCiteMetadata metadata) throws DoiExistsException, DoiException;
+  void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException;
 
   /**
    * Registers an identifier that is either brand new, has been reserved or is currently marked as deleted.
    * It assigns the latest metadata and a URL for resolution.
    * This causes the DOI to be publicly registered with resolvers and other external services.
-   * <br/>
-   * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain
-   * matching your account permissions.
-   * <br/>
-   * You can also call this method to re-register previously deleted, registered DOIs
-   * that are currently marked as inactive (DataCite) or unavailable (EZID). Because the API of these 2 implementations
-   * differ in how to re-register deleted DOIs (DataCite requires new metadata, EZID needs a new terget URL),
-   * we have to take both the metadata and the target URL as params.
    *
    * @param doi the identifier to register
    * @param target the URL the DOI should resolve to
@@ -89,14 +85,6 @@ public interface DoiService {
    * Registers an identifier that is either brand new, has been reserved or is currently marked as deleted.
    * It assigns the latest metadata and a URL for resolution.
    * This causes the DOI to be publicly registered with resolvers and other external services.
-   * <br/>
-   * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain
-   * matching your account permissions.
-   * <br/>
-   * You can also call this method to re-register previously deleted, registered DOIs
-   * that are currently marked as inactive (DataCite) or unavailable (EZID). Because the API of these 2 implementations
-   * differ in how to re-register deleted DOIs (DataCite requires new metadata, EZID needs a new terget URL),
-   * we have to take both the metadata and the target URL as params.
    *
    * @param doi the identifier to register
    * @param target the URL the DOI should resolve to
@@ -106,12 +94,11 @@ public interface DoiService {
    * @throws DoiException if the operation failed for any reason
    * @throws DoiExistsException if the DOI was already registered
    */
-  void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiExistsException, DoiException;
+  void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException;
 
   /**
    * Tries to delete an identifier. If the DOI has only been reserved it will be fully deleted,
    * if it was registered before it cannot be deleted as DOIs are permanent identifiers.
-   * In DataCite a DOI will be marked as "inactive" though, in EZID as "unavailable".
    * You can re-register a deleted DOI again if needed.
    *
    * @param doi the identifier to delete
@@ -126,7 +113,7 @@ public interface DoiService {
    * the identifier changes (e.g. a dataset gets republished, a dataset is replaced by a new major version, etc).
    *
    * @param doi the identifier of metadata to update
-   * @param metadata the datacite metadata given as a valid DataCite v3.1 XML document
+   * @param metadata the DataCite metadata
    *
    * @throws DoiException if the operation failed for any reason
    */
@@ -137,7 +124,7 @@ public interface DoiService {
    * the identifier changes (e.g. a dataset gets republished, a dataset is replaced by a new major version, etc).
    *
    * @param doi the identifier of metadata to update
-   * @param metadata the datacite metadata
+   * @param metadata the DataCite metadata
    *
    * @throws DoiException if the operation failed for any reason
    */
@@ -145,8 +132,6 @@ public interface DoiService {
 
   /**
    * Updates the registered identifier's target URL.
-   * DataCite and EZID restrict target URL domains and the target URL given MUST have a domain
-   * matching your account permissions.
    *
    * @param doi the identifier of metadata to update
    * @param target the new URL the DOI should resolve to

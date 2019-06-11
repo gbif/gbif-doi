@@ -1,5 +1,8 @@
-package org.gbif.doi.service;
+package org.gbif.doi.service.exception;
 
+/**
+ * Happening when there are some problems on DataCite side (service responded with an HTTP error).
+ */
 public class DoiHttpException extends DoiException {
   private final int status;
 

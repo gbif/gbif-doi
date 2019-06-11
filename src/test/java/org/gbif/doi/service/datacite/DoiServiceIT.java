@@ -1,168 +1,397 @@
 package org.gbif.doi.service.datacite;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import okhttp3.ResponseBody;
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
-import org.gbif.api.model.common.DoiStatus;
+import org.gbif.datacite.rest.client.DataCiteClient;
+import org.gbif.datacite.rest.client.configuration.ClientConfiguration;
+import org.gbif.datacite.rest.client.retrofit.DataCiteRetrofitSyncClient;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
-import org.gbif.doi.service.DoiException;
-import org.gbif.doi.service.DoiService;
+import org.gbif.doi.service.*;
+import org.gbif.doi.service.exception.DoiException;
+import org.gbif.doi.service.exception.DoiExistsException;
+import org.gbif.doi.service.exception.DoiHttpException;
+import org.gbif.doi.service.exception.DoiNotFoundException;
+import org.gbif.utils.file.FileUtils;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+import retrofit2.Response;
 
+import java.io.InputStream;
 import java.net.URI;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.gbif.api.model.common.DoiStatus.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
- * Base class for shared tests of doi service implementations.
+ * Test DoiService and its implementation RestJsonApiDataCiteService.
  */
-public abstract class DoiServiceIT {
-  public final static URI TEST_TARGET = URI.create("http://www.gbif.org/datasets");
-  public final static DOI FOREIGN_DOI = new DOI("10.6084/m9.figshare.821213");
-  protected final DoiService service;
-  protected final String prefix;
-  protected final String shoulder;
+@RunWith(MockitoJUnitRunner.class)
+public class DoiServiceIT {
+  private final static URI TEST_TARGET = URI.create("http://www.gbif.org/datasets");
+  private final static String PREFIX = "10.21373";
+  private final static String SHOULDER = "gbif.";
 
-  public DoiServiceIT(String prefix, String shoulder, DoiService service) {
-    this.prefix = prefix;
-    this.shoulder = shoulder;
-    this.service = service;
-  }
+  private static DoiService service;
+  private static DoiService serviceWithMockClient;
 
-  protected DOI newDoi() {
-    return new DOI(prefix, shoulder + System.nanoTime());
-  }
+  // for mocking exception cases (HTTP errors)
+  private static DataCiteClient dataCiteClientMock;
 
+  @BeforeClass
+  public static void setup() throws Exception {
+    try (InputStream dc = FileUtils.classpathStream("datacite.yaml")) {
+      ObjectMapper mapper = new ObjectMapper(new YAMLFactory())
+          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-  @Test
-  public void testResolve() throws Exception {
-    final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
-    assertNull(service.resolve(doi));
+      final ClientConfiguration configuration = mapper.readValue(dc, ClientConfiguration.class);
+      DataCiteClient dataCiteClient = new DataCiteRetrofitSyncClient(configuration);
+      dataCiteClientMock = mock(DataCiteClient.class);
 
-    service.reserve(doi, meta);
-    assertEquals(new DoiData(DoiStatus.RESERVED, null), service.resolve(doi));
-
-    service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
-
-    service.delete(doi);
-    assertEquals(DoiStatus.DELETED, service.resolve(doi).getStatus());
-
-    service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
-  }
-
-  @Test
-  public void test404() throws Exception {
-    final DOI doi = newDoi();
-    assertNull(service.resolve(doi));
-  }
-
-  @Test
-  public void testReserve() throws Exception {
-    final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
-    service.reserve(doi, meta);
-    try {
-      service.reserve(doi, meta);
-      fail("DOI was reserved already, expected DoiExistsException");
-    } catch (DoiException e) {
-
+      service = new RestJsonApiDataCiteService(dataCiteClient);
+      serviceWithMockClient = new RestJsonApiDataCiteService(dataCiteClientMock);
     }
   }
 
+  private DOI newDoi() {
+    return new DOI(PREFIX, SHOULDER + System.nanoTime());
+  }
+
+  @Test(expected = DoiHttpException.class)
+  public void resolveOnHttpErrorExcept404ShouldThrowDoiHttpException() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    prepareExceptionThrown(doi, 400);
+
+    // when
+    serviceWithMockClient.resolve(doi);
+
+    // then exception is expected
+    verify(dataCiteClientMock).getDoi(doi.getDoiName());
+  }
+
   @Test
-  public void testDeleteReserved() throws Exception {
+  public void resolveOnNewNotFoundDoiShouldReturnStatusNew() throws DoiException {
+    // given
+    final DOI doi = newDoi();
+
+    // when
+    final DoiData actual = service.resolve(doi);
+
+    // then
+    assertEquals(new DoiData(NEW), actual);
+  }
+
+  @Test
+  public void resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() throws DoiException {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");
+    service.reserve(doi, meta);
+
+    // when
+    final DoiData actual = service.resolve(doi);
+
+    // then
+    assertEquals(new DoiData(RESERVED), actual);
+  }
+
+  @Test
+  public void resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() throws DoiException {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");
+    service.register(doi, TEST_TARGET, meta);
+
+    // when
+    final DoiData actual = service.resolve(doi);
+
+    // then
+    assertEquals(new DoiData(REGISTERED, TEST_TARGET), actual);
+  }
+
+  @Test(expected = DoiExistsException.class)
+  public void reservePerformedTwiceShouldThrowDoiExistsException() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+
+    // when
+    service.reserve(doi, meta);
+    service.reserve(doi, meta);
+
+    // then exception is expected
+  }
+
+  @Test
+  public void deleteReservedDoiShouldBeOk() throws Exception {
+    // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
     service.reserve(doi, meta);
-    // now delete it and reserving again should work
+
+    // when
     boolean isDeletedOne = service.delete(doi);
-    service.reserve(doi, meta);
-    boolean isDeletedTwo = service.delete(doi);
 
+    // then
     assertTrue(isDeletedOne);
-    assertTrue(isDeletedTwo);
   }
 
-  @Test
-  public void testDeleteRegistered() throws Exception {
+  @Test(expected = DoiException.class)
+  public void deleteRegisteredDoiShouldThrowDoiException() throws Exception {
+    // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "delete test");
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
-    // now delete it to mark inactive (datacite) or set to unavailable (ezid)
+
+    // when
     service.delete(doi);
-    assertEquals(DoiStatus.DELETED, service.resolve(doi).getStatus());
-    // registering again should work
-    service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
+
+    // then exception is expected
   }
 
   @Test
-  public void testUpdateRegistered() throws Exception {
+  public void registerReservedShouldBeOk() throws Exception {
+    // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
     service.reserve(doi, meta);
-    assertEquals(new DoiData(DoiStatus.RESERVED, null), service.resolve(doi));
+
+    // when
     service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
 
-    final URI target2 = TEST_TARGET.resolve("subsub");
-    service.update(doi, target2);
-    assertEquals(new DoiData(DoiStatus.REGISTERED, target2), service.resolve(doi));
+    // then
+    assertEquals(new DoiData(REGISTERED, TEST_TARGET), service.resolve(doi));
   }
 
   @Test(expected = NullPointerException.class)
-  public void testRegisterNPE1() throws Exception {
+  public void registerWithoutUrlShouldThrowNPE() throws Exception {
+    // given
     final DOI doi = newDoi();
-    service.register(doi, null, (DataCiteMetadata) null);
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
+
+    // when
+    service.register(doi, null, meta);
+
+    // then exception is expected
   }
 
   @Test(expected = NullPointerException.class)
-  public void testRegisterNPE2() throws Exception {
+  public void registerWithoutMetaShouldThrowNPE() throws Exception {
+    // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+
+    // when
+    service.register(doi, TEST_TARGET, (DataCiteMetadata) null);
+
+    // then exception is expected
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void registerWithoutIdentifierShouldThrowNPE() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
+
+    // when
     service.register(null, TEST_TARGET, meta);
+
+    // then exception is expected
   }
 
-  @Test(expected = DoiException.class)
-  public void testDelete404() throws Exception {
+  @Test(expected = DoiNotFoundException.class)
+  public void deleteNewDoiShouldThrowDoiNotFoundException() throws Exception {
+    // given
     final DOI doi = newDoi();
-    service.delete(doi);
+
+    // when
+    final boolean actual = service.delete(doi);
+
+    // then
+    assertFalse(actual);
   }
 
-  @Test(expected = DoiException.class)
-  public void testUpdate404() throws Exception {
+  @Test(expected = DoiNotFoundException.class)
+  public void updateNewDoiWithNewUrlShouldThrowDoiNotFoundException() throws Exception {
+    // given
     final DOI doi = newDoi();
+
+    // when
     service.update(doi, TEST_TARGET);
+
+    // then exception is expected
   }
 
-  @Test(expected = DoiException.class)
-  public void testUpdateMeta404() throws Exception {
+  @Test(expected = DoiNotFoundException.class)
+  public void updateNewDoiWithNewMetaShouldThrowDoiNotFoundException() throws Exception {
+    // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "update test");
+
+    // when
     service.update(doi, meta);
+
+    // then exception is expected
   }
 
   @Test
-  public void testRegister() throws Exception {
-    final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
-    service.register(doi, TEST_TARGET, meta);
-    assertEquals(new DoiData(DoiStatus.REGISTERED, TEST_TARGET), service.resolve(doi));
-    try {
-      // try again, this should fail!
-      service.register(doi, TEST_TARGET, meta);
-      fail("DOI was registered already, expected DoiExistsException");
-    } catch (DoiException e) {
-      System.out.println(e);
-    }
+  public void updateReservedDoiShouldBeOk() throws Exception {
+    // given
+    final DOI doi1 = newDoi();
+    final DOI doi2 = newDoi();
+    DataCiteMetadata meta1 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 1");
+    DataCiteMetadata meta2 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 2");
+    service.reserve(doi1, meta1);
+    service.reserve(doi2, meta2);
+    final URI newUrl = TEST_TARGET.resolve("new");
+
+    // when
+    service.update(doi1, newUrl);
+    service.update(doi2, meta2);
+
+    // then
+    assertEquals(new DoiData(RESERVED, newUrl), service.resolve(doi1));
+    assertEquals(new DoiData(RESERVED), service.resolve(doi2));
   }
 
+  @Test
+  public void updateRegisteredDoiShouldBeOk() throws Exception {
+    // given
+    final DOI doi1 = newDoi();
+    final DOI doi2 = newDoi();
+    DataCiteMetadata meta1 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 1");
+    DataCiteMetadata meta2 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 2");
+    service.register(doi1, TEST_TARGET, meta1);
+    service.register(doi2, TEST_TARGET, meta2);
+    final URI newUrl = TEST_TARGET.resolve("new");
+
+    // when
+    service.update(doi1, newUrl);
+    service.update(doi1, meta2);
+
+    // then
+    assertEquals(new DoiData(REGISTERED, newUrl), service.resolve(doi1));
+    assertEquals(new DoiData(REGISTERED, TEST_TARGET), service.resolve(doi2));
+  }
+
+  @Test(expected = DoiExistsException.class)
+  public void registerPerformedTwiceShouldThrowDoiExistsException() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
+
+    // when
+    service.register(doi, TEST_TARGET, meta);
+    service.register(doi, TEST_TARGET, meta);
+
+    // then exception is expected
+  }
+
+  @Test(expected = DoiHttpException.class)
+  public void existsOnHttpErrorExcept404ShouldThrowDoiHttpException() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    prepareExceptionThrown(doi, 500);
+
+    // when
+    serviceWithMockClient.exists(doi);
+
+    // then exception is expected
+    verify(dataCiteClientMock).getDoi(doi.getDoiName());
+  }
+
+  @Test
+  public void existsOnNotFoundShouldReturnFalse() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    prepareExceptionThrown(doi, 404);
+
+    // when
+    final boolean actual = serviceWithMockClient.exists(doi);
+
+    // then
+    verify(dataCiteClientMock).getDoi(doi.getDoiName());
+    assertFalse(actual);
+  }
+
+  @Test
+  public void existsOnNewDoiShouldReturnFalse() throws Exception {
+    // given
+    final DOI doi = newDoi();
+
+    // when
+    final boolean actual = service.exists(doi);
+
+    // then
+    assertFalse(actual);
+  }
+
+  @Test
+  public void existsOnReservedDoiShouldReturnTrue() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "exists test");
+    service.reserve(doi, meta);
+
+    // when
+    final boolean actual = service.exists(doi);
+
+    // then
+    assertTrue(actual);
+  }
+
+  @Test
+  public void existsOnRegisteredShouldReturnTrue() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "exists test");
+    service.register(doi, TEST_TARGET, meta);
+
+    // when
+    final boolean actual = service.exists(doi);
+
+    // then
+    assertTrue(actual);
+  }
+
+  @Test(expected = DoiHttpException.class)
+  public void getMetadataOnHttpErrorShouldTrowDoiHttpException() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    prepareExceptionThrown(doi, 404);
+
+    // when
+    serviceWithMockClient.getMetadata(doi);
+
+    // then exception is expected
+    verify(dataCiteClientMock).getDoi(doi.getDoiName());
+  }
+
+  @Test
+  public void getMetadataShouldReturnValidXmlMetadata() throws Exception {
+    // given
+    final DOI doi = newDoi();
+    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "getMetadata test");
+    service.reserve(doi, meta);
+
+    // when
+    final String stringXmlMetadata = service.getMetadata(doi);
+
+    // then
+    assertEquals(doi.getDoiName(), DataCiteValidator.fromXml(stringXmlMetadata).getIdentifier().getValue().toLowerCase());
+  }
+
+  private void prepareExceptionThrown(DOI doi, int code) {
+    when(dataCiteClientMock.getDoi(doi.getDoiName()))
+        .thenReturn(Response.error(
+            code,
+            ResponseBody.create(okhttp3.MediaType.get("application/json"), "")));
+  }
 }

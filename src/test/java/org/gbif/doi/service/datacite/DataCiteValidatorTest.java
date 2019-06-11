@@ -3,7 +3,7 @@ package org.gbif.doi.service.datacite;
 import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
-import org.gbif.doi.service.InvalidMetadataException;
+import org.gbif.doi.service.exception.InvalidMetadataException;
 import org.gbif.utils.file.FileUtils;
 
 import java.io.IOException;
@@ -51,14 +51,10 @@ public class DataCiteValidatorTest {
 
   /**
    * Since javax.xml.validation.Validator is NOT thread-safe, make sure our usage of it is.
-   * 
-   * @throws InterruptedException
-   * @throws ExecutionException
    */
   @Test
-  public void testValidationMultiThread()
-          throws InterruptedException, ExecutionException {
-    int numberOfParallelTask = 50;
+  public void testValidationMultiThread() throws InterruptedException, ExecutionException {
+    int numberOfParallelTask = 1000;
 
     List<Callable<Boolean>> tasks = new ArrayList<Callable<Boolean>>();
     for (int i = 0; i < numberOfParallelTask; i++) {
@@ -68,12 +64,10 @@ public class DataCiteValidatorTest {
           boolean success = true;
           try {
             DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
-          }
-          catch (InvalidMetadataException imEx){
+          } catch (InvalidMetadataException imEx) {
             imEx.printStackTrace();
             success = false;
-          }
-          catch (IOException ioEx){
+          } catch (IOException ioEx) {
             success = false;
           }
           return success;
@@ -81,14 +75,14 @@ public class DataCiteValidatorTest {
       };
       tasks.add(task);
     }
-    //use less Thread than the number of tasks
-    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelTask/2);
+    // use less Thread than the number of tasks
+    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelTask / 100);
     // call all threads and wait for completion
     List<Future<Boolean>> futures = executorService.invokeAll(tasks);
 
     // Validate
     Assert.assertEquals(futures.size(), numberOfParallelTask);
-    for(Future<Boolean> future : futures){
+    for (Future<Boolean> future : futures) {
       Assert.assertTrue(future.get());
     }
   }

@@ -1,7 +1,10 @@
-package org.gbif.doi.service;
+package org.gbif.doi.service.exception;
 
 import org.gbif.api.model.common.DOI;
 
+/**
+ * Happening when trying to reserve or register an existing DOI.
+ */
 public class DoiExistsException extends DoiException {
   private final DOI doi;
 
