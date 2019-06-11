@@ -54,7 +54,7 @@ public class DataCiteValidatorTest {
    */
   @Test
   public void testValidationMultiThread() throws InterruptedException, ExecutionException {
-    int numberOfParallelTask = 1000;
+    int numberOfParallelTask = 50;
 
     List<Callable<Boolean>> tasks = new ArrayList<Callable<Boolean>>();
     for (int i = 0; i < numberOfParallelTask; i++) {
@@ -76,7 +76,7 @@ public class DataCiteValidatorTest {
       tasks.add(task);
     }
     // use less Thread than the number of tasks
-    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelTask / 100);
+    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelTask / 2);
     // call all threads and wait for completion
     List<Future<Boolean>> futures = executorService.invokeAll(tasks);
 
