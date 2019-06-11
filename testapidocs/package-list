@@ -18,7 +18,6 @@ org.gbif.api.vocabulary
 org.gbif.doi.metadata.datacite
 org.gbif.doi.mock
 org.gbif.doi.service.datacite
-org.gbif.doi.service.ezid
 org.gbif.utils
 org.gbif.utils.collection
 org.gbif.utils.concurrent

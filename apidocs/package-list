@@ -41,7 +41,7 @@ org.gbif.api.vocabulary.collections
 org.gbif.doi.metadata.datacite
 org.gbif.doi.service
 org.gbif.doi.service.datacite
-org.gbif.doi.service.ezid
+org.gbif.doi.service.exception
 org.gbif.utils
 org.gbif.utils.collection
 org.gbif.utils.concurrent
