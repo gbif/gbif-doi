@@ -18,11 +18,11 @@
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.gbif.datacite.<strong class="jxr_keyword">rest</strong>.client.model.DoiSimplifiedModel;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.gbif.datacite.<strong class="jxr_keyword">rest</strong>.client.model.EventType;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.metadata.datacite.DataCiteMetadata;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.*;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.exception.DoiException;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.exception.DoiExistsException;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.exception.DoiHttpException;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.exception.DoiNotFoundException;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.DoiException;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.DoiExistsException;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.DoiHttpException;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.DoiNotFoundException;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.gbif.doi.service.DoiService;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> retrofit2.Response;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> javax.annotation.Nonnull;
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>     <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED) {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiExistsException.html">DoiExistsException</a>(doi);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiExistsException.html">DoiExistsException</a>(doi);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>     } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>       DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>       JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = <strong class="jxr_keyword">new</strong> JSONAPIDocument&lt;&gt;(model);
@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.REGISTERED) {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiExistsException.html">DoiExistsException</a>(doi);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiExistsException.html">DoiExistsException</a>(doi);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.RESERVED) {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>     } <strong class="jxr_keyword">else</strong> {
@@ -217,9 +217,9 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 
 <a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.REGISTERED) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiException.html">DoiException</a>(<span class="jxr_string">"Registered DOI can't be deleted "</span> + doi.getDoiName());
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiException.html">DoiException</a>(<span class="jxr_string">"Registered DOI can't be deleted "</span> + doi.getDoiName());
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.NEW) {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiNotFoundException.html">DoiNotFoundException</a>(doi);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiNotFoundException.html">DoiNotFoundException</a>(doi);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>     }
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>     Response&lt;Void&gt; deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());
@@ -248,7 +248,7 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a>       JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = <strong class="jxr_keyword">new</strong> JSONAPIDocument&lt;&gt;(model);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a>       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
 <a class="jxr_linenumber" name="L242" href="#L242">242</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiNotFoundException.html">DoiNotFoundException</a>(doi);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiNotFoundException.html">DoiNotFoundException</a>(doi);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a>     }
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>   }
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
@@ -287,21 +287,21 @@
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>       JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = <strong class="jxr_keyword">new</strong> JSONAPIDocument&lt;&gt;(model);
 <a class="jxr_linenumber" name="L280" href="#L280">280</a>       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
 <a class="jxr_linenumber" name="L281" href="#L281">281</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiNotFoundException.html">DoiNotFoundException</a>(doi);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiNotFoundException.html">DoiNotFoundException</a>(doi);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a>     }
 <a class="jxr_linenumber" name="L284" href="#L284">284</a>   }
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 
 <a class="jxr_linenumber" name="L286" href="#L286">286</a>   <em class="jxr_comment">// check the response is unsuccessful and throw an exception</em>
 <a class="jxr_linenumber" name="L287" href="#L287">287</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> throwExceptionOnBadResponse(Response response) <strong class="jxr_keyword">throws</strong> DoiHttpException {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a>     <strong class="jxr_keyword">if</strong> (!response.isSuccessful()) {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiHttpException.html">DoiHttpException</a>(response.code(), response.message());
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiHttpException.html">DoiHttpException</a>(response.code(), response.message());
 <a class="jxr_linenumber" name="L290" href="#L290">290</a>     }
 <a class="jxr_linenumber" name="L291" href="#L291">291</a>   }
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 
 <a class="jxr_linenumber" name="L293" href="#L293">293</a>   <em class="jxr_comment">// check the response is unsuccessful and throw an exception (except 404 status)</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> throwExceptionOnBadResponseExcept404(Response response) <strong class="jxr_keyword">throws</strong> DoiHttpException {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a>     <strong class="jxr_keyword">if</strong> (!response.isSuccessful() &amp;&amp; response.code() != 404) {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/DoiHttpException.html">DoiHttpException</a>(response.code(), response.message());
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiHttpException.html">DoiHttpException</a>(response.code(), response.message());
 <a class="jxr_linenumber" name="L297" href="#L297">297</a>     }
 <a class="jxr_linenumber" name="L298" href="#L298">298</a>   }
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> }

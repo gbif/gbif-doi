@@ -10,7 +10,7 @@
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> org.gbif.api.model.common.DOI;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.metadata.datacite.DataCiteMetadata;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.service.exception.InvalidMetadataException;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> org.gbif.doi.service.InvalidMetadataException;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.io.ByteArrayInputStream;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>        }
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>        <strong class="jxr_keyword">return</strong> xml;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      } <strong class="jxr_keyword">catch</strong> (JAXBException | IOException e) {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/InvalidMetadataException.html">InvalidMetadataException</a>(e);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>        <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/InvalidMetadataException.html">InvalidMetadataException</a>(e);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>    }
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>       getValidator().validate(source);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>       LOG.debug(<span class="jxr_string">"Metadata XML passed validation"</span>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>     } <strong class="jxr_keyword">catch</strong> (SAXException e) {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/exception/InvalidMetadataException.html">InvalidMetadataException</a>(e);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/InvalidMetadataException.html">InvalidMetadataException</a>(e);
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>     } <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>       <em class="jxr_comment">// cant happen, we had a string in memory already!</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(e);
