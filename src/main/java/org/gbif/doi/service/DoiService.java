@@ -3,8 +3,6 @@ package org.gbif.doi.service;
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
-import org.gbif.doi.service.exception.DoiException;
-import org.gbif.doi.service.exception.DoiExistsException;
 
 import java.net.URI;
 import javax.annotation.Nonnull;

@@ -10,11 +10,11 @@ import org.gbif.datacite.rest.client.DataCiteClient;
 import org.gbif.datacite.rest.client.model.DoiSimplifiedModel;
 import org.gbif.datacite.rest.client.model.EventType;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
-import org.gbif.doi.service.*;
-import org.gbif.doi.service.exception.DoiException;
-import org.gbif.doi.service.exception.DoiExistsException;
-import org.gbif.doi.service.exception.DoiHttpException;
-import org.gbif.doi.service.exception.DoiNotFoundException;
+import org.gbif.doi.service.DoiException;
+import org.gbif.doi.service.DoiExistsException;
+import org.gbif.doi.service.DoiHttpException;
+import org.gbif.doi.service.DoiNotFoundException;
+import org.gbif.doi.service.DoiService;
 import retrofit2.Response;
 
 import javax.annotation.Nonnull;

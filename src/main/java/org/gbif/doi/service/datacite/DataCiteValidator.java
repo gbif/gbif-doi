@@ -2,7 +2,7 @@ package org.gbif.doi.service.datacite;
 
 import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
-import org.gbif.doi.service.exception.InvalidMetadataException;
+import org.gbif.doi.service.InvalidMetadataException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

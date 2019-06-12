@@ -11,11 +11,11 @@ import org.gbif.datacite.rest.client.configuration.ClientConfiguration;
 import org.gbif.datacite.rest.client.retrofit.DataCiteRetrofitSyncClient;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
-import org.gbif.doi.service.*;
-import org.gbif.doi.service.exception.DoiException;
-import org.gbif.doi.service.exception.DoiExistsException;
-import org.gbif.doi.service.exception.DoiHttpException;
-import org.gbif.doi.service.exception.DoiNotFoundException;
+import org.gbif.doi.service.DoiException;
+import org.gbif.doi.service.DoiExistsException;
+import org.gbif.doi.service.DoiHttpException;
+import org.gbif.doi.service.DoiNotFoundException;
+import org.gbif.doi.service.DoiService;
 import org.gbif.utils.file.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,9 +26,15 @@ import retrofit2.Response;
 import java.io.InputStream;
 import java.net.URI;
 
-import static org.gbif.api.model.common.DoiStatus.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.gbif.api.model.common.DoiStatus.NEW;
+import static org.gbif.api.model.common.DoiStatus.REGISTERED;
+import static org.gbif.api.model.common.DoiStatus.RESERVED;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Test DoiService and its implementation RestJsonApiDataCiteService.

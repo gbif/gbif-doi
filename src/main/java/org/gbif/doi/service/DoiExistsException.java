@@ -1,4 +1,4 @@
-package org.gbif.doi.service.exception;
+package org.gbif.doi.service;
 
 import org.gbif.api.model.common.DOI;
 

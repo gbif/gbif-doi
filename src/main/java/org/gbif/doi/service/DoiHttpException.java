@@ -1,4 +1,4 @@
-package org.gbif.doi.service.exception;
+package org.gbif.doi.service;
 
 /**
  * Happening when there are some problems on DataCite side (service responded with an HTTP error).

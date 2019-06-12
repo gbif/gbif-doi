@@ -1,4 +1,4 @@
-package org.gbif.doi.service.exception;
+package org.gbif.doi.service;
 
 /**
  * Any exception happening during requests with agency APIs will be converted to this exception.
