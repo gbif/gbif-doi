@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataCiteValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GBIF DOI Service</a> &gt; <a href="index.source.html" class="el_package">org.gbif.doi.service.datacite</a> &gt; <span class="el_source">DataCiteValidator.java</span></div><h1>DataCiteValidator.java</h1><pre class="source lang-java linenums">package org.gbif.doi.service.datacite;
+
+import org.gbif.api.model.common.DOI;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata;
+import org.gbif.doi.service.InvalidMetadataException;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import com.google.common.base.Charsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
+
+/**
+ * For the validation of DataCite metadata files.
+ */
+public final class DataCiteValidator {
+<span class="fc" id="L31">  private static final Logger LOG = LoggerFactory.getLogger(DataCiteValidator.class);</span>
+  private static final String DATACITE_XSD_LOCATION = &quot;http://schema.datacite.org/meta/kernel-4/metadata.xsd&quot;;
+  private static final String DATACITE_SCHEMA_LOCATION = &quot;http://datacite.org/schema/kernel-4 &quot; + DATACITE_XSD_LOCATION;
+  //lazy initialized
+  private static Schema dataciteSchema;
+  private static final JAXBContext CONTEXT;
+
+  private DataCiteValidator() {
+  }
+
+  static {
+    try {
+<span class="fc" id="L43">      CONTEXT = JAXBContext.newInstance(DataCiteMetadata.class);</span>
+<span class="nc" id="L44">    } catch (JAXBException e) {</span>
+<span class="nc" id="L45">      throw new IllegalStateException(&quot;Fail to setup JAXB&quot;, e);</span>
+<span class="fc" id="L46">    }</span>
+<span class="fc" id="L47">  }</span>
+
+  /**
+   * Produces a validated xml representation of the data cite metadata.
+   * The DOI inside the metadata is overwritten to always represent the given DOI
+   * and the generated XML is validated according to the datacite xsd schema.
+   *
+   * @return xml string
+   * @throws InvalidMetadataException if the generated xml failed validation, e.g. missing mandatory elements
+   */
+  public static String toXml(DOI doi, DataCiteMetadata data) throws InvalidMetadataException {
+    // make sure we use the right doi inside the metadata
+<span class="fc" id="L59">    data.setIdentifier(DataCiteMetadata.Identifier.builder()</span>
+<span class="fc" id="L60">        .withValue(doi.getDoiName())</span>
+<span class="fc" id="L61">        .withIdentifierType(&quot;DOI&quot;)</span>
+<span class="fc" id="L62">        .build()</span>
+    );
+<span class="fc" id="L64">    LOG.debug(&quot;Metadata XML passed validation {}&quot;, doi);</span>
+<span class="fc" id="L65">    return toXml(data, true);</span>
+  }
+
+  /**
+   * Produces a validated xml representation of the data cite metadata.
+   * The boolean flag 'validate' it is used to specify if it should be validated.
+   * The generated XML is validated according to the datacite xsd schema.
+   *
+   * @return xml string
+   * @throws InvalidMetadataException if the generated xml failed validation, e.g. missing mandatory elements
+   */
+  public static String toXml(DataCiteMetadata data, boolean validate) throws InvalidMetadataException {
+    // (un)marshaller are not thread safe and need to be created on each authCall
+<span class="fc" id="L78">    try (StringWriter writer = new StringWriter()) {</span>
+<span class="fc" id="L79">      Marshaller m = CONTEXT.createMarshaller();</span>
+<span class="fc" id="L80">      m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);</span>
+<span class="fc" id="L81">      m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, DATACITE_SCHEMA_LOCATION);</span>
+
+<span class="fc" id="L83">      m.marshal(data, writer);</span>
+<span class="fc" id="L84">      writer.flush();</span>
+
+<span class="fc" id="L86">      String xml = writer.toString();</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">      if (validate) {</span>
+        // validate the xml before we return it
+<span class="fc" id="L89">        validateMetadata(xml);</span>
+      }
+<span class="fc" id="L91">      return xml;</span>
+<span class="nc" id="L92">    } catch (JAXBException | IOException e) {</span>
+<span class="nc" id="L93">      throw new InvalidMetadataException(e);</span>
+    }
+  }
+
+  /**
+   * Create metadata from String XML.
+   *
+   * @param xml string metadata
+   * @return DataCiteMetadata
+   * @throws JAXBException in case of unmarshalling problems
+   */
+  public static DataCiteMetadata fromXml(String xml) throws JAXBException {
+<span class="fc" id="L105">    return fromXml(new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8)));</span>
+  }
+
+  /**
+   * Create metadata from byte stream.
+   *
+   * @param in byte stream
+   * @return DataCiteMetadata
+   * @throws JAXBException in case of unmarshalling problems
+   */
+  public static DataCiteMetadata fromXml(InputStream in) throws JAXBException {
+    // (un)marshaller are not thread safe and need to be created on each call
+<span class="fc" id="L117">    Unmarshaller m = CONTEXT.createUnmarshaller();</span>
+<span class="fc" id="L118">    return (DataCiteMetadata) m.unmarshal(in);</span>
+  }
+
+  /**
+   * Validate metadata.
+   *
+   * @param xml DataCite xml metadata to validate (String)
+   * @throws InvalidMetadataException in case of invalid metadata
+   */
+  public static void validateMetadata(String xml) throws InvalidMetadataException {
+<span class="fc" id="L128">    validateMetadata(new StreamSource(new StringReader(xml)));</span>
+<span class="fc" id="L129">  }</span>
+
+  /**
+   * Validate metadata.
+   *
+   * @param xml DataCite xml metadata to validate (byte stream)
+   * @throws InvalidMetadataException in case of invalid metadata
+   */
+  public static void validateMetadata(InputStream xml) throws InvalidMetadataException {
+<span class="nc" id="L138">    validateMetadata(new StreamSource(xml));</span>
+<span class="nc" id="L139">  }</span>
+
+  /**
+   * Validate metadata.
+   *
+   * @param source DataCite xml metadata to validate (abstract source)
+   * @throws InvalidMetadataException in case of invalid metadata
+   */
+  public static void validateMetadata(Source source) throws InvalidMetadataException {
+    try {
+<span class="fc" id="L149">      getValidator().validate(source);</span>
+<span class="fc" id="L150">      LOG.debug(&quot;Metadata XML passed validation&quot;);</span>
+<span class="nc" id="L151">    } catch (SAXException e) {</span>
+<span class="nc" id="L152">      throw new InvalidMetadataException(e);</span>
+<span class="nc" id="L153">    } catch (IOException e) {</span>
+      // cant happen, we had a string in memory already!
+<span class="nc" id="L155">      throw new IllegalStateException(e);</span>
+<span class="fc" id="L156">    }</span>
+<span class="fc" id="L157">  }</span>
+
+  /**
+   * Lazy create the dataciteSchema and return a new instance of validator on each call.
+   * Validator instances are NOT thread-safe.
+   *
+   * @return validator
+   * @throws SAXException in case of xml parsing exceptions
+   */
+  private synchronized static Validator getValidator() throws SAXException {
+<span class="fc bfc" id="L167" title="All 2 branches covered.">    if (dataciteSchema == null) {</span>
+<span class="fc" id="L168">      String schemaLang = &quot;http://www.w3.org/2001/XMLSchema&quot;;</span>
+      // resolve validation driver:
+<span class="fc" id="L170">      SchemaFactory factory = SchemaFactory.newInstance(schemaLang);</span>
+      // create schema by reading it from an URL:
+<span class="fc" id="L172">      dataciteSchema = factory.newSchema(new StreamSource(DATACITE_XSD_LOCATION));</span>
+    }
+
+<span class="fc" id="L175">    return dataciteSchema.newValidator();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
