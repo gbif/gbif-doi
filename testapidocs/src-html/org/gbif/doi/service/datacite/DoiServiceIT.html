@@ -385,7 +385,7 @@
 <span class="sourceLineNo">377</span>    serviceWithMockClient.getMetadata(doi);<a name="line.377"></a>
 <span class="sourceLineNo">378</span><a name="line.378"></a>
 <span class="sourceLineNo">379</span>    // then exception is expected<a name="line.379"></a>
-<span class="sourceLineNo">380</span>    verify(dataCiteClientMock).getDoi(doi.getDoiName());<a name="line.380"></a>
+<span class="sourceLineNo">380</span>    verify(dataCiteClientMock).getMetadata(doi.getDoiName());<a name="line.380"></a>
 <span class="sourceLineNo">381</span>  }<a name="line.381"></a>
 <span class="sourceLineNo">382</span><a name="line.382"></a>
 <span class="sourceLineNo">383</span>  @Test<a name="line.383"></a>
@@ -407,8 +407,12 @@
 <span class="sourceLineNo">399</span>        .thenReturn(Response.error(<a name="line.399"></a>
 <span class="sourceLineNo">400</span>            code,<a name="line.400"></a>
 <span class="sourceLineNo">401</span>            ResponseBody.create(okhttp3.MediaType.get("application/json"), "")));<a name="line.401"></a>
-<span class="sourceLineNo">402</span>  }<a name="line.402"></a>
-<span class="sourceLineNo">403</span>}<a name="line.403"></a>
+<span class="sourceLineNo">402</span>    when(dataCiteClientMock.getMetadata(doi.getDoiName()))<a name="line.402"></a>
+<span class="sourceLineNo">403</span>        .thenReturn(Response.error(<a name="line.403"></a>
+<span class="sourceLineNo">404</span>            code,<a name="line.404"></a>
+<span class="sourceLineNo">405</span>            ResponseBody.create(okhttp3.MediaType.get("application/xml"), "")));<a name="line.405"></a>
+<span class="sourceLineNo">406</span>  }<a name="line.406"></a>
+<span class="sourceLineNo">407</span>}<a name="line.407"></a>
 
 
 

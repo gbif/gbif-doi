@@ -385,7 +385,7 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a>     serviceWithMockClient.getMetadata(doi);
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 
 <a class="jxr_linenumber" name="L379" href="#L379">379</a>     <em class="jxr_comment">// then exception is expected</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>     verify(dataCiteClientMock).getDoi(doi.getDoiName());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>     verify(dataCiteClientMock).getMetadata(doi.getDoiName());
 <a class="jxr_linenumber" name="L381" href="#L381">381</a>   }
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 
 <a class="jxr_linenumber" name="L383" href="#L383">383</a>   @Test
@@ -407,8 +407,12 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a>         .thenReturn(Response.error(
 <a class="jxr_linenumber" name="L400" href="#L400">400</a>             code,
 <a class="jxr_linenumber" name="L401" href="#L401">401</a>             ResponseBody.create(okhttp3.MediaType.get(<span class="jxr_string">"application/json"</span>), <span class="jxr_string">""</span>)));
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>   }
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> }
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>     when(dataCiteClientMock.getMetadata(doi.getDoiName()))
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>         .thenReturn(Response.error(
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>             code,
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>             ResponseBody.create(okhttp3.MediaType.get(<span class="jxr_string">"application/xml"</span>), <span class="jxr_string">""</span>)));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>   }
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2019 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>

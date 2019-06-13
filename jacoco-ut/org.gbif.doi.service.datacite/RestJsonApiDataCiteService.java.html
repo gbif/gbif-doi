@@ -97,10 +97,9 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public String getMetadata(DOI doi) throws DoiException {
-<span class="nc" id="L100">    Response&lt;JSONAPIDocument&lt;Datacite42Schema&gt;&gt; response = dataCiteClient.getDoi(doi.getDoiName());</span>
+<span class="nc" id="L100">    Response&lt;String&gt; response = dataCiteClient.getMetadata(doi.getDoiName());</span>
 <span class="nc" id="L101">    throwExceptionOnBadResponse(response);</span>
-<span class="nc" id="L102">    String encodedXmlMetadata = response.body().get().getXml();</span>
-<span class="nc" id="L103">    return new String(Base64.getDecoder().decode(encodedXmlMetadata));</span>
+<span class="nc" id="L102">    return response.body();</span>
   }
 
   /**
@@ -111,19 +110,19 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void reserve(DOI doi, String metadata) throws DoiException {
-<span class="nc" id="L114">    Preconditions.checkNotNull(doi, &quot;DOI can't be reserved with 'null' identifier&quot;);</span>
-<span class="nc" id="L115">    Preconditions.checkNotNull(metadata, &quot;DOI can't be reserved with 'null' metadata&quot;);</span>
+<span class="nc" id="L113">    Preconditions.checkNotNull(doi, &quot;DOI can't be reserved with 'null' identifier&quot;);</span>
+<span class="nc" id="L114">    Preconditions.checkNotNull(metadata, &quot;DOI can't be reserved with 'null' metadata&quot;);</span>
 
-<span class="nc" id="L117">    DoiData doiData = resolve(doi);</span>
+<span class="nc" id="L116">    DoiData doiData = resolve(doi);</span>
 
-<span class="nc bnc" id="L119" title="All 4 branches missed.">    if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED) {</span>
-<span class="nc" id="L120">      throw new DoiExistsException(doi);</span>
+<span class="nc bnc" id="L118" title="All 4 branches missed.">    if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED) {</span>
+<span class="nc" id="L119">      throw new DoiExistsException(doi);</span>
     } else {
-<span class="nc" id="L122">      DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);</span>
-<span class="nc" id="L123">      JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
-<span class="nc" id="L124">      throwExceptionOnBadResponse(dataCiteClient.createDoi(jsonApiWrapper));</span>
+<span class="nc" id="L121">      DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);</span>
+<span class="nc" id="L122">      JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
+<span class="nc" id="L123">      throwExceptionOnBadResponse(dataCiteClient.createDoi(jsonApiWrapper));</span>
     }
-<span class="nc" id="L126">  }</span>
+<span class="nc" id="L125">  }</span>
 
   /**
    * Reserve a doi. Uses createDoi method without the event type.
@@ -133,11 +132,11 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException {
-<span class="nc" id="L136">    Preconditions.checkNotNull(doi, &quot;DOI can't be reserved with 'null' identifier&quot;);</span>
-<span class="nc" id="L137">    Preconditions.checkNotNull(metadata, &quot;DOI can't be reserved with 'null' metadata&quot;);</span>
-<span class="nc" id="L138">    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);</span>
-<span class="nc" id="L139">    reserve(doi, xmlMetadata);</span>
-<span class="nc" id="L140">  }</span>
+<span class="nc" id="L135">    Preconditions.checkNotNull(doi, &quot;DOI can't be reserved with 'null' identifier&quot;);</span>
+<span class="nc" id="L136">    Preconditions.checkNotNull(metadata, &quot;DOI can't be reserved with 'null' metadata&quot;);</span>
+<span class="nc" id="L137">    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);</span>
+<span class="nc" id="L138">    reserve(doi, xmlMetadata);</span>
+<span class="nc" id="L139">  }</span>
 
   /**
    * Register a doi. Uses createDoi method with the event type 'PUBLISH'.
@@ -147,25 +146,25 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void register(DOI doi, URI target, String metadata) throws DoiException {
-<span class="nc" id="L150">    Preconditions.checkNotNull(doi, &quot;DOI can't be registered without identifier&quot;);</span>
-<span class="nc" id="L151">    Preconditions.checkNotNull(target, &quot;DOI can't be registered without target URL&quot;);</span>
-<span class="nc" id="L152">    Preconditions.checkNotNull(metadata, &quot;DOI can't be registered without metadata&quot;);</span>
+<span class="nc" id="L149">    Preconditions.checkNotNull(doi, &quot;DOI can't be registered without identifier&quot;);</span>
+<span class="nc" id="L150">    Preconditions.checkNotNull(target, &quot;DOI can't be registered without target URL&quot;);</span>
+<span class="nc" id="L151">    Preconditions.checkNotNull(metadata, &quot;DOI can't be registered without metadata&quot;);</span>
 
-<span class="nc" id="L154">    DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);</span>
-<span class="nc" id="L155">    model.setEvent(EventType.PUBLISH.getValue());</span>
-<span class="nc" id="L156">    model.setUrl(target.toString());</span>
-<span class="nc" id="L157">    JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
+<span class="nc" id="L153">    DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);</span>
+<span class="nc" id="L154">    model.setEvent(EventType.PUBLISH.getValue());</span>
+<span class="nc" id="L155">    model.setUrl(target.toString());</span>
+<span class="nc" id="L156">    JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
 
-<span class="nc" id="L159">    DoiData doiData = resolve(doi);</span>
+<span class="nc" id="L158">    DoiData doiData = resolve(doi);</span>
 
-<span class="nc bnc" id="L161" title="All 2 branches missed.">    if (doiData.getStatus() == DoiStatus.REGISTERED) {</span>
-<span class="nc" id="L162">      throw new DoiExistsException(doi);</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">    } else if (doiData.getStatus() == DoiStatus.RESERVED) {</span>
-<span class="nc" id="L164">      throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">    if (doiData.getStatus() == DoiStatus.REGISTERED) {</span>
+<span class="nc" id="L161">      throw new DoiExistsException(doi);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">    } else if (doiData.getStatus() == DoiStatus.RESERVED) {</span>
+<span class="nc" id="L163">      throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));</span>
     } else {
-<span class="nc" id="L166">      throwExceptionOnBadResponse(dataCiteClient.createDoi(jsonApiWrapper));</span>
+<span class="nc" id="L165">      throwExceptionOnBadResponse(dataCiteClient.createDoi(jsonApiWrapper));</span>
     }
-<span class="nc" id="L168">  }</span>
+<span class="nc" id="L167">  }</span>
 
   /**
    * Register a doi. Uses createDoi method with the event type 'PUBLISH'.
@@ -175,12 +174,12 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException {
-<span class="nc" id="L178">    Preconditions.checkNotNull(doi, &quot;DOI can't be registered without identifier&quot;);</span>
-<span class="nc" id="L179">    Preconditions.checkNotNull(target, &quot;DOI can't be registered without target URL&quot;);</span>
-<span class="nc" id="L180">    Preconditions.checkNotNull(metadata, &quot;DOI can't be registered without metadata&quot;);</span>
-<span class="nc" id="L181">    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);</span>
-<span class="nc" id="L182">    register(doi, target, xmlMetadata);</span>
-<span class="nc" id="L183">  }</span>
+<span class="nc" id="L177">    Preconditions.checkNotNull(doi, &quot;DOI can't be registered without identifier&quot;);</span>
+<span class="nc" id="L178">    Preconditions.checkNotNull(target, &quot;DOI can't be registered without target URL&quot;);</span>
+<span class="nc" id="L179">    Preconditions.checkNotNull(metadata, &quot;DOI can't be registered without metadata&quot;);</span>
+<span class="nc" id="L180">    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);</span>
+<span class="nc" id="L181">    register(doi, target, xmlMetadata);</span>
+<span class="nc" id="L182">  }</span>
 
   /**
    * Creates DoiSimplifiedModel which can be passed as an argument to dataCiteClient's create method.
@@ -190,10 +189,10 @@ public class RestJsonApiDataCiteService implements DoiService {
    * @return doi model which can be registered or reserved
    */
   private DoiSimplifiedModel prepareDoiCreateModel(DOI doi, String metadata) {
-<span class="nc" id="L193">    DoiSimplifiedModel model = new DoiSimplifiedModel();</span>
-<span class="nc" id="L194">    model.setDoi(doi.getDoiName());</span>
-<span class="nc" id="L195">    model.setXml(Base64.getEncoder().encodeToString(metadata.getBytes()));</span>
-<span class="nc" id="L196">    return model;</span>
+<span class="nc" id="L192">    DoiSimplifiedModel model = new DoiSimplifiedModel();</span>
+<span class="nc" id="L193">    model.setDoi(doi.getDoiName());</span>
+<span class="nc" id="L194">    model.setXml(Base64.getEncoder().encodeToString(metadata.getBytes()));</span>
+<span class="nc" id="L195">    return model;</span>
   }
 
   /**
@@ -204,20 +203,20 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public boolean delete(DOI doi) throws DoiException {
-<span class="nc" id="L207">    Preconditions.checkNotNull(doi, &quot;DOI can't be deleted without identifier&quot;);</span>
+<span class="nc" id="L206">    Preconditions.checkNotNull(doi, &quot;DOI can't be deleted without identifier&quot;);</span>
 
-<span class="nc" id="L209">    DoiData doiData = resolve(doi);</span>
+<span class="nc" id="L208">    DoiData doiData = resolve(doi);</span>
 
-<span class="nc bnc" id="L211" title="All 2 branches missed.">    if (doiData.getStatus() == DoiStatus.REGISTERED) {</span>
-<span class="nc" id="L212">      throw new DoiException(&quot;Registered DOI can't be deleted &quot; + doi.getDoiName());</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">    } else if (doiData.getStatus() == DoiStatus.NEW) {</span>
-<span class="nc" id="L214">      throw new DoiNotFoundException(doi);</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">    if (doiData.getStatus() == DoiStatus.REGISTERED) {</span>
+<span class="nc" id="L211">      throw new DoiException(&quot;Registered DOI can't be deleted &quot; + doi.getDoiName());</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">    } else if (doiData.getStatus() == DoiStatus.NEW) {</span>
+<span class="nc" id="L213">      throw new DoiNotFoundException(doi);</span>
     }
 
-<span class="nc" id="L217">    Response&lt;Void&gt; deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());</span>
-<span class="nc" id="L218">    throwExceptionOnBadResponse(deleteResponse);</span>
+<span class="nc" id="L216">    Response&lt;Void&gt; deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());</span>
+<span class="nc" id="L217">    throwExceptionOnBadResponse(deleteResponse);</span>
 
-<span class="nc" id="L220">    return deleteResponse.isSuccessful();</span>
+<span class="nc" id="L219">    return deleteResponse.isSuccessful();</span>
   }
 
   /**
@@ -228,21 +227,21 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void update(DOI doi, String metadata) throws DoiException {
-<span class="nc" id="L231">    Preconditions.checkNotNull(doi, &quot;DOI can't be updated with 'null' identifier&quot;);</span>
-<span class="nc" id="L232">    Preconditions.checkNotNull(metadata, &quot;DOI can't be updated with 'null' metadata&quot;);</span>
+<span class="nc" id="L230">    Preconditions.checkNotNull(doi, &quot;DOI can't be updated with 'null' identifier&quot;);</span>
+<span class="nc" id="L231">    Preconditions.checkNotNull(metadata, &quot;DOI can't be updated with 'null' metadata&quot;);</span>
 
-<span class="nc" id="L234">    DoiData doiData = resolve(doi);</span>
+<span class="nc" id="L233">    DoiData doiData = resolve(doi);</span>
 
-<span class="nc bnc" id="L236" title="All 4 branches missed.">    if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.REGISTERED) {</span>
-<span class="nc" id="L237">      DoiSimplifiedModel model = new DoiSimplifiedModel();</span>
-<span class="nc" id="L238">      model.setDoi(doi.getDoiName());</span>
-<span class="nc" id="L239">      model.setXml(Base64.getEncoder().encodeToString(metadata.getBytes()));</span>
-<span class="nc" id="L240">      JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
-<span class="nc" id="L241">      throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));</span>
-<span class="nc" id="L242">    } else {</span>
-<span class="nc" id="L243">      throw new DoiNotFoundException(doi);</span>
+<span class="nc bnc" id="L235" title="All 4 branches missed.">    if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.REGISTERED) {</span>
+<span class="nc" id="L236">      DoiSimplifiedModel model = new DoiSimplifiedModel();</span>
+<span class="nc" id="L237">      model.setDoi(doi.getDoiName());</span>
+<span class="nc" id="L238">      model.setXml(Base64.getEncoder().encodeToString(metadata.getBytes()));</span>
+<span class="nc" id="L239">      JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
+<span class="nc" id="L240">      throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));</span>
+<span class="nc" id="L241">    } else {</span>
+<span class="nc" id="L242">      throw new DoiNotFoundException(doi);</span>
     }
-<span class="nc" id="L245">  }</span>
+<span class="nc" id="L244">  }</span>
 
   /**
    * Update with metadata.
@@ -253,11 +252,11 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void update(DOI doi, DataCiteMetadata metadata) throws DoiException {
-<span class="nc" id="L256">    Preconditions.checkNotNull(doi, &quot;DOI can't be updated with 'null' identifier&quot;);</span>
-<span class="nc" id="L257">    Preconditions.checkNotNull(metadata, &quot;DOI can't be updated with 'null' metadata&quot;);</span>
-<span class="nc" id="L258">    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);</span>
-<span class="nc" id="L259">    update(doi, xmlMetadata);</span>
-<span class="nc" id="L260">  }</span>
+<span class="nc" id="L255">    Preconditions.checkNotNull(doi, &quot;DOI can't be updated with 'null' identifier&quot;);</span>
+<span class="nc" id="L256">    Preconditions.checkNotNull(metadata, &quot;DOI can't be updated with 'null' metadata&quot;);</span>
+<span class="nc" id="L257">    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);</span>
+<span class="nc" id="L258">    update(doi, xmlMetadata);</span>
+<span class="nc" id="L259">  }</span>
 
   /**
    * Update with a new URL.
@@ -267,34 +266,34 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void update(DOI doi, URI target) throws DoiException {
-<span class="nc" id="L270">    Preconditions.checkNotNull(doi, &quot;DOI can't be updated with 'null' identifier&quot;);</span>
-<span class="nc" id="L271">    Preconditions.checkNotNull(target, &quot;DOI can't be updated with 'null' target URL&quot;);</span>
+<span class="nc" id="L269">    Preconditions.checkNotNull(doi, &quot;DOI can't be updated with 'null' identifier&quot;);</span>
+<span class="nc" id="L270">    Preconditions.checkNotNull(target, &quot;DOI can't be updated with 'null' target URL&quot;);</span>
 
-<span class="nc" id="L273">    DoiData doiData = resolve(doi);</span>
+<span class="nc" id="L272">    DoiData doiData = resolve(doi);</span>
 
-<span class="nc bnc" id="L275" title="All 4 branches missed.">    if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.REGISTERED) {</span>
-<span class="nc" id="L276">      DoiSimplifiedModel model = new DoiSimplifiedModel();</span>
-<span class="nc" id="L277">      model.setDoi(doi.getDoiName());</span>
-<span class="nc" id="L278">      model.setUrl(target.toString());</span>
-<span class="nc" id="L279">      JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
-<span class="nc" id="L280">      throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));</span>
-<span class="nc" id="L281">    } else {</span>
-<span class="nc" id="L282">      throw new DoiNotFoundException(doi);</span>
+<span class="nc bnc" id="L274" title="All 4 branches missed.">    if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.REGISTERED) {</span>
+<span class="nc" id="L275">      DoiSimplifiedModel model = new DoiSimplifiedModel();</span>
+<span class="nc" id="L276">      model.setDoi(doi.getDoiName());</span>
+<span class="nc" id="L277">      model.setUrl(target.toString());</span>
+<span class="nc" id="L278">      JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = new JSONAPIDocument&lt;&gt;(model);</span>
+<span class="nc" id="L279">      throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));</span>
+<span class="nc" id="L280">    } else {</span>
+<span class="nc" id="L281">      throw new DoiNotFoundException(doi);</span>
     }
-<span class="nc" id="L284">  }</span>
+<span class="nc" id="L283">  }</span>
 
   // check the response is unsuccessful and throw an exception
   private void throwExceptionOnBadResponse(Response response) throws DoiHttpException {
-<span class="nc bnc" id="L288" title="All 2 branches missed.">    if (!response.isSuccessful()) {</span>
-<span class="nc" id="L289">      throw new DoiHttpException(response.code(), response.message());</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">    if (!response.isSuccessful()) {</span>
+<span class="nc" id="L288">      throw new DoiHttpException(response.code(), response.message());</span>
     }
-<span class="nc" id="L291">  }</span>
+<span class="nc" id="L290">  }</span>
 
   // check the response is unsuccessful and throw an exception (except 404 status)
   private void throwExceptionOnBadResponseExcept404(Response response) throws DoiHttpException {
-<span class="nc bnc" id="L295" title="All 4 branches missed.">    if (!response.isSuccessful() &amp;&amp; response.code() != 404) {</span>
-<span class="nc" id="L296">      throw new DoiHttpException(response.code(), response.message());</span>
+<span class="nc bnc" id="L294" title="All 4 branches missed.">    if (!response.isSuccessful() &amp;&amp; response.code() != 404) {</span>
+<span class="nc" id="L295">      throw new DoiHttpException(response.code(), response.message());</span>
     }
-<span class="nc" id="L298">  }</span>
+<span class="nc" id="L297">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
