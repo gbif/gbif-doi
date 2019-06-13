@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>gbif-doi</artifactId>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2</version>
   <packaging>jar</packaging>
 
   <name>GBIF DOI Service</name>
@@ -19,7 +19,7 @@
     <connection>scm:git:git@github.com:gbif/gbif-doi.git</connection>
     <url>https://github.com/gbif/gbif-doi</url>
     <developerConnection>scm:git:git@github.com:gbif/gbif-doi.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>gbif-doi-2.2</tag>
   </scm>
 
   <distributionManagement>
