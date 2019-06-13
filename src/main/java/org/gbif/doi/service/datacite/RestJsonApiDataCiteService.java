@@ -97,10 +97,9 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public String getMetadata(DOI doi) throws DoiException {
-    Response<JSONAPIDocument<Datacite42Schema>> response = dataCiteClient.getDoi(doi.getDoiName());
+    Response<String> response = dataCiteClient.getMetadata(doi.getDoiName());
     throwExceptionOnBadResponse(response);
-    String encodedXmlMetadata = response.body().get().getXml();
-    return new String(Base64.getDecoder().decode(encodedXmlMetadata));
+    return response.body();
   }
 
   /**

@@ -377,7 +377,7 @@ public class DoiServiceIT {
     serviceWithMockClient.getMetadata(doi);
 
     // then exception is expected
-    verify(dataCiteClientMock).getDoi(doi.getDoiName());
+    verify(dataCiteClientMock).getMetadata(doi.getDoiName());
   }
 
   @Test
@@ -399,5 +399,9 @@ public class DoiServiceIT {
         .thenReturn(Response.error(
             code,
             ResponseBody.create(okhttp3.MediaType.get("application/json"), "")));
+    when(dataCiteClientMock.getMetadata(doi.getDoiName()))
+        .thenReturn(Response.error(
+            code,
+            ResponseBody.create(okhttp3.MediaType.get("application/xml"), "")));
   }
 }
