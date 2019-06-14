@@ -14,29 +14,30 @@ import static org.junit.Assert.assertEquals;
 public class DataCiteMetadataTest {
 
   public static DataCiteMetadata testMetadata() {
-    return testMetadata(new DOI("10.5072/WDCC/CCSRNIES_SRES_B2"), "My Title");
+    return testMetadata(new DOI("10.21373/WDCC/CCSRNIES_SRES_B2"), "My Title");
   }
+
   public static DataCiteMetadata testMetadata(DOI doi, String title) {
     return DataCiteMetadata.builder()
-      .withIdentifier().withValue(doi.getDoiName()).withIdentifierType("DOI").end()
-      .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
-      .withCreators().addCreator().withCreatorName().withValue("Markus").end()
-      .withNameIdentifier().addNameIdentifier().withNameIdentifierScheme("ORCID")
-      .withSchemeURI("orcid.org").withValue("0000-0001-7757-1889").end()
-      .end()
-      .end()
-      .withTitles()
-      .addTitle().withValue(title).withLang(Language.ENGLISH.getIso3LetterCode()).end()
-      .addTitle().withValue("Meine Übersetzung").withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(
-        TitleType.TRANSLATED_TITLE).end()
-      .end()
-      .withPublicationYear("2014")
-      .withPublisher().withValue("Pensoft").end()
-      .build();
+        .withIdentifier().withValue(doi.getDoiName()).withIdentifierType("DOI").end()
+        .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())
+        .withCreators().addCreator().withCreatorName().withValue("Markus").end()
+        .withNameIdentifier().addNameIdentifier().withNameIdentifierScheme("ORCID")
+        .withSchemeURI("orcid.org").withValue("0000-0001-7757-1889").end()
+        .end()
+        .end()
+        .withTitles()
+        .addTitle().withValue(title).withLang(Language.ENGLISH.getIso3LetterCode()).end()
+        .addTitle().withValue("Meine Übersetzung").withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(
+            TitleType.TRANSLATED_TITLE).end()
+        .end()
+        .withPublicationYear("2014")
+        .withPublisher().withValue("Pensoft").end()
+        .build();
   }
 
   @Test
-  public void testObjectFactory() throws Exception {
+  public void testObjectFactory() {
     ObjectFactory of = new ObjectFactory();
     DataCiteMetadata res = of.createDataCiteMetadata();
 
@@ -53,7 +54,7 @@ public class DataCiteMetadataTest {
 
     DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();
     id.setIdentifierType("DOI");
-    id.setValue("10.5072/WDCC/CCSRNIES_SRES_B2");
+    id.setValue("10.21373/WDCC/CCSRNIES_SRES_B2");
     res.setIdentifier(id);
 
     DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();
@@ -71,7 +72,7 @@ public class DataCiteMetadataTest {
   }
 
   @Test
-  public void testBuilder() throws Exception {
+  public void testBuilder() {
     DataCiteMetadata r = testMetadata();
     System.out.print(r);
   }
