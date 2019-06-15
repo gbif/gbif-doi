@@ -7,8 +7,10 @@ import org.gbif.api.model.common.DoiData;
 import org.gbif.api.model.common.DoiStatus;
 import org.gbif.datacite.model.json.Datacite42Schema;
 import org.gbif.datacite.rest.client.DataCiteClient;
+import org.gbif.datacite.rest.client.configuration.ClientConfiguration;
 import org.gbif.datacite.rest.client.model.DoiSimplifiedModel;
 import org.gbif.datacite.rest.client.model.EventType;
+import org.gbif.datacite.rest.client.retrofit.DataCiteRetrofitSyncClient;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.service.DoiException;
 import org.gbif.doi.service.DoiExistsException;
@@ -30,6 +32,16 @@ public class RestJsonApiDataCiteService implements DoiService {
 
   public RestJsonApiDataCiteService(DataCiteClient dataCiteClient) {
     this.dataCiteClient = dataCiteClient;
+  }
+
+  public RestJsonApiDataCiteService(String api, String user, String password) {
+    ClientConfiguration cfg = ClientConfiguration.builder()
+        .withBaseApiUrl(api)
+        .withUser(user)
+        .withPassword(password)
+        .build();
+
+    this.dataCiteClient = new DataCiteRetrofitSyncClient(cfg);
   }
 
   /**

@@ -8,7 +8,6 @@ import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
 import org.gbif.datacite.rest.client.DataCiteClient;
 import org.gbif.datacite.rest.client.configuration.ClientConfiguration;
-import org.gbif.datacite.rest.client.retrofit.DataCiteRetrofitSyncClient;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
 import org.gbif.doi.service.DoiException;
@@ -26,6 +25,7 @@ import retrofit2.Response;
 import java.io.InputStream;
 import java.net.URI;
 
+import static org.gbif.api.model.common.DoiStatus.FAILED;
 import static org.gbif.api.model.common.DoiStatus.NEW;
 import static org.gbif.api.model.common.DoiStatus.REGISTERED;
 import static org.gbif.api.model.common.DoiStatus.RESERVED;
@@ -58,10 +58,12 @@ public class DoiServiceIT {
           .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
       final ClientConfiguration configuration = mapper.readValue(dc, ClientConfiguration.class);
-      DataCiteClient dataCiteClient = new DataCiteRetrofitSyncClient(configuration);
       dataCiteClientMock = mock(DataCiteClient.class);
 
-      service = new RestJsonApiDataCiteService(dataCiteClient);
+      service = new RestJsonApiDataCiteService(
+          configuration.getBaseApiUrl(),
+          configuration.getUser(),
+          configuration.getPassword());
       serviceWithMockClient = new RestJsonApiDataCiteService(dataCiteClientMock);
     }
   }
@@ -93,6 +95,19 @@ public class DoiServiceIT {
 
     // then
     assertEquals(new DoiData(NEW), actual);
+  }
+
+  @Test
+  public void resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() throws DoiException {
+    // given
+    final DOI doi = newDoi();
+    prepareSuccessfulResponseWithoutBody(doi);
+
+    // when
+    final DoiData actual = serviceWithMockClient.resolve(doi);
+
+    // then
+    assertEquals(new DoiData(FAILED), actual);
   }
 
   @Test
@@ -392,6 +407,11 @@ public class DoiServiceIT {
 
     // then
     assertEquals(doi.getDoiName(), DataCiteValidator.fromXml(stringXmlMetadata).getIdentifier().getValue().toLowerCase());
+  }
+
+  private void prepareSuccessfulResponseWithoutBody(DOI doi) {
+    when(dataCiteClientMock.getDoi(doi.getDoiName()))
+        .thenReturn(Response.success(null));
   }
 
   private void prepareExceptionThrown(DOI doi, int code) {

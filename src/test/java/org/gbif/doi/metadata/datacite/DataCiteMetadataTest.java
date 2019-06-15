@@ -2,21 +2,16 @@ package org.gbif.doi.metadata.datacite;
 
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.vocabulary.Language;
-import org.gbif.doi.service.datacite.DataCiteValidator;
-import org.gbif.utils.file.FileUtils;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
+/**
+ * Metadata helper.
+ */
 public class DataCiteMetadataTest {
 
-  public static DataCiteMetadata testMetadata() {
-    return testMetadata(new DOI("10.21373/WDCC/CCSRNIES_SRES_B2"), "My Title");
-  }
-
+  /**
+   * Helper for providing the mock metadata object.
+   */
   public static DataCiteMetadata testMetadata(DOI doi, String title) {
     return DataCiteMetadata.builder()
         .withIdentifier().withValue(doi.getDoiName()).withIdentifierType("DOI").end()
@@ -36,6 +31,9 @@ public class DataCiteMetadataTest {
         .build();
   }
 
+  /**
+   * Just check everything was generated properly.
+   */
   @Test
   public void testObjectFactory() {
     ObjectFactory of = new ObjectFactory();
@@ -69,21 +67,5 @@ public class DataCiteMetadataTest {
     res.setPublisher(pub);
 
     System.out.print(res);
-  }
-
-  @Test
-  public void testBuilder() {
-    DataCiteMetadata r = testMetadata();
-    System.out.print(r);
-  }
-
-  @Test
-  @Ignore("This fails and serves as a test only to try to serde the full datacite object into JSON for messaging")
-  public void testJsonSerde() throws Exception {
-    ObjectMapper mapper = new ObjectMapper();
-    DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream("metadata/datacite-example-full-v4.xml"));
-    String json = mapper.writeValueAsString(m);
-    DataCiteMetadata m2 = mapper.readValue(json, DataCiteMetadata.class);
-    assertEquals(m, m2);
   }
 }

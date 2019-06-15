@@ -2,9 +2,9 @@ package org.gbif.doi.service.datacite;
 
 import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
-import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
 import org.gbif.doi.service.InvalidMetadataException;
 import org.gbif.utils.file.FileUtils;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,30 +15,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+/**
+ * Test DataCiteValidator.
+ */
 public class DataCiteValidatorTest {
 
   private static final String DATACITE_FULL_EXAMPLE_PATH = "metadata/datacite-example-full-v4.xml";
+  private static final String DATACITE_MINIMAL_EXAMPLE_PATH = "metadata/minimal-v4.xml";
 
   @Test
-  public void testValidateMetadata() throws Exception {
+  public void testValidateMetadataDataCiteMetadataExamplesShouldBeValid() throws Exception {
     DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4.xml"));
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_MINIMAL_EXAMPLE_PATH));
   }
 
   @Test
-  public void testValidateMetadataBean() throws Exception {
-    final DOI doi = new DOI("10.1234/gbif");
-    DataCiteValidator.validateMetadata(DataCiteValidator.toXml(doi, DataCiteMetadataTest.testMetadata()));
-  }
-
-  @Test
-  public void testRoundtrip() throws Exception {
-    final DOI doi = new DOI("10.1234/gbif");
+  public void testRoundTrip() throws Exception {
+    final DOI doi = new DOI("10.21373/example-full");
 
     DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
     String xml = DataCiteValidator.toXml(doi, m);
@@ -81,9 +77,9 @@ public class DataCiteValidatorTest {
     List<Future<Boolean>> futures = executorService.invokeAll(tasks);
 
     // Validate
-    Assert.assertEquals(futures.size(), numberOfParallelTask);
+    assertEquals(futures.size(), numberOfParallelTask);
     for (Future<Boolean> future : futures) {
-      Assert.assertTrue(future.get());
+      assertTrue(future.get());
     }
   }
 }
