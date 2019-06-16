@@ -10,90 +10,73 @@
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import org.gbif.api.model.common.DOI;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import org.gbif.api.vocabulary.Language;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import org.gbif.doi.service.datacite.DataCiteValidator;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.gbif.utils.file.FileUtils;<a name="line.6"></a>
-<span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>import com.fasterxml.jackson.databind.ObjectMapper;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import org.junit.Ignore;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import org.junit.Test;<a name="line.10"></a>
+<span class="sourceLineNo">005</span>import org.junit.Test;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * Metadata helper.<a name="line.8"></a>
+<span class="sourceLineNo">009</span> */<a name="line.9"></a>
+<span class="sourceLineNo">010</span>public class DataCiteMetadataTest {<a name="line.10"></a>
 <span class="sourceLineNo">011</span><a name="line.11"></a>
-<span class="sourceLineNo">012</span>import static org.junit.Assert.assertEquals;<a name="line.12"></a>
-<span class="sourceLineNo">013</span><a name="line.13"></a>
-<span class="sourceLineNo">014</span>public class DataCiteMetadataTest {<a name="line.14"></a>
-<span class="sourceLineNo">015</span><a name="line.15"></a>
-<span class="sourceLineNo">016</span>  public static DataCiteMetadata testMetadata() {<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    return testMetadata(new DOI("10.5072/WDCC/CCSRNIES_SRES_B2"), "My Title");<a name="line.17"></a>
-<span class="sourceLineNo">018</span>  }<a name="line.18"></a>
-<span class="sourceLineNo">019</span>  public static DataCiteMetadata testMetadata(DOI doi, String title) {<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    return DataCiteMetadata.builder()<a name="line.20"></a>
-<span class="sourceLineNo">021</span>      .withIdentifier().withValue(doi.getDoiName()).withIdentifierType("DOI").end()<a name="line.21"></a>
-<span class="sourceLineNo">022</span>      .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())<a name="line.22"></a>
-<span class="sourceLineNo">023</span>      .withCreators().addCreator().withCreatorName().withValue("Markus").end()<a name="line.23"></a>
-<span class="sourceLineNo">024</span>      .withNameIdentifier().addNameIdentifier().withNameIdentifierScheme("ORCID")<a name="line.24"></a>
-<span class="sourceLineNo">025</span>      .withSchemeURI("orcid.org").withValue("0000-0001-7757-1889").end()<a name="line.25"></a>
-<span class="sourceLineNo">026</span>      .end()<a name="line.26"></a>
-<span class="sourceLineNo">027</span>      .end()<a name="line.27"></a>
-<span class="sourceLineNo">028</span>      .withTitles()<a name="line.28"></a>
-<span class="sourceLineNo">029</span>      .addTitle().withValue(title).withLang(Language.ENGLISH.getIso3LetterCode()).end()<a name="line.29"></a>
-<span class="sourceLineNo">030</span>      .addTitle().withValue("Meine Übersetzung").withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(<a name="line.30"></a>
-<span class="sourceLineNo">031</span>        TitleType.TRANSLATED_TITLE).end()<a name="line.31"></a>
-<span class="sourceLineNo">032</span>      .end()<a name="line.32"></a>
-<span class="sourceLineNo">033</span>      .withPublicationYear("2014")<a name="line.33"></a>
-<span class="sourceLineNo">034</span>      .withPublisher().withValue("Pensoft").end()<a name="line.34"></a>
-<span class="sourceLineNo">035</span>      .build();<a name="line.35"></a>
-<span class="sourceLineNo">036</span>  }<a name="line.36"></a>
-<span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>  @Test<a name="line.38"></a>
-<span class="sourceLineNo">039</span>  public void testObjectFactory() throws Exception {<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    ObjectFactory of = new ObjectFactory();<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    DataCiteMetadata res = of.createDataCiteMetadata();<a name="line.41"></a>
-<span class="sourceLineNo">042</span><a name="line.42"></a>
-<span class="sourceLineNo">043</span>    DataCiteMetadata.Creators creators = of.createDataCiteMetadataCreators();<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    DataCiteMetadata.Creators.Creator creator = of.createDataCiteMetadataCreatorsCreator();<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    DataCiteMetadata.Creators.Creator.CreatorName cn = of.createDataCiteMetadataCreatorsCreatorCreatorName();<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    cn.setValue("Piyapong");<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    creator.setCreatorName(cn);<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    DataCiteMetadata.Creators.Creator.NameIdentifier nid = of.createDataCiteMetadataCreatorsCreatorNameIdentifier();<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    nid.setValue("pc1405");<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    creator.getNameIdentifier().add(nid);<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    creators.getCreator().add(creator);<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    res.setCreators(creators);<a name="line.52"></a>
-<span class="sourceLineNo">053</span><a name="line.53"></a>
-<span class="sourceLineNo">054</span>    DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    id.setIdentifierType("DOI");<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    id.setValue("10.5072/WDCC/CCSRNIES_SRES_B2");<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    res.setIdentifier(id);<a name="line.57"></a>
-<span class="sourceLineNo">058</span><a name="line.58"></a>
-<span class="sourceLineNo">059</span>    DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    DataCiteMetadata.Titles.Title title = of.createDataCiteMetadataTitlesTitle();<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    title.setValue("National Institute for Environmental Studies and Center for Climate System Research Japan");<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    titles.getTitle().add(title);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    res.setTitles(titles);<a name="line.63"></a>
-<span class="sourceLineNo">064</span><a name="line.64"></a>
-<span class="sourceLineNo">065</span>    res.setPublicationYear("2014");<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    DataCiteMetadata.Publisher pub = of.createDataCiteMetadataPublisher();<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    pub.setValue("Piyapong");<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    res.setPublisher(pub);<a name="line.68"></a>
-<span class="sourceLineNo">069</span><a name="line.69"></a>
-<span class="sourceLineNo">070</span>    System.out.print(res);<a name="line.70"></a>
-<span class="sourceLineNo">071</span>  }<a name="line.71"></a>
-<span class="sourceLineNo">072</span><a name="line.72"></a>
-<span class="sourceLineNo">073</span>  @Test<a name="line.73"></a>
-<span class="sourceLineNo">074</span>  public void testBuilder() throws Exception {<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    DataCiteMetadata r = testMetadata();<a name="line.75"></a>
-<span class="sourceLineNo">076</span>    System.out.print(r);<a name="line.76"></a>
-<span class="sourceLineNo">077</span>  }<a name="line.77"></a>
-<span class="sourceLineNo">078</span><a name="line.78"></a>
-<span class="sourceLineNo">079</span>  @Test<a name="line.79"></a>
-<span class="sourceLineNo">080</span>  @Ignore("This fails and serves as a test only to try to serde the full datacite object into JSON for messaging")<a name="line.80"></a>
-<span class="sourceLineNo">081</span>  public void testJsonSerde() throws Exception {<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    ObjectMapper mapper = new ObjectMapper();<a name="line.82"></a>
-<span class="sourceLineNo">083</span>    DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream("metadata/datacite-example-full-v4.xml"));<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    String json = mapper.writeValueAsString(m);<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    DataCiteMetadata m2 = mapper.readValue(json, DataCiteMetadata.class);<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    assertEquals(m, m2);<a name="line.86"></a>
-<span class="sourceLineNo">087</span>  }<a name="line.87"></a>
-<span class="sourceLineNo">088</span>}<a name="line.88"></a>
+<span class="sourceLineNo">012</span>  /**<a name="line.12"></a>
+<span class="sourceLineNo">013</span>   * Helper for providing the mock metadata object.<a name="line.13"></a>
+<span class="sourceLineNo">014</span>   */<a name="line.14"></a>
+<span class="sourceLineNo">015</span>  public static DataCiteMetadata testMetadata(DOI doi, String title) {<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    return DataCiteMetadata.builder()<a name="line.16"></a>
+<span class="sourceLineNo">017</span>        .withIdentifier().withValue(doi.getDoiName()).withIdentifierType("DOI").end()<a name="line.17"></a>
+<span class="sourceLineNo">018</span>        .withResourceType(DataCiteMetadata.ResourceType.builder().withResourceTypeGeneral(ResourceType.DATASET).build())<a name="line.18"></a>
+<span class="sourceLineNo">019</span>        .withCreators().addCreator().withCreatorName().withValue("Markus").end()<a name="line.19"></a>
+<span class="sourceLineNo">020</span>        .withNameIdentifier().addNameIdentifier().withNameIdentifierScheme("ORCID")<a name="line.20"></a>
+<span class="sourceLineNo">021</span>        .withSchemeURI("orcid.org").withValue("0000-0001-7757-1889").end()<a name="line.21"></a>
+<span class="sourceLineNo">022</span>        .end()<a name="line.22"></a>
+<span class="sourceLineNo">023</span>        .end()<a name="line.23"></a>
+<span class="sourceLineNo">024</span>        .withTitles()<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        .addTitle().withValue(title).withLang(Language.ENGLISH.getIso3LetterCode()).end()<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        .addTitle().withValue("Meine Übersetzung").withLang(Language.GERMAN.getIso3LetterCode()).withTitleType(<a name="line.26"></a>
+<span class="sourceLineNo">027</span>            TitleType.TRANSLATED_TITLE).end()<a name="line.27"></a>
+<span class="sourceLineNo">028</span>        .end()<a name="line.28"></a>
+<span class="sourceLineNo">029</span>        .withPublicationYear("2014")<a name="line.29"></a>
+<span class="sourceLineNo">030</span>        .withPublisher().withValue("Pensoft").end()<a name="line.30"></a>
+<span class="sourceLineNo">031</span>        .build();<a name="line.31"></a>
+<span class="sourceLineNo">032</span>  }<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>  /**<a name="line.34"></a>
+<span class="sourceLineNo">035</span>   * Just check everything was generated properly.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>   */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>  @Test<a name="line.37"></a>
+<span class="sourceLineNo">038</span>  public void testObjectFactory() {<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    ObjectFactory of = new ObjectFactory();<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    DataCiteMetadata res = of.createDataCiteMetadata();<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>    DataCiteMetadata.Creators creators = of.createDataCiteMetadataCreators();<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    DataCiteMetadata.Creators.Creator creator = of.createDataCiteMetadataCreatorsCreator();<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    DataCiteMetadata.Creators.Creator.CreatorName cn = of.createDataCiteMetadataCreatorsCreatorCreatorName();<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    cn.setValue("Piyapong");<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    creator.setCreatorName(cn);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    DataCiteMetadata.Creators.Creator.NameIdentifier nid = of.createDataCiteMetadataCreatorsCreatorNameIdentifier();<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    nid.setValue("pc1405");<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    creator.getNameIdentifier().add(nid);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    creators.getCreator().add(creator);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    res.setCreators(creators);<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>    DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    id.setIdentifierType("DOI");<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    id.setValue("10.21373/WDCC/CCSRNIES_SRES_B2");<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    res.setIdentifier(id);<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>    DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    DataCiteMetadata.Titles.Title title = of.createDataCiteMetadataTitlesTitle();<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    title.setValue("National Institute for Environmental Studies and Center for Climate System Research Japan");<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    titles.getTitle().add(title);<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    res.setTitles(titles);<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    res.setPublicationYear("2014");<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    DataCiteMetadata.Publisher pub = of.createDataCiteMetadataPublisher();<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    pub.setValue("Piyapong");<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    res.setPublisher(pub);<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>    System.out.print(res);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>  }<a name="line.70"></a>
+<span class="sourceLineNo">071</span>}<a name="line.71"></a>
 
 
 
