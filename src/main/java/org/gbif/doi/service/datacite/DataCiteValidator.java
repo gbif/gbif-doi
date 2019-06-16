@@ -41,7 +41,8 @@ public final class DataCiteValidator {
 
   static {
     try {
-      DATACITE_SCHEMA = SchemaFactory.newInstance(SCHEMA_LANG).newSchema(new StreamSource(DATACITE_XSD_LOCATION));
+      SchemaFactory factory = SchemaFactory.newInstance(SCHEMA_LANG);
+      DATACITE_SCHEMA = factory.newSchema(new StreamSource(DATACITE_XSD_LOCATION));
       CONTEXT = JAXBContext.newInstance(DataCiteMetadata.class);
     } catch (JAXBException | SAXException e) {
       throw new IllegalStateException("Fail to setup JAXB", e);

@@ -45,6 +45,46 @@ public class DataCiteValidatorTest {
     assertEquals(xml, xml2);
   }
 
+  @Test(expected = InvalidMetadataException.class)
+  public void testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml"));
+  }
+
+  @Test(expected = InvalidMetadataException.class)
+  public void testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml"));
+  }
+
+  @Test(expected = InvalidMetadataException.class)
+  public void testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml"));
+  }
+
+  @Test(expected = InvalidMetadataException.class)
+  public void testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml"));
+  }
+
+  @Test(expected = InvalidMetadataException.class)
+  public void testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml"));
+  }
+
+  @Test(expected = InvalidMetadataException.class)
+  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml"));
+  }
+
+  @Test(expected = InvalidMetadataException.class)
+  public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml"));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testValidateMetadataIfWrongSourceShouldThrowIllegalStateException() throws Exception {
+    DataCiteValidator.validateMetadata(FileUtils.classpathStream("wrong_path"));
+  }
+
   /**
    * Since javax.xml.validation.Validator is NOT thread-safe, make sure our usage of it is.
    */
