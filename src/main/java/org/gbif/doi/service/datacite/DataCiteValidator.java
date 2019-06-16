@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 /**
  * For the validation of DataCite metadata files.
@@ -108,7 +109,7 @@ public final class DataCiteValidator {
    * @throws JAXBException in case of unmarshalling problems
    */
   public static DataCiteMetadata fromXml(String xml) throws JAXBException {
-    return fromXml(new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8)));
+    return fromXml(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
   }
 
   /**
@@ -152,7 +153,8 @@ public final class DataCiteValidator {
    */
   public static void validateMetadata(Source source) throws InvalidMetadataException {
     try {
-      getValidator().validate(source);
+      final Validator validator = getValidator();
+      validator.validate(source);
       LOG.debug("Metadata XML passed validation");
     } catch (SAXException e) {
       throw new InvalidMetadataException(e);
