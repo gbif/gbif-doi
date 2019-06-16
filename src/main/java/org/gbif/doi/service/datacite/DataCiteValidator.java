@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -167,8 +168,11 @@ public final class DataCiteValidator {
    *
    * @return validator
    */
-  private static synchronized Validator getValidator() {
-    return DATACITE_SCHEMA.newValidator();
+  private static synchronized Validator getValidator() throws SAXException {
+    final Validator validator = DATACITE_SCHEMA.newValidator();
+    validator.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    validator.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+    return validator;
   }
 
 }
