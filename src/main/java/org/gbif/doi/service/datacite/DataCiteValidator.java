@@ -1,6 +1,5 @@
 package org.gbif.doi.service.datacite;
 
-import com.google.common.base.Charsets;
 import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.service.InvalidMetadataException;
