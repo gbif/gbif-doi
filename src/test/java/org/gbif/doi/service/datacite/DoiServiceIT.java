@@ -86,7 +86,7 @@ public class DoiServiceIT {
   }
 
   @Test
-  public void resolveOnNewNotFoundDoiShouldReturnStatusNew() throws DoiException {
+  public void resolveOnNewNotFoundDoiShouldReturnStatusNew() throws Exception {
     // given
     final DOI doi = newDoi();
 
@@ -98,7 +98,7 @@ public class DoiServiceIT {
   }
 
   @Test
-  public void resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() throws DoiException {
+  public void resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() throws Exception {
     // given
     final DOI doi = newDoi();
     prepareSuccessfulResponseWithoutBody(doi);
@@ -111,7 +111,7 @@ public class DoiServiceIT {
   }
 
   @Test
-  public void resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() throws DoiException {
+  public void resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() throws Exception {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");
@@ -125,7 +125,7 @@ public class DoiServiceIT {
   }
 
   @Test
-  public void resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() throws DoiException {
+  public void resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() throws Exception {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");

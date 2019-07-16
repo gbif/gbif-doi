@@ -66,7 +66,7 @@
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
     <gbif-api.version>0.81</gbif-api.version>
-    <gbif-datacite-rest-client.version>1.7</gbif-datacite-rest-client.version>
+    <gbif-datacite-rest-client.version>1.8</gbif-datacite-rest-client.version>
     <gbif-common.version>0.37</gbif-common.version>
     <guava.version>19.0</guava.version>
     <jackson2.version>2.9.9</jackson2.version>

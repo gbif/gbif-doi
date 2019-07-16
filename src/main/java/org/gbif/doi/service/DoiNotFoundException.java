@@ -13,7 +13,8 @@ public class DoiNotFoundException extends DoiException {
     this.doi = doi;
   }
 
-  public DoiNotFoundException(DOI doi) {
+  public DoiNotFoundException(String message, DOI doi) {
+    super(message);
     this.doi = doi;
   }
 

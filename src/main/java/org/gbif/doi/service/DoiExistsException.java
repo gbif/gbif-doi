@@ -13,7 +13,8 @@ public class DoiExistsException extends DoiException {
     this.doi = doi;
   }
 
-  public DoiExistsException(DOI doi) {
+  public DoiExistsException(String message, DOI doi) {
+    super(message);
     this.doi = doi;
   }
 

@@ -2,6 +2,7 @@ package org.gbif.doi.service.datacite;
 
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.google.common.base.Preconditions;
+import okhttp3.ResponseBody;
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
 import org.gbif.api.model.common.DoiStatus;
@@ -17,9 +18,12 @@ import org.gbif.doi.service.DoiExistsException;
 import org.gbif.doi.service.DoiHttpException;
 import org.gbif.doi.service.DoiNotFoundException;
 import org.gbif.doi.service.DoiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import retrofit2.Response;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Base64;
 
@@ -27,6 +31,8 @@ import java.util.Base64;
  * DataCite service implementation with REST and JSON:API.
  */
 public class RestJsonApiDataCiteService implements DoiService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(RestJsonApiDataCiteService.class);
 
   private DataCiteClient dataCiteClient;
 
@@ -128,7 +134,7 @@ public class RestJsonApiDataCiteService implements DoiService {
     DoiData doiData = resolve(doi);
 
     if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED) {
-      throw new DoiExistsException(doi);
+      throw new DoiExistsException("Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
     } else {
       DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
       JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
@@ -170,7 +176,7 @@ public class RestJsonApiDataCiteService implements DoiService {
     DoiData doiData = resolve(doi);
 
     if (doiData.getStatus() == DoiStatus.REGISTERED) {
-      throw new DoiExistsException(doi);
+      throw new DoiExistsException("Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
     } else if (doiData.getStatus() == DoiStatus.RESERVED) {
       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
     } else {
@@ -222,7 +228,7 @@ public class RestJsonApiDataCiteService implements DoiService {
     if (doiData.getStatus() == DoiStatus.REGISTERED) {
       throw new DoiException("Registered DOI can't be deleted " + doi.getDoiName());
     } else if (doiData.getStatus() == DoiStatus.NEW) {
-      throw new DoiNotFoundException(doi);
+      throw new DoiNotFoundException("Can't delete non-existing DOI " + doi.getDoiName(), doi);
     }
 
     Response<Void> deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());
@@ -251,7 +257,7 @@ public class RestJsonApiDataCiteService implements DoiService {
       JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
     } else {
-      throw new DoiNotFoundException(doi);
+      throw new DoiNotFoundException("Can't update non-existing DOI " + doi.getDoiName(), doi);
     }
   }
 
@@ -290,21 +296,38 @@ public class RestJsonApiDataCiteService implements DoiService {
       JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
     } else {
-      throw new DoiNotFoundException(doi);
+      throw new DoiNotFoundException("Only a reserved/registered doi can be updated. DOI "
+          + doi.getDoiName() + " status is " + doiData.getStatus(), doi);
     }
   }
 
   // check the response is unsuccessful and throw an exception
   private void throwExceptionOnBadResponse(Response response) throws DoiHttpException {
     if (!response.isSuccessful()) {
-      throw new DoiHttpException(response.code(), response.message());
+      throw new DoiHttpException(response.code(), response.message(), getErrorBody(response));
     }
   }
 
   // check the response is unsuccessful and throw an exception (except 404 status)
   private void throwExceptionOnBadResponseExcept404(Response response) throws DoiHttpException {
     if (!response.isSuccessful() && response.code() != 404) {
-      throw new DoiHttpException(response.code(), response.message());
+      throw new DoiHttpException(response.code(), response.message(), getErrorBody(response));
     }
+  }
+
+  private String getErrorBody(Response response) {
+    String errorBody;
+    try (final ResponseBody responseBody = response.errorBody()) {
+      if (responseBody != null) {
+        errorBody = responseBody.string();
+      } else {
+        LOG.warn("Can't read a response error body");
+        errorBody = "{}";
+      }
+    } catch (IOException e) {
+      LOG.warn("Can't read a response error body");
+      errorBody = "{}";
+    }
+    return errorBody;
   }
 }
