@@ -94,7 +94,7 @@
 <span class="sourceLineNo">086</span>  }<a name="line.86"></a>
 <span class="sourceLineNo">087</span><a name="line.87"></a>
 <span class="sourceLineNo">088</span>  @Test<a name="line.88"></a>
-<span class="sourceLineNo">089</span>  public void resolveOnNewNotFoundDoiShouldReturnStatusNew() throws DoiException {<a name="line.89"></a>
+<span class="sourceLineNo">089</span>  public void resolveOnNewNotFoundDoiShouldReturnStatusNew() throws Exception {<a name="line.89"></a>
 <span class="sourceLineNo">090</span>    // given<a name="line.90"></a>
 <span class="sourceLineNo">091</span>    final DOI doi = newDoi();<a name="line.91"></a>
 <span class="sourceLineNo">092</span><a name="line.92"></a>
@@ -106,7 +106,7 @@
 <span class="sourceLineNo">098</span>  }<a name="line.98"></a>
 <span class="sourceLineNo">099</span><a name="line.99"></a>
 <span class="sourceLineNo">100</span>  @Test<a name="line.100"></a>
-<span class="sourceLineNo">101</span>  public void resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() throws DoiException {<a name="line.101"></a>
+<span class="sourceLineNo">101</span>  public void resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() throws Exception {<a name="line.101"></a>
 <span class="sourceLineNo">102</span>    // given<a name="line.102"></a>
 <span class="sourceLineNo">103</span>    final DOI doi = newDoi();<a name="line.103"></a>
 <span class="sourceLineNo">104</span>    prepareSuccessfulResponseWithoutBody(doi);<a name="line.104"></a>
@@ -119,7 +119,7 @@
 <span class="sourceLineNo">111</span>  }<a name="line.111"></a>
 <span class="sourceLineNo">112</span><a name="line.112"></a>
 <span class="sourceLineNo">113</span>  @Test<a name="line.113"></a>
-<span class="sourceLineNo">114</span>  public void resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() throws DoiException {<a name="line.114"></a>
+<span class="sourceLineNo">114</span>  public void resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() throws Exception {<a name="line.114"></a>
 <span class="sourceLineNo">115</span>    // given<a name="line.115"></a>
 <span class="sourceLineNo">116</span>    final DOI doi = newDoi();<a name="line.116"></a>
 <span class="sourceLineNo">117</span>    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");<a name="line.117"></a>
@@ -133,7 +133,7 @@
 <span class="sourceLineNo">125</span>  }<a name="line.125"></a>
 <span class="sourceLineNo">126</span><a name="line.126"></a>
 <span class="sourceLineNo">127</span>  @Test<a name="line.127"></a>
-<span class="sourceLineNo">128</span>  public void resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() throws DoiException {<a name="line.128"></a>
+<span class="sourceLineNo">128</span>  public void resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() throws Exception {<a name="line.128"></a>
 <span class="sourceLineNo">129</span>    // given<a name="line.129"></a>
 <span class="sourceLineNo">130</span>    final DOI doi = newDoi();<a name="line.130"></a>
 <span class="sourceLineNo">131</span>    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");<a name="line.131"></a>

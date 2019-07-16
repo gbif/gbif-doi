@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>    }
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>    @Test
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveOnNewNotFoundDoiShouldReturnStatusNew() <strong class="jxr_keyword">throws</strong> DoiException {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveOnNewNotFoundDoiShouldReturnStatusNew() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      <em class="jxr_comment">// given</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      <strong class="jxr_keyword">final</strong> DOI doi = newDoi();
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
@@ -106,7 +106,7 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>    }
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>   @Test
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() <strong class="jxr_keyword">throws</strong> DoiException {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>     <em class="jxr_comment">// given</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>     <strong class="jxr_keyword">final</strong> DOI doi = newDoi();
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>     prepareSuccessfulResponseWithoutBody(doi);
@@ -119,7 +119,7 @@
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>   }
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>   @Test
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() <strong class="jxr_keyword">throws</strong> DoiException {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>     <em class="jxr_comment">// given</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">final</strong> DOI doi = newDoi();
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, <span class="jxr_string">"resolve test"</span>);
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>   }
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>   @Test
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() <strong class="jxr_keyword">throws</strong> DoiException {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>     <em class="jxr_comment">// given</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>     <strong class="jxr_keyword">final</strong> DOI doi = newDoi();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, <span class="jxr_string">"resolve test"</span>);
