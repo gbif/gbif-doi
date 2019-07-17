@@ -44,7 +44,8 @@ public class DataCiteMetadataTest {
     DataCiteMetadata.Creators.Creator.CreatorName cn = of.createDataCiteMetadataCreatorsCreatorCreatorName();
     cn.setValue("Piyapong");
     creator.setCreatorName(cn);
-    DataCiteMetadata.Creators.Creator.NameIdentifier nid = of.createDataCiteMetadataCreatorsCreatorNameIdentifier();
+
+    NameIdentifier nid = of.createNameIdentifier();
     nid.setValue("pc1405");
     creator.getNameIdentifier().add(nid);
     creators.getCreator().add(creator);

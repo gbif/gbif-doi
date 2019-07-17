@@ -54,8 +54,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- plugins -->
-    <jaxb2-rich-contract-plugin.version>1.2.3</jaxb2-rich-contract-plugin.version>
-    <maven-jaxb2-plugin.version>0.9.0</maven-jaxb2-plugin.version>
+    <jaxb2-rich-contract-plugin.version>2.0.1</jaxb2-rich-contract-plugin.version>
+    <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
     <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
     <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
@@ -261,14 +261,18 @@
           <!--
           <verbose>true</verbose>
           -->
-          <forceRegenerate>true</forceRegenerate>
           <removeOldOutput>true</removeOldOutput>
           <generatePackage>org.gbif.doi.metadata.datacite</generatePackage>
           <generateDirectory>${project.basedir}/src/main/java-xjc</generateDirectory>
           <bindingDirectory>src/main/resources</bindingDirectory>
           <schemas>
             <schema>
-              <url>http://schema.datacite.org/meta/kernel-4/metadata.xsd</url>
+              <fileset>
+                <directory>${project.basedir}/src/main/resources/schema</directory>
+                <includes>
+                  <include>*.xsd</include>
+                </includes>
+              </fileset>
             </schema>
           </schemas>
           <args>
@@ -282,7 +286,7 @@
           <plugins>
             <!-- Required for immutable and builder pattern -->
             <plugin>
-              <groupId>com.kscs.util</groupId>
+              <groupId>net.codesup.util</groupId>
               <artifactId>jaxb2-rich-contract-plugin</artifactId>
               <version>${jaxb2-rich-contract-plugin.version}</version>
             </plugin>
@@ -335,6 +339,18 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${project.basedir}/src/main/java-xjc</directory>
+            </fileset>
+          </filesets>
+        </configuration>
       </plugin>
     </plugins>
   </build>

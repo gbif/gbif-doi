@@ -21,36 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.kscs.util.jaxb;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 /**
- * Retrieves a dependent builder instance.
- * @author mirko 2014-04-02
+ * @author Mirko Klemm 2015-09-03
  */
-@SuppressWarnings("unchecked")
-public final class BuilderUtilities {
-	public static <T> T getBuilder(final Class<T> declaredBuilderType, final Object instance, final Object... args) {
-		for(final Class<?> innerClass : instance.getClass().getDeclaredClasses()) {
-			if("Builder".equals(innerClass.getSimpleName())) {
-				for(final Constructor<?> constructor : innerClass.getConstructors()) {
-					if(constructor.getParameterTypes().length == args.length) {
-						try {
-							return (T) constructor.newInstance(args);
-						} catch (final InstantiationException e) {
-							throw new RuntimeException(e);
-						} catch (final IllegalAccessException e) {
-							throw new RuntimeException(e);
-						} catch (final InvocationTargetException e) {
-							throw new RuntimeException(e);
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
+public interface Buildable {
+	Object build();
 
+	class PrimitiveBuildable implements Buildable {
+		private final Object content;
+
+		public PrimitiveBuildable(final Object content) {
+			this.content = content;
+		}
+
+		public Object getContent() {
+			return this.content;
+		}
+
+		@Override
+		public Object build() {
+			return this.content;
+		}
+	}
 }
