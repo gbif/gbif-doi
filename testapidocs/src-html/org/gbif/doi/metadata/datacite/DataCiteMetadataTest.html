@@ -52,31 +52,32 @@
 <span class="sourceLineNo">044</span>    DataCiteMetadata.Creators.Creator.CreatorName cn = of.createDataCiteMetadataCreatorsCreatorCreatorName();<a name="line.44"></a>
 <span class="sourceLineNo">045</span>    cn.setValue("Piyapong");<a name="line.45"></a>
 <span class="sourceLineNo">046</span>    creator.setCreatorName(cn);<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    DataCiteMetadata.Creators.Creator.NameIdentifier nid = of.createDataCiteMetadataCreatorsCreatorNameIdentifier();<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    nid.setValue("pc1405");<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    creator.getNameIdentifier().add(nid);<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    creators.getCreator().add(creator);<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    res.setCreators(creators);<a name="line.51"></a>
-<span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>    DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    id.setIdentifierType("DOI");<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    id.setValue("10.21373/WDCC/CCSRNIES_SRES_B2");<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    res.setIdentifier(id);<a name="line.56"></a>
-<span class="sourceLineNo">057</span><a name="line.57"></a>
-<span class="sourceLineNo">058</span>    DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    DataCiteMetadata.Titles.Title title = of.createDataCiteMetadataTitlesTitle();<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    title.setValue("National Institute for Environmental Studies and Center for Climate System Research Japan");<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    titles.getTitle().add(title);<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    res.setTitles(titles);<a name="line.62"></a>
-<span class="sourceLineNo">063</span><a name="line.63"></a>
-<span class="sourceLineNo">064</span>    res.setPublicationYear("2014");<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    DataCiteMetadata.Publisher pub = of.createDataCiteMetadataPublisher();<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    pub.setValue("Piyapong");<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    res.setPublisher(pub);<a name="line.67"></a>
-<span class="sourceLineNo">068</span><a name="line.68"></a>
-<span class="sourceLineNo">069</span>    System.out.print(res);<a name="line.69"></a>
-<span class="sourceLineNo">070</span>  }<a name="line.70"></a>
-<span class="sourceLineNo">071</span>}<a name="line.71"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>    NameIdentifier nid = of.createNameIdentifier();<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    nid.setValue("pc1405");<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    creator.getNameIdentifier().add(nid);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    creators.getCreator().add(creator);<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    res.setCreators(creators);<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>    DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    id.setIdentifierType("DOI");<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    id.setValue("10.21373/WDCC/CCSRNIES_SRES_B2");<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    res.setIdentifier(id);<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    DataCiteMetadata.Titles.Title title = of.createDataCiteMetadataTitlesTitle();<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    title.setValue("National Institute for Environmental Studies and Center for Climate System Research Japan");<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    titles.getTitle().add(title);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    res.setTitles(titles);<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    res.setPublicationYear("2014");<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    DataCiteMetadata.Publisher pub = of.createDataCiteMetadataPublisher();<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    pub.setValue("Piyapong");<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    res.setPublisher(pub);<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>    System.out.print(res);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>  }<a name="line.71"></a>
+<span class="sourceLineNo">072</span>}<a name="line.72"></a>
 
 
 
