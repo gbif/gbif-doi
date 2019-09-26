@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Base64;
 
+import static org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.DRAFT;
+import static org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.FINDABLE;
+
 /**
  * DataCite service implementation with REST and JSON:API.
  */
@@ -78,14 +81,14 @@ public class RestJsonApiDataCiteService implements DoiService {
     Datacite42Schema body = bodyJsonApiWrapper.get();
     String doiState = body.getState();
 
-    if ("draft".equals(doiState)) {
+    if (DRAFT.equals(doiState)) {
       return new DoiData(
           DoiStatus.RESERVED,
           body.getUrl() != null ? URI.create(body.getUrl()) : null
       );
     }
 
-    if ("findable".equals(doiState)) {
+    if (FINDABLE.equals(doiState)) {
       return new DoiData(DoiStatus.REGISTERED, URI.create(body.getUrl()));
     }
 
