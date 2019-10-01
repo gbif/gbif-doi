@@ -1,6 +1,19 @@
 package org.gbif.doi.metadata.datacite;
 
 import org.gbif.api.model.common.DOI;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.AlternateIdentifiers.AlternateIdentifier;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Contributors.Contributor;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Contributors.Contributor.ContributorName;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Creators.Creator;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Creators.Creator.CreatorName;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Dates.Date;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Descriptions.Description;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.GeoLocations.GeoLocation;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Identifier;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.RelatedIdentifiers.RelatedIdentifier;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.RightsList.Rights;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Subjects.Subject;
+import org.gbif.doi.metadata.datacite.DataCiteMetadata.Titles.Title;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -17,11 +30,11 @@ public class DataCiteMetadataTest {
     return DataCiteMetadata.builder()
         // build titles
         .withTitles()
-        .addTitle(DataCiteMetadata.Titles.Title.builder()
+        .addTitle(Title.builder()
             .withLang("en-us")
             .withValue(title)
             .build())
-        .addTitle(DataCiteMetadata.Titles.Title.builder()
+        .addTitle(Title.builder()
             .withLang("en-us")
             .withTitleType(TitleType.SUBTITLE)
             .withValue("Demonstration of DataCite Properties.")
@@ -43,14 +56,14 @@ public class DataCiteMetadataTest {
 
         // build related identifiers
         .withRelatedIdentifiers()
-        .addRelatedIdentifier(DataCiteMetadata.RelatedIdentifiers.RelatedIdentifier.builder()
+        .addRelatedIdentifier(RelatedIdentifier.builder()
             .withRelatedIdentifierType(RelatedIdentifierType.URL)
             .withRelationType(RelationType.HAS_METADATA)
             .withRelatedMetadataScheme("citeproc+json")
             .withSchemeURI("https://github.com/citation-style-language/schema/raw/master/csl-data.json")
             .withValue("http://data.datacite.org/application/citeproc+json/10.21373/example-full")
             .build())
-        .addRelatedIdentifier(DataCiteMetadata.RelatedIdentifiers.RelatedIdentifier.builder()
+        .addRelatedIdentifier(RelatedIdentifier.builder()
             .withRelatedIdentifierType(RelatedIdentifierType.AR_XIV)
             .withRelationType(RelationType.IS_REVIEWED_BY)
             .withValue("arXiv:0706.0001")
@@ -59,7 +72,7 @@ public class DataCiteMetadataTest {
 
         // build dates
         .withDates()
-        .addDate(DataCiteMetadata.Dates.Date.builder()
+        .addDate(Date.builder()
             .withDateType(DateType.UPDATED)
             .withValue("2014-10-17")
             .build())
@@ -67,8 +80,8 @@ public class DataCiteMetadataTest {
 
         // build creators
         .withCreators()
-        .addCreator(DataCiteMetadata.Creators.Creator.builder()
-            .withCreatorName(DataCiteMetadata.Creators.Creator.CreatorName.builder()
+        .addCreator(Creator.builder()
+            .withCreatorName(CreatorName.builder()
                 .withValue("Miller, Elizabeth")
                 .build())
             .addNameIdentifier(NameIdentifier.builder()
@@ -83,14 +96,14 @@ public class DataCiteMetadataTest {
         .end()
 
         // build identifier
-        .withIdentifier(DataCiteMetadata.Identifier.builder()
+        .withIdentifier(Identifier.builder()
             .withIdentifierType("DOI")
             .withValue(doi.getDoiName())
             .build())
 
         // build alternate identifiers
         .withAlternateIdentifiers()
-        .addAlternateIdentifier(DataCiteMetadata.AlternateIdentifiers.AlternateIdentifier.builder()
+        .addAlternateIdentifier(AlternateIdentifier.builder()
             .withAlternateIdentifierType("URL")
             .withValue("http://schema.datacite.org/schema/meta/kernel-4/example/datacite-example-full-v4.xml")
             .build())
@@ -98,7 +111,7 @@ public class DataCiteMetadataTest {
 
         // build descriptions
         .withDescriptions()
-        .addDescription(DataCiteMetadata.Descriptions.Description.builder()
+        .addDescription(Description.builder()
             .withLang("en-us")
             .withDescriptionType(DescriptionType.ABSTRACT)
             .withContent("XML example of all DataCite Metadata Schema v3.1 properties.")
@@ -110,7 +123,7 @@ public class DataCiteMetadataTest {
 
         // build rights list
         .withRightsList()
-        .addRights(DataCiteMetadata.RightsList.Rights.builder()
+        .addRights(Rights.builder()
             .withRightsURI("http://creativecommons.org/publicdomain/zero/1.0/")
             .withValue("CC0 1.0 Universal")
             .build())
@@ -118,7 +131,7 @@ public class DataCiteMetadataTest {
 
         // build geo locations
         .withGeoLocations()
-        .addGeoLocation(DataCiteMetadata.GeoLocations.GeoLocation.builder()
+        .addGeoLocation(GeoLocation.builder()
             .addGeoLocationPoint(Point.builder()
                 .withPointLongitude(31.233f)
                 .withPointLatitude(-67.302f)
@@ -148,9 +161,9 @@ public class DataCiteMetadataTest {
 
         // build contributors
         .withContributors()
-        .addContributor(DataCiteMetadata.Contributors.Contributor.builder()
+        .addContributor(Contributor.builder()
             .withContributorType(ContributorType.PROJECT_LEADER)
-            .withContributorName(DataCiteMetadata.Contributors.Contributor.ContributorName.builder()
+            .withContributorName(ContributorName.builder()
                 .withValue("Starr, Joan")
                 .build())
             .withNameIdentifier(NameIdentifier.builder()
@@ -166,7 +179,7 @@ public class DataCiteMetadataTest {
 
         // build subjects
         .withSubjects()
-        .addSubject(DataCiteMetadata.Subjects.Subject.builder()
+        .addSubject(Subject.builder()
             .withLang("en-us")
             .withSchemeURI("http://dewey.info/")
             .withSubjectScheme("dewey")
@@ -185,8 +198,8 @@ public class DataCiteMetadataTest {
     DataCiteMetadata res = of.createDataCiteMetadata();
 
     DataCiteMetadata.Creators creators = of.createDataCiteMetadataCreators();
-    DataCiteMetadata.Creators.Creator creator = of.createDataCiteMetadataCreatorsCreator();
-    DataCiteMetadata.Creators.Creator.CreatorName cn = of.createDataCiteMetadataCreatorsCreatorCreatorName();
+    Creator creator = of.createDataCiteMetadataCreatorsCreator();
+    CreatorName cn = of.createDataCiteMetadataCreatorsCreatorCreatorName();
     cn.setValue("Piyapong");
     creator.setCreatorName(cn);
 
@@ -196,13 +209,13 @@ public class DataCiteMetadataTest {
     creators.getCreator().add(creator);
     res.setCreators(creators);
 
-    DataCiteMetadata.Identifier id = of.createDataCiteMetadataIdentifier();
+    Identifier id = of.createDataCiteMetadataIdentifier();
     id.setIdentifierType("DOI");
     id.setValue("10.21373/WDCC/CCSRNIES_SRES_B2");
     res.setIdentifier(id);
 
     DataCiteMetadata.Titles titles = of.createDataCiteMetadataTitles();
-    DataCiteMetadata.Titles.Title title = of.createDataCiteMetadataTitlesTitle();
+    Title title = of.createDataCiteMetadataTitlesTitle();
     title.setValue("National Institute for Environmental Studies and Center for Climate System Research Japan");
     titles.getTitle().add(title);
     res.setTitles(titles);
