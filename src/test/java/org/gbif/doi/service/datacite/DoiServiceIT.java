@@ -114,7 +114,7 @@ public class DoiServiceIT {
   public void resolveOnDoiWhichWasReservedBeforeShouldReturnStatusReserved() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "resolve test");
     service.reserve(doi, meta);
 
     // when
@@ -128,7 +128,7 @@ public class DoiServiceIT {
   public void resolveOnDoiWhichWasRegisteredBeforeShouldReturnStatusRegistered() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "resolve test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "resolve test");
     service.register(doi, TEST_TARGET, meta);
 
     // when
@@ -142,7 +142,7 @@ public class DoiServiceIT {
   public void reservePerformedTwiceShouldThrowDoiExistsException() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "reserve test");
 
     // when
     service.reserve(doi, meta);
@@ -155,7 +155,7 @@ public class DoiServiceIT {
   public void deleteReservedDoiShouldBeOk() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "reserve test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "reserve test");
     service.reserve(doi, meta);
 
     // when
@@ -169,7 +169,7 @@ public class DoiServiceIT {
   public void deleteRegisteredDoiShouldThrowDoiException() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "delete test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "delete test");
     service.register(doi, TEST_TARGET, meta);
 
     // when
@@ -182,7 +182,7 @@ public class DoiServiceIT {
   public void registerReservedShouldBeOk() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "register test");
     service.reserve(doi, meta);
 
     // when
@@ -196,7 +196,7 @@ public class DoiServiceIT {
   public void registerWithoutUrlShouldThrowNPE() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "register test");
 
     // when
     service.register(doi, null, meta);
@@ -219,7 +219,7 @@ public class DoiServiceIT {
   public void registerWithoutIdentifierShouldThrowNPE() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "register test");
 
     // when
     service.register(null, TEST_TARGET, meta);
@@ -254,7 +254,7 @@ public class DoiServiceIT {
   public void updateNewDoiWithNewMetaShouldThrowDoiNotFoundException() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "update test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "update test");
 
     // when
     service.update(doi, meta);
@@ -267,8 +267,8 @@ public class DoiServiceIT {
     // given
     final DOI doi1 = newDoi();
     final DOI doi2 = newDoi();
-    DataCiteMetadata meta1 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 1");
-    DataCiteMetadata meta2 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 2");
+    DataCiteMetadata meta1 = DataCiteMetadataTest.getMockMetadata(doi1, "update test meta 1");
+    DataCiteMetadata meta2 = DataCiteMetadataTest.getMockMetadata(doi1, "update test meta 2");
     service.reserve(doi1, meta1);
     service.reserve(doi2, meta2);
     final URI newUrl = TEST_TARGET.resolve("new");
@@ -287,8 +287,8 @@ public class DoiServiceIT {
     // given
     final DOI doi1 = newDoi();
     final DOI doi2 = newDoi();
-    DataCiteMetadata meta1 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 1");
-    DataCiteMetadata meta2 = DataCiteMetadataTest.testMetadata(doi1, "update test meta 2");
+    DataCiteMetadata meta1 = DataCiteMetadataTest.getMockMetadata(doi1, "update test meta 1");
+    DataCiteMetadata meta2 = DataCiteMetadataTest.getMockMetadata(doi1, "update test meta 2");
     service.register(doi1, TEST_TARGET, meta1);
     service.register(doi2, TEST_TARGET, meta2);
     final URI newUrl = TEST_TARGET.resolve("new");
@@ -306,7 +306,7 @@ public class DoiServiceIT {
   public void registerPerformedTwiceShouldThrowDoiExistsException() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "register test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "register test");
 
     // when
     service.register(doi, TEST_TARGET, meta);
@@ -358,7 +358,7 @@ public class DoiServiceIT {
   public void existsOnReservedDoiShouldReturnTrue() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "exists test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "exists test");
     service.reserve(doi, meta);
 
     // when
@@ -372,7 +372,7 @@ public class DoiServiceIT {
   public void existsOnRegisteredShouldReturnTrue() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "exists test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "exists test");
     service.register(doi, TEST_TARGET, meta);
 
     // when
@@ -399,7 +399,7 @@ public class DoiServiceIT {
   public void getMetadataShouldReturnValidXmlMetadata() throws Exception {
     // given
     final DOI doi = newDoi();
-    DataCiteMetadata meta = DataCiteMetadataTest.testMetadata(doi, "getMetadata test");
+    DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "getMetadata test");
     service.reserve(doi, meta);
 
     // when

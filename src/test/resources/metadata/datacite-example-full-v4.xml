@@ -47,9 +47,7 @@
         <rights rightsURI="http://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal</rights>
     </rightsList>
     <descriptions>
-        <description xml:lang="en-us" descriptionType="Abstract">
-            XML example of all DataCite Metadata Schema v3.1 properties.
-        </description>
+        <description xml:lang="en-us" descriptionType="Abstract">XML example of all DataCite Metadata Schema v3.1 properties.</description>
     </descriptions>
     <geoLocations>
         <geoLocation>
@@ -63,7 +61,7 @@
                 <southBoundLatitude>41.090</southBoundLatitude>
                 <northBoundLatitude>42.893</northBoundLatitude>
             </geoLocationBox>
-            <geoLocationPlace>Atlantic Ocean</geoLocationPlace>
+            <geoLocationPlace xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">Atlantic Ocean</geoLocationPlace>
         </geoLocation>
     </geoLocations>
 </resource>

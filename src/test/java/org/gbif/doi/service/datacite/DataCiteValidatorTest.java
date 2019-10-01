@@ -2,6 +2,7 @@ package org.gbif.doi.service.datacite;
 
 import org.gbif.api.model.common.DOI;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
+import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
 import org.gbif.doi.service.InvalidMetadataException;
 import org.gbif.utils.file.FileUtils;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class DataCiteValidatorTest {
   }
 
   @Test
-  public void testRoundTrip() throws Exception {
+  public void testRoundTripFromXmlFile() throws Exception {
     final DOI doi = new DOI("10.21373/example-full");
 
     DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
@@ -42,7 +43,22 @@ public class DataCiteValidatorTest {
     DataCiteMetadata m2 = DataCiteValidator.fromXml(xml);
     String xml2 = DataCiteValidator.toXml(doi, m2);
 
+    assertEquals(m, m2);
     assertEquals(xml, xml2);
+  }
+
+  @Test
+  public void testMetadataFromXmlAgainstFromBuilders() throws Exception {
+    final DOI doi = new DOI("10.21373/example-full");
+
+    final DataCiteMetadata metadataFromXml = DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
+    final String metadataFromXmlResult = DataCiteValidator.toXml(doi, metadataFromXml);
+
+    final DataCiteMetadata metadataFromBuilders = DataCiteMetadataTest.getMockMetadata(doi, "Full DataCite XML Example");
+    final String metadataFromBuildersResult = DataCiteValidator.toXml(doi, metadataFromBuilders);
+
+    assertEquals(metadataFromXml, metadataFromBuilders);
+    assertEquals(metadataFromXmlResult, metadataFromBuildersResult);
   }
 
   @Test(expected = InvalidMetadataException.class)
