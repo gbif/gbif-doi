@@ -1,8 +1,20 @@
+/*
+ * Copyright 2020 Global Biodiversity Information Facility (GBIF)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.gbif.doi.service.datacite;
 
-import com.github.jasminb.jsonapi.JSONAPIDocument;
-import com.google.common.base.Preconditions;
-import okhttp3.ResponseBody;
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
 import org.gbif.api.model.common.DoiStatus;
@@ -18,21 +30,26 @@ import org.gbif.doi.service.DoiExistsException;
 import org.gbif.doi.service.DoiHttpException;
 import org.gbif.doi.service.DoiNotFoundException;
 import org.gbif.doi.service.DoiService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import retrofit2.Response;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Base64;
 
+import javax.annotation.Nonnull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.jasminb.jsonapi.JSONAPIDocument;
+import com.google.common.base.Preconditions;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
+
 import static org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.DRAFT;
 import static org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.FINDABLE;
 
-/**
- * DataCite service implementation with REST and JSON:API.
- */
+/** DataCite service implementation with REST and JSON:API. */
 public class RestJsonApiDataCiteService implements DoiService {
 
   private static final Logger LOG = LoggerFactory.getLogger(RestJsonApiDataCiteService.class);
@@ -44,11 +61,12 @@ public class RestJsonApiDataCiteService implements DoiService {
   }
 
   public RestJsonApiDataCiteService(String api, String user, String password) {
-    ClientConfiguration cfg = ClientConfiguration.builder()
-        .withBaseApiUrl(api)
-        .withUser(user)
-        .withPassword(password)
-        .build();
+    ClientConfiguration cfg =
+        ClientConfiguration.builder()
+            .withBaseApiUrl(api)
+            .withUser(user)
+            .withPassword(password)
+            .build();
 
     this.dataCiteClient = new DataCiteRetrofitSyncClient(cfg);
   }
@@ -57,7 +75,8 @@ public class RestJsonApiDataCiteService implements DoiService {
    * Resolves the registered identifier to its status and target URL.
    *
    * @param doi the identifier to resolve
-   * @return the status object with the target URL the DOI is backed by or null if DOI does not exist at all
+   * @return the status object with the target URL the DOI is backed by or null if DOI does not
+   *     exist at all
    */
   @Nonnull
   @Override
@@ -83,9 +102,7 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     if (DRAFT.equals(doiState)) {
       return new DoiData(
-          DoiStatus.RESERVED,
-          body.getUrl() != null ? URI.create(body.getUrl()) : null
-      );
+          DoiStatus.RESERVED, body.getUrl() != null ? URI.create(body.getUrl()) : null);
     }
 
     if (FINDABLE.equals(doiState)) {
@@ -104,7 +121,8 @@ public class RestJsonApiDataCiteService implements DoiService {
   @Override
   public boolean exists(DOI doi) throws DoiException {
     Preconditions.checkNotNull(doi);
-    Response<JSONAPIDocument<Datacite42Schema>> doiResponse = dataCiteClient.getDoi(doi.getDoiName());
+    Response<JSONAPIDocument<Datacite42Schema>> doiResponse =
+        dataCiteClient.getDoi(doi.getDoiName());
     throwExceptionOnBadResponseExcept404(doiResponse);
 
     return doiResponse.isSuccessful();
@@ -126,7 +144,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   /**
    * Reserve a doi. Uses createDoi method without the event type.
    *
-   * @param doi      the identifier
+   * @param doi the identifier
    * @param metadata the metadata to be associated with the doi
    */
   @Override
@@ -137,7 +155,8 @@ public class RestJsonApiDataCiteService implements DoiService {
     DoiData doiData = resolve(doi);
 
     if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED) {
-      throw new DoiExistsException("Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
+      throw new DoiExistsException(
+          "Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
     } else {
       DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
       JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
@@ -148,7 +167,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   /**
    * Reserve a doi. Uses createDoi method without the event type.
    *
-   * @param doi      the identifier
+   * @param doi the identifier
    * @param metadata the metadata to be associated with the doi
    */
   @Override
@@ -162,7 +181,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   /**
    * Register a doi. Uses createDoi method with the event type 'PUBLISH'.
    *
-   * @param doi      the identifier
+   * @param doi the identifier
    * @param metadata the metadata to be associated with the doi
    */
   @Override
@@ -179,7 +198,8 @@ public class RestJsonApiDataCiteService implements DoiService {
     DoiData doiData = resolve(doi);
 
     if (doiData.getStatus() == DoiStatus.REGISTERED) {
-      throw new DoiExistsException("Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
+      throw new DoiExistsException(
+          "Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
     } else if (doiData.getStatus() == DoiStatus.RESERVED) {
       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
     } else {
@@ -190,7 +210,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   /**
    * Register a doi. Uses createDoi method with the event type 'PUBLISH'.
    *
-   * @param doi      the identifier
+   * @param doi the identifier
    * @param metadata the metadata to be associated with the doi
    */
   @Override
@@ -203,9 +223,10 @@ public class RestJsonApiDataCiteService implements DoiService {
   }
 
   /**
-   * Creates DoiSimplifiedModel which can be passed as an argument to dataCiteClient's create method.
+   * Creates DoiSimplifiedModel which can be passed as an argument to dataCiteClient's create
+   * method.
    *
-   * @param doi      the identifier
+   * @param doi the identifier
    * @param metadata the metadata to be associated with the doi
    * @return doi model which can be registered or reserved
    */
@@ -243,7 +264,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   /**
    * Update with metadata.
    *
-   * @param doi      the identifier
+   * @param doi the identifier
    * @param metadata the DataCite metadata
    */
   @Override
@@ -267,7 +288,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   /**
    * Update with metadata.
    *
-   * @param doi      the identifier
+   * @param doi the identifier
    * @param metadata the DataCite metadata
    * @throws DoiException if some problems occur while xml serializing
    */
@@ -282,7 +303,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   /**
    * Update with a new URL.
    *
-   * @param doi    the identifier of metadata to update
+   * @param doi the identifier of metadata to update
    * @param target the new URL the DOI should resolve to
    */
   @Override
@@ -299,8 +320,12 @@ public class RestJsonApiDataCiteService implements DoiService {
       JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
     } else {
-      throw new DoiNotFoundException("Only a reserved/registered doi can be updated. DOI "
-          + doi.getDoiName() + " status is " + doiData.getStatus(), doi);
+      throw new DoiNotFoundException(
+          "Only a reserved/registered doi can be updated. DOI "
+              + doi.getDoiName()
+              + " status is "
+              + doiData.getStatus(),
+          doi);
     }
   }
 

@@ -1,9 +1,20 @@
+/*
+ * Copyright 2020 Global Biodiversity Information Facility (GBIF)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.gbif.doi.service.datacite;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import okhttp3.ResponseBody;
 import org.gbif.api.model.common.DOI;
 import org.gbif.api.model.common.DoiData;
 import org.gbif.datacite.rest.client.DataCiteClient;
@@ -16,14 +27,22 @@ import org.gbif.doi.service.DoiHttpException;
 import org.gbif.doi.service.DoiNotFoundException;
 import org.gbif.doi.service.DoiService;
 import org.gbif.utils.file.FileUtils;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
-import retrofit2.Response;
 
 import java.io.InputStream;
 import java.net.URI;
+
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 import static org.gbif.api.model.common.DoiStatus.FAILED;
 import static org.gbif.api.model.common.DoiStatus.NEW;
@@ -36,14 +55,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Test DoiService and its implementation RestJsonApiDataCiteService.
- */
+/** Test DoiService and its implementation RestJsonApiDataCiteService. */
 @RunWith(MockitoJUnitRunner.class)
 public class DoiServiceIT {
-  private final static URI TEST_TARGET = URI.create("http://www.gbif.org/datasets");
-  private final static String PREFIX = "10.21373";
-  private final static String SHOULDER = "gbif.";
+  private static final URI TEST_TARGET = URI.create("http://www.gbif.org/datasets");
+  private static final String PREFIX = "10.21373";
+  private static final String SHOULDER = "gbif.";
 
   private static DoiService service;
   private static DoiService serviceWithMockClient;
@@ -54,16 +71,16 @@ public class DoiServiceIT {
   @BeforeClass
   public static void setup() throws Exception {
     try (InputStream dc = FileUtils.classpathStream("datacite.yaml")) {
-      ObjectMapper mapper = new ObjectMapper(new YAMLFactory())
-          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      ObjectMapper mapper =
+          new ObjectMapper(new YAMLFactory())
+              .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
       final ClientConfiguration configuration = mapper.readValue(dc, ClientConfiguration.class);
       dataCiteClientMock = mock(DataCiteClient.class);
 
-      service = new RestJsonApiDataCiteService(
-          configuration.getBaseApiUrl(),
-          configuration.getUser(),
-          configuration.getPassword());
+      service =
+          new RestJsonApiDataCiteService(
+              configuration.getBaseApiUrl(), configuration.getUser(), configuration.getPassword());
       serviceWithMockClient = new RestJsonApiDataCiteService(dataCiteClientMock);
     }
   }
@@ -98,7 +115,9 @@ public class DoiServiceIT {
   }
 
   @Test
-  public void resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed() throws Exception {
+  public void
+      resolveWhenServiceRespondedWithSuccessfulCodeButEmptyResponseShouldReturnStatusFailed()
+          throws Exception {
     // given
     final DOI doi = newDoi();
     prepareSuccessfulResponseWithoutBody(doi);
@@ -151,6 +170,7 @@ public class DoiServiceIT {
     // then exception is expected
   }
 
+  @Ignore("temporarily switched off because of DataCite Internal Server Error 500")
   @Test
   public void deleteReservedDoiShouldBeOk() throws Exception {
     // given
@@ -406,22 +426,23 @@ public class DoiServiceIT {
     final String stringXmlMetadata = service.getMetadata(doi);
 
     // then
-    assertEquals(doi.getDoiName(), DataCiteValidator.fromXml(stringXmlMetadata).getIdentifier().getValue().toLowerCase());
+    assertEquals(
+        doi.getDoiName(),
+        DataCiteValidator.fromXml(stringXmlMetadata).getIdentifier().getValue().toLowerCase());
   }
 
   private void prepareSuccessfulResponseWithoutBody(DOI doi) {
-    when(dataCiteClientMock.getDoi(doi.getDoiName()))
-        .thenReturn(Response.success(null));
+    when(dataCiteClientMock.getDoi(doi.getDoiName())).thenReturn(Response.success(null));
   }
 
   private void prepareExceptionThrown(DOI doi, int code) {
     when(dataCiteClientMock.getDoi(doi.getDoiName()))
-        .thenReturn(Response.error(
-            code,
-            ResponseBody.create(okhttp3.MediaType.get("application/json"), "")));
+        .thenReturn(
+            Response.error(
+                code, ResponseBody.create(okhttp3.MediaType.get("application/json"), "")));
     when(dataCiteClientMock.getMetadata(doi.getDoiName()))
-        .thenReturn(Response.error(
-            code,
-            ResponseBody.create(okhttp3.MediaType.get("application/xml"), "")));
+        .thenReturn(
+            Response.error(
+                code, ResponseBody.create(okhttp3.MediaType.get("application/xml"), "")));
   }
 }

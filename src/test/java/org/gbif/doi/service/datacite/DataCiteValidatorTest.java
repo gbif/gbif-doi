@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 Global Biodiversity Information Facility (GBIF)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.gbif.doi.service.datacite;
 
 import org.gbif.api.model.common.DOI;
@@ -5,7 +20,6 @@ import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
 import org.gbif.doi.service.InvalidMetadataException;
 import org.gbif.utils.file.FileUtils;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,12 +30,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Test DataCiteValidator.
- */
+/** Test DataCiteValidator. */
 public class DataCiteValidatorTest {
 
   private static final String DATACITE_FULL_EXAMPLE_PATH = "metadata/datacite-example-full-v4.xml";
@@ -37,7 +51,8 @@ public class DataCiteValidatorTest {
   public void testRoundTripFromXmlFile() throws Exception {
     final DOI doi = new DOI("10.21373/example-full");
 
-    DataCiteMetadata m = DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
+    DataCiteMetadata m =
+        DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
     String xml = DataCiteValidator.toXml(doi, m);
 
     DataCiteMetadata m2 = DataCiteValidator.fromXml(xml);
@@ -51,10 +66,12 @@ public class DataCiteValidatorTest {
   public void testMetadataFromXmlAgainstFromBuilders() throws Exception {
     final DOI doi = new DOI("10.21373/example-full");
 
-    final DataCiteMetadata metadataFromXml = DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
+    final DataCiteMetadata metadataFromXml =
+        DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
     final String metadataFromXmlResult = DataCiteValidator.toXml(doi, metadataFromXml);
 
-    final DataCiteMetadata metadataFromBuilders = DataCiteMetadataTest.getMockMetadata(doi, "Full DataCite XML Example");
+    final DataCiteMetadata metadataFromBuilders =
+        DataCiteMetadataTest.getMockMetadata(doi, "Full DataCite XML Example");
     final String metadataFromBuildersResult = DataCiteValidator.toXml(doi, metadataFromBuilders);
 
     assertEquals(metadataFromXml, metadataFromBuilders);
@@ -62,38 +79,57 @@ public class DataCiteValidatorTest {
   }
 
   @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml"));
+  public void
+      testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException()
+          throws Exception {
+    DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml"));
   }
 
   @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml"));
+  public void
+      testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException()
+          throws Exception {
+    DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml"));
   }
 
   @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml"));
+  public void
+      testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException()
+          throws Exception {
+    DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml"));
   }
 
   @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml"));
+  public void
+      testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException()
+          throws Exception {
+    DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml"));
   }
 
   @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml"));
+  public void
+      testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException()
+          throws Exception {
+    DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml"));
   }
 
   @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml"));
+  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException()
+      throws Exception {
+    DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml"));
   }
 
   @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml"));
+  public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException()
+      throws Exception {
+    DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml"));
   }
 
   @Test(expected = IllegalStateException.class)
@@ -101,30 +137,30 @@ public class DataCiteValidatorTest {
     DataCiteValidator.validateMetadata(FileUtils.classpathStream("wrong_path"));
   }
 
-  /**
-   * Since javax.xml.validation.Validator is NOT thread-safe, make sure our usage of it is.
-   */
+  /** Since javax.xml.validation.Validator is NOT thread-safe, make sure our usage of it is. */
   @Test
   public void testValidationMultiThread() throws InterruptedException, ExecutionException {
     int numberOfParallelTask = 50;
 
     List<Callable<Boolean>> tasks = new ArrayList<Callable<Boolean>>();
     for (int i = 0; i < numberOfParallelTask; i++) {
-      Callable<Boolean> task = new Callable<Boolean>() {
-        @Override
-        public Boolean call() {
-          boolean success = true;
-          try {
-            DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
-          } catch (InvalidMetadataException imEx) {
-            imEx.printStackTrace();
-            success = false;
-          } catch (IOException ioEx) {
-            success = false;
-          }
-          return success;
-        }
-      };
+      Callable<Boolean> task =
+          new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+              boolean success = true;
+              try {
+                DataCiteValidator.validateMetadata(
+                    FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));
+              } catch (InvalidMetadataException imEx) {
+                imEx.printStackTrace();
+                success = false;
+              } catch (IOException ioEx) {
+                success = false;
+              }
+              return success;
+            }
+          };
       tasks.add(task);
     }
     // use less Thread than the number of tasks
