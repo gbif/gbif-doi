@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>37</version>
+    <version>42</version>
   </parent>
 
   <artifactId>gbif-doi</artifactId>
@@ -50,18 +50,14 @@
   </pluginRepositories>
 
   <properties>
-    <jdkLevel>1.8</jdkLevel>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spotless.check.skip>true</spotless.check.skip>
+    <main.basedir>${project.basedir}</main.basedir>
 
     <!-- plugins -->
     <jaxb2-rich-contract-plugin.version>2.0.1</jaxb2-rich-contract-plugin.version>
     <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
-    <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
-    <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
-    <maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
     <jaxb2_commons.version>0.6.3</jaxb2_commons.version>
     <xjc-guava-plugin.version>0.3</xjc-guava-plugin.version>
-    <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
 
     <!-- libs -->
     <findbugs-jsr305.version>3.0.1</findbugs-jsr305.version>
@@ -69,16 +65,14 @@
     <gbif-datacite-rest-client.version>1.9</gbif-datacite-rest-client.version>
     <gbif-common.version>0.37</gbif-common.version>
     <guava.version>19.0</guava.version>
-    <jackson2.version>2.9.9</jackson2.version>
+    <jackson2.version>2.10.1</jackson2.version>
     <junit.version>4.12</junit.version>
     <logback.version>1.1.5</logback.version>
     <mockito.version>1.10.19</mockito.version>
     <slf4j-api.version>1.7.16</slf4j-api.version>
 
     <!-- Sonar -->
-    <sonar.language>java</sonar.language>
     <sonar.sources>src/main/java</sonar.sources>
-    <sonar.jacoco.reportPaths>${jacoco.merged.output.file}</sonar.jacoco.reportPaths>
     <sonar.exclusions>**/metadata/datacite/**,**/com/kscs/util/**,**/java-generated/**</sonar.exclusions>
     <sonar.cpd.exclusions>
       **/metadata/datacite/**,
@@ -93,15 +87,6 @@
       **/*Exception.java,
       **/model/**
     </sonar.coverage.exclusions>
-
-    <!-- JaCoCo -->
-    <coverage.dir>${project.build.directory}/coverage</coverage.dir>
-    <coverage.report.it.dir>${project.reporting.outputDirectory}/jacoco-it</coverage.report.it.dir>
-    <coverage.report.ut.dir>${project.reporting.outputDirectory}/jacoco-ut</coverage.report.ut.dir>
-    <jacoco.it.output.file>${coverage.dir}/jacoco-it.exec</jacoco.it.output.file>
-    <jacoco.ut.output.file>${coverage.dir}/jacoco-ut.exec</jacoco.ut.output.file>
-    <jacoco.merged.output.file>${coverage.dir}/jacoco.exec</jacoco.merged.output.file>
-    <jacoco.minimum.coverage>80%</jacoco.minimum.coverage>
   </properties>
 
 
@@ -112,32 +97,31 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
+
     <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-surefire-plugin.version}</version>
-        <configuration>
-          <argLine>${surefireArgLine}</argLine>
-          <excludes>
-            <exclude>**/*IT.java</exclude>
-          </excludes>
-        </configuration>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>${maven-failsafe-plugin.version}</version>
-        <configuration>
-          <argLine>${failsafeArgLine}</argLine>
-        </configuration>
       </plugin>
 
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco-maven-plugin.version}</version>
         <configuration>
           <excludes>
             <exclude>org/gbif/doi/metadata/**/*</exclude>
@@ -147,90 +131,6 @@
             <exclude>**/*Exception*</exclude>
           </excludes>
         </configuration>
-        <executions>
-          <execution>
-            <id>prepare-agent-ut</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <destFile>${jacoco.ut.output.file}</destFile>
-              <propertyName>surefireArgLine</propertyName>
-            </configuration>
-          </execution>
-          <execution>
-            <id>report-ut-coverage</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-            <configuration>
-              <dataFile>${jacoco.ut.output.file}</dataFile>
-              <outputDirectory>${coverage.report.ut.dir}</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>prepare-agent-it</id>
-            <goals>
-              <goal>prepare-agent-integration</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <destFile>${jacoco.it.output.file}</destFile>
-              <propertyName>failsafeArgLine</propertyName>
-            </configuration>
-          </execution>
-          <execution>
-            <id>report-it-coverage</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>report-integration</goal>
-            </goals>
-            <configuration>
-              <dataFile>${jacoco.it.output.file}</dataFile>
-              <outputDirectory>${coverage.report.it.dir}</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>merge-exec-files</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>merge</goal>
-            </goals>
-            <configuration>
-              <fileSets>
-                <fileSet>
-                  <directory>${coverage.dir}</directory>
-                  <includes>
-                    <include>*.exec</include>
-                  </includes>
-                </fileSet>
-              </fileSets>
-              <destFile>${jacoco.merged.output.file}</destFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>check-coverage</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <dataFile>${jacoco.merged.output.file}</dataFile>
-              <rules>
-                <rule>
-                  <element>BUNDLE</element>
-                  <limits>
-                    <limit>
-                      <counter>LINE</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>${jacoco.minimum.coverage}</minimum>
-                    </limit>
-                  </limits>
-                </rule>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
 
       <!--
@@ -315,7 +215,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>${maven-shade-plugin.version}</version>
         <configuration>
           <createDependencyReducedPom>false</createDependencyReducedPom>
         </configuration>
