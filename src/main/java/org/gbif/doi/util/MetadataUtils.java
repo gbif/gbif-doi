@@ -17,7 +17,7 @@ package org.gbif.doi.util;
 
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 /** Utils related {@link DataCiteMetadata}. */
 public final class MetadataUtils {
@@ -46,23 +46,23 @@ public final class MetadataUtils {
             .getIdentifier()
             .getValue()
             .equalsIgnoreCase(metadata2.getIdentifier().getValue())
-        && Objects.equal(metadata1.getCreators(), metadata2.getCreators())
-        && Objects.equal(metadata1.getTitles(), metadata2.getTitles())
-        && Objects.equal(metadata1.getPublisher(), metadata2.getPublisher())
-        && Objects.equal(metadata1.getPublicationYear(), metadata2.getPublicationYear())
-        && Objects.equal(metadata1.getResourceType(), metadata2.getResourceType())
-        && Objects.equal(metadata1.getSubjects(), metadata2.getSubjects())
-        && Objects.equal(metadata1.getContributors(), metadata2.getContributors())
-        && Objects.equal(metadata1.getDates(), metadata2.getDates())
-        && Objects.equal(metadata1.getLanguage(), metadata2.getLanguage())
-        && Objects.equal(metadata1.getAlternateIdentifiers(), metadata2.getAlternateIdentifiers())
-        && Objects.equal(metadata1.getRelatedIdentifiers(), metadata2.getRelatedIdentifiers())
-        && Objects.equal(metadata1.getSizes(), metadata2.getSizes())
-        && Objects.equal(metadata1.getFormats(), metadata2.getFormats())
-        && Objects.equal(metadata1.getVersion(), metadata2.getVersion())
-        && Objects.equal(metadata1.getRightsList(), metadata2.getRightsList())
-        && Objects.equal(metadata1.getDescriptions(), metadata2.getDescriptions())
-        && Objects.equal(metadata1.getGeoLocations(), metadata2.getGeoLocations())
-        && Objects.equal(metadata1.getFundingReferences(), metadata2.getFundingReferences());
+        && Objects.equals(metadata1.getCreators(), metadata2.getCreators())
+        && Objects.equals(metadata1.getTitles(), metadata2.getTitles())
+        && Objects.equals(metadata1.getPublisher(), metadata2.getPublisher())
+        && Objects.equals(metadata1.getPublicationYear(), metadata2.getPublicationYear())
+        && Objects.equals(metadata1.getResourceType(), metadata2.getResourceType())
+        && Objects.equals(metadata1.getSubjects(), metadata2.getSubjects())
+        && Objects.equals(metadata1.getContributors(), metadata2.getContributors())
+        && Objects.equals(metadata1.getDates(), metadata2.getDates())
+        && Objects.equals(metadata1.getLanguage(), metadata2.getLanguage())
+        && Objects.equals(metadata1.getAlternateIdentifiers(), metadata2.getAlternateIdentifiers())
+        && Objects.equals(metadata1.getRelatedIdentifiers(), metadata2.getRelatedIdentifiers())
+        && Objects.equals(metadata1.getSizes(), metadata2.getSizes())
+        && Objects.equals(metadata1.getFormats(), metadata2.getFormats())
+        && Objects.equals(metadata1.getVersion(), metadata2.getVersion())
+        && Objects.equals(metadata1.getRightsList(), metadata2.getRightsList())
+        && Objects.equals(metadata1.getDescriptions(), metadata2.getDescriptions())
+        && Objects.equals(metadata1.getGeoLocations(), metadata2.getGeoLocations())
+        && Objects.equals(metadata1.getFundingReferences(), metadata2.getFundingReferences());
   }
 }
