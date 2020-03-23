@@ -73,19 +73,12 @@
 
     <!-- Sonar -->
     <sonar.sources>src/main/java</sonar.sources>
-    <sonar.exclusions>**/metadata/datacite/**,**/com/kscs/util/**,**/java-generated/**</sonar.exclusions>
-    <sonar.cpd.exclusions>
-      **/metadata/datacite/**,
-      **/com/kscs/util/**,
-      **/java-generated/**,
-      **/ClientConfiguration.java
-    </sonar.cpd.exclusions>
+    <sonar.exclusions>**/metadata/datacite/**,**/com/kscs/util/**</sonar.exclusions>
+    <sonar.cpd.exclusions>**/metadata/datacite/**,**/com/kscs/util/**</sonar.cpd.exclusions>
     <sonar.coverage.exclusions>
       **/metadata/datacite/**,
       **/com/kscs/util/**,
-      **/ClientConfiguration.java,
-      **/*Exception.java,
-      **/model/**
+      **/*Exception.java
     </sonar.coverage.exclusions>
   </properties>
 
