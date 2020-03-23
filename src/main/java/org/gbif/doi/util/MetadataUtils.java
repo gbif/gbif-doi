@@ -30,7 +30,7 @@ public final class MetadataUtils {
    * because the DataCite keeps DOIs in uppercase, and GBIF does in lowercase.
    */
   public static boolean equal(DataCiteMetadata metadata1, DataCiteMetadata metadata2) {
-    if (metadata1 == metadata2) {
+    if (metadata1 == null && metadata2 == null) {
       return true;
     }
 
