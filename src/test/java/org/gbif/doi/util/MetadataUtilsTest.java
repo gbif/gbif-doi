@@ -63,7 +63,7 @@ public class MetadataUtilsTest {
 
     // when
     boolean metadataEqualsResult =
-        MetadataUtils.equal(uppercaseIdentifierMetadata, lowercaseIdentifierMetadata);
+        MetadataUtils.metadataEquals(uppercaseIdentifierMetadata, lowercaseIdentifierMetadata);
     boolean regularEqualsResult =
         Objects.equals(uppercaseIdentifierMetadata, lowercaseIdentifierMetadata);
 
@@ -76,7 +76,7 @@ public class MetadataUtilsTest {
   public void testEqualInsensitiveIdentifierStringSources() {
     // when
     boolean metadataEqualsResult =
-        MetadataUtils.equal(metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
+        MetadataUtils.metadataEquals(metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
     boolean regularEqualsResult =
         Objects.equals(metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
 

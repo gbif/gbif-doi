@@ -37,7 +37,7 @@ public final class MetadataUtils {
    * method is case-insensitive for {@link DataCiteMetadata.Identifier#getValue()}. This is needed
    * because the DataCite keeps DOIs in uppercase, and GBIF does in lowercase.
    */
-  public static boolean equal(DataCiteMetadata metadata1, DataCiteMetadata metadata2) {
+  public static boolean metadataEquals(DataCiteMetadata metadata1, DataCiteMetadata metadata2) {
     if (metadata1 == null && metadata2 == null) {
       return true;
     }
@@ -76,9 +76,9 @@ public final class MetadataUtils {
 
   /**
    * Compare two metadata objects. First convert them to {@link DataCiteMetadata} and apply {@link
-   * MetadataUtils#equal(DataCiteMetadata, DataCiteMetadata)} afterwards.
+   * MetadataUtils#metadataEquals(DataCiteMetadata, DataCiteMetadata)} afterwards.
    */
-  public static boolean equal(String metadata1, String metadata2) {
+  public static boolean metadataEquals(String metadata1, String metadata2) {
     try {
       DataCiteMetadata registryDoiMetadata =
           metadata1 != null ? DataCiteValidator.fromXml(metadata1) : null;
@@ -87,7 +87,7 @@ public final class MetadataUtils {
 
       // Use this method unless it's always false because the DataCite store DOI in uppercase a
       // nd the registry store in lower case
-      return equal(registryDoiMetadata, dataCiteDoiMetadata);
+      return metadataEquals(registryDoiMetadata, dataCiteDoiMetadata);
     } catch (JAXBException e) {
       LOG.error("Invalid metadata", e);
     }
