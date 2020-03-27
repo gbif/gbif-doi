@@ -76,7 +76,8 @@ public class MetadataUtilsTest {
   public void testEqualInsensitiveIdentifierStringSources() {
     // when
     boolean metadataEqualsResult =
-        MetadataUtils.metadataEquals(metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
+        MetadataUtils.metadataEquals(
+            metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
     boolean regularEqualsResult =
         Objects.equals(metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
 
