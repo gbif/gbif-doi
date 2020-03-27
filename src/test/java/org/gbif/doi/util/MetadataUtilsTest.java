@@ -16,46 +16,72 @@
 package org.gbif.doi.util;
 
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
-import org.gbif.doi.metadata.datacite.DataCiteMetadata.Identifier;
 import org.gbif.doi.service.datacite.DataCiteValidator;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("ConstantConditions")
 public class MetadataUtilsTest {
 
-  private String metadataXml;
+  private static String metadataXmlLowerCaseIdentifier;
+  private static String metadataXmlUpperCaseIdentifier;
 
-  @Before
-  public void before() throws Exception {
-    byte[] bytes =
-        Files.readAllBytes(
-            Paths.get(
-                ClassLoader.getSystemClassLoader()
-                    .getResource("metadata/datacite-example-full-v4.xml")
-                    .getFile()));
+  @BeforeClass
+  public static void before() throws Exception {
+    metadataXmlLowerCaseIdentifier =
+        new String(
+            Files.readAllBytes(
+                Paths.get(
+                    ClassLoader.getSystemClassLoader()
+                        .getResource("metadata/datacite-example-full-v4.xml")
+                        .getFile())));
 
-    metadataXml = new String(bytes);
+    metadataXmlUpperCaseIdentifier =
+        new String(
+            Files.readAllBytes(
+                Paths.get(
+                    ClassLoader.getSystemClassLoader()
+                        .getResource("metadata/datacite-example-full-v4-uppercase-identifier.xml")
+                        .getFile())));
   }
 
   @Test
-  public void testEqualInsensitiveIdentifier() throws Exception {
-    DataCiteMetadata uppercaseIdentifierMetadata = DataCiteValidator.fromXml(metadataXml);
-    uppercaseIdentifierMetadata.setIdentifier(
-        Identifier.builder().withValue("10.21373/ABCD").withIdentifierType("DOI").build());
+  public void testEqualInsensitiveIdentifierDataCiteMetadataSources() throws Exception {
+    // given
+    DataCiteMetadata uppercaseIdentifierMetadata =
+        DataCiteValidator.fromXml(metadataXmlLowerCaseIdentifier);
+    DataCiteMetadata lowercaseIdentifierMetadata =
+        DataCiteValidator.fromXml(metadataXmlUpperCaseIdentifier);
 
-    DataCiteMetadata lowercaseIdentifierMetadata = DataCiteValidator.fromXml(metadataXml);
-    lowercaseIdentifierMetadata.setIdentifier(
-        Identifier.builder().withValue("10.21373/abcd").withIdentifierType("DOI").build());
+    // when
+    boolean metadataEqualsResult =
+        MetadataUtils.equal(uppercaseIdentifierMetadata, lowercaseIdentifierMetadata);
+    boolean regularEqualsResult =
+        Objects.equals(uppercaseIdentifierMetadata, lowercaseIdentifierMetadata);
 
-    assertTrue(MetadataUtils.equal(uppercaseIdentifierMetadata, lowercaseIdentifierMetadata));
-    assertNotEquals(uppercaseIdentifierMetadata, lowercaseIdentifierMetadata);
+    // then
+    assertTrue(metadataEqualsResult);
+    assertFalse(regularEqualsResult);
+  }
+
+  @Test
+  public void testEqualInsensitiveIdentifierStringSources() {
+    // when
+    boolean metadataEqualsResult =
+        MetadataUtils.equal(metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
+    boolean regularEqualsResult =
+        Objects.equals(metadataXmlUpperCaseIdentifier, metadataXmlLowerCaseIdentifier);
+
+    // then
+    assertTrue(metadataEqualsResult);
+    assertFalse(regularEqualsResult);
   }
 }

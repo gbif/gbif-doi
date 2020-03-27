@@ -16,11 +16,19 @@
 package org.gbif.doi.util;
 
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
+import org.gbif.doi.service.datacite.DataCiteValidator;
 
 import java.util.Objects;
 
+import javax.xml.bind.JAXBException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /** Utils related {@link DataCiteMetadata}. */
 public final class MetadataUtils {
+
+  private static final Logger LOG = LoggerFactory.getLogger(MetadataUtils.class);
 
   private MetadataUtils() {}
 
@@ -64,5 +72,26 @@ public final class MetadataUtils {
         && Objects.equals(metadata1.getDescriptions(), metadata2.getDescriptions())
         && Objects.equals(metadata1.getGeoLocations(), metadata2.getGeoLocations())
         && Objects.equals(metadata1.getFundingReferences(), metadata2.getFundingReferences());
+  }
+
+  /**
+   * Compare two metadata objects. First convert them to {@link DataCiteMetadata} and apply {@link
+   * MetadataUtils#equal(DataCiteMetadata, DataCiteMetadata)} afterwards.
+   */
+  public static boolean equal(String metadata1, String metadata2) {
+    try {
+      DataCiteMetadata registryDoiMetadata =
+          metadata1 != null ? DataCiteValidator.fromXml(metadata1) : null;
+      DataCiteMetadata dataCiteDoiMetadata =
+          metadata2 != null ? DataCiteValidator.fromXml(metadata2) : null;
+
+      // Use this method unless it's always false because the DataCite store DOI in uppercase a
+      // nd the registry store in lower case
+      return equal(registryDoiMetadata, dataCiteDoiMetadata);
+    } catch (JAXBException e) {
+      LOG.error("Invalid metadata", e);
+    }
+
+    return false;
   }
 }
