@@ -17,14 +17,20 @@ package org.gbif.doi.util;
 
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.service.datacite.DataCiteValidator;
+import org.gbif.doi.util.Difference.DifferenceItem;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -32,25 +38,22 @@ import static org.junit.Assert.assertTrue;
 public class MetadataUtilsTest {
 
   private static String metadataXmlLowerCaseIdentifier;
+  private static String metadataXmlLowerCaseIdentifierAnother;
   private static String metadataXmlUpperCaseIdentifier;
 
   @BeforeClass
   public static void before() throws Exception {
-    metadataXmlLowerCaseIdentifier =
-        new String(
-            Files.readAllBytes(
-                Paths.get(
-                    ClassLoader.getSystemClassLoader()
-                        .getResource("metadata/datacite-example-full-v4.xml")
-                        .getFile())));
-
+    metadataXmlLowerCaseIdentifier = readFileData("metadata/datacite-example-full-v4.xml");
     metadataXmlUpperCaseIdentifier =
-        new String(
-            Files.readAllBytes(
-                Paths.get(
-                    ClassLoader.getSystemClassLoader()
-                        .getResource("metadata/datacite-example-full-v4-uppercase-identifier.xml")
-                        .getFile())));
+        readFileData("metadata/datacite-example-full-v4-uppercase-identifier.xml");
+    metadataXmlLowerCaseIdentifierAnother =
+        readFileData("metadata/datacite-example-full-v4-another.xml");
+  }
+
+  @NotNull
+  private static String readFileData(String s) throws IOException {
+    return new String(
+        Files.readAllBytes(Paths.get(ClassLoader.getSystemClassLoader().getResource(s).getFile())));
   }
 
   @Test
@@ -84,5 +87,23 @@ public class MetadataUtilsTest {
     // then
     assertTrue(metadataEqualsResult);
     assertFalse(regularEqualsResult);
+  }
+
+  @Test
+  public void testMetadataDifference() throws Exception {
+    // when
+    Difference metadataDifference =
+        MetadataUtils.metadataDifference(
+            metadataXmlLowerCaseIdentifier, metadataXmlLowerCaseIdentifierAnother);
+
+    // then
+    List<String> fields =
+        metadataDifference.getDifference().stream()
+            .map(DifferenceItem::getFieldName)
+            .collect(Collectors.toList());
+    assertEquals(3, fields.size());
+    assertTrue(fields.contains("creators"));
+    assertTrue(fields.contains("publicationYear"));
+    assertTrue(fields.contains("dates"));
   }
 }
