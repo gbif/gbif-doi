@@ -97,28 +97,33 @@ public final class MetadataUtils {
   }
 
   /** Compare two metadata objects and get {@link Difference} between them. */
-  public static Difference metadataDifference(String xmlMetadata1, String xmlMetadata2)
-      throws Exception {
+  public static Difference metadataDifference(String xmlMetadata1, String xmlMetadata2) {
     Set<Difference.DifferenceItem> result = new LinkedHashSet<>();
 
-    DataCiteMetadata dataCiteMetadata1 =
-        xmlMetadata1 != null ? DataCiteValidator.fromXml(xmlMetadata1) : null;
-    DataCiteMetadata dataCiteMetadata2 =
-        xmlMetadata2 != null ? DataCiteValidator.fromXml(xmlMetadata2) : null;
+    try {
+      DataCiteMetadata dataCiteMetadata1 =
+          xmlMetadata1 != null ? DataCiteValidator.fromXml(xmlMetadata1) : null;
+      DataCiteMetadata dataCiteMetadata2 =
+          xmlMetadata2 != null ? DataCiteValidator.fromXml(xmlMetadata2) : null;
 
-    if (dataCiteMetadata1 == null || dataCiteMetadata2 == null) {
-      LOG.error("Can't get difference: null argument");
-    } else {
-      Field[] declaredFields = DataCiteMetadata.class.getDeclaredFields();
-      for (Field field : declaredFields) {
-        field.setAccessible(true);
-        Object value1 = field.get(dataCiteMetadata1);
-        Object value2 = field.get(dataCiteMetadata2);
+      if (dataCiteMetadata1 == null || dataCiteMetadata2 == null) {
+        LOG.error("Can't get difference: null argument(s)");
+      } else {
+        Field[] declaredFields = DataCiteMetadata.class.getDeclaredFields();
+        for (Field field : declaredFields) {
+          field.setAccessible(true);
+          Object value1 = field.get(dataCiteMetadata1);
+          Object value2 = field.get(dataCiteMetadata2);
 
-        if (!Objects.equals(value1, value2)) {
-          result.add(new Difference.DifferenceItem(field.getName(), value1, value2));
+          if (!Objects.equals(value1, value2)) {
+            result.add(new Difference.DifferenceItem(field.getName(), value1, value2));
+          }
         }
       }
+    } catch (JAXBException e) {
+      LOG.error("Invalid metadata", e);
+    } catch (IllegalAccessException e) {
+      LOG.error("Access exception", e);
     }
 
     return new Difference(result);
