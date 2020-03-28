@@ -106,4 +106,23 @@ public class MetadataUtilsTest {
     assertTrue(fields.contains("publicationYear"));
     assertTrue(fields.contains("dates"));
   }
+
+  @Test
+  public void testMetadataDifferenceBothArgumentNull() throws Exception {
+    // when
+    Difference metadataDifference = MetadataUtils.metadataDifference(null, null);
+
+    // then
+    assertEquals(0, metadataDifference.getDifference().size());
+  }
+
+  @Test
+  public void testMetadataDifferenceOneArgumentNull() throws Exception {
+    // when
+    Difference metadataDifference =
+        MetadataUtils.metadataDifference(null, metadataXmlLowerCaseIdentifier);
+
+    // then
+    assertEquals(0, metadataDifference.getDifference().size());
+  }
 }

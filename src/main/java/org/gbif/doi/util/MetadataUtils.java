@@ -106,14 +106,18 @@ public final class MetadataUtils {
     DataCiteMetadata dataCiteMetadata2 =
         xmlMetadata2 != null ? DataCiteValidator.fromXml(xmlMetadata2) : null;
 
-    Field[] declaredFields = DataCiteMetadata.class.getDeclaredFields();
-    for (Field field : declaredFields) {
-      field.setAccessible(true);
-      Object value1 = field.get(dataCiteMetadata1);
-      Object value2 = field.get(dataCiteMetadata2);
+    if (dataCiteMetadata1 == null || dataCiteMetadata2 == null) {
+      LOG.error("Can't get difference: null argument");
+    } else {
+      Field[] declaredFields = DataCiteMetadata.class.getDeclaredFields();
+      for (Field field : declaredFields) {
+        field.setAccessible(true);
+        Object value1 = field.get(dataCiteMetadata1);
+        Object value2 = field.get(dataCiteMetadata2);
 
-      if (!Objects.equals(value1, value2)) {
-        result.add(new Difference.DifferenceItem(field.getName(), value1, value2));
+        if (!Objects.equals(value1, value2)) {
+          result.add(new Difference.DifferenceItem(field.getName(), value1, value2));
+        }
       }
     }
 
