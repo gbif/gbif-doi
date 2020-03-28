@@ -18,7 +18,10 @@ package org.gbif.doi.util;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.service.datacite.DataCiteValidator;
 
+import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -91,5 +94,29 @@ public final class MetadataUtils {
     }
 
     return false;
+  }
+
+  /** Compare two metadata objects and get {@link Difference} between them. */
+  public static Difference metadataDifference(String xmlMetadata1, String xmlMetadata2)
+      throws Exception {
+    Set<Difference.DifferenceItem> result = new LinkedHashSet<>();
+
+    DataCiteMetadata dataCiteMetadata1 =
+        xmlMetadata1 != null ? DataCiteValidator.fromXml(xmlMetadata1) : null;
+    DataCiteMetadata dataCiteMetadata2 =
+        xmlMetadata2 != null ? DataCiteValidator.fromXml(xmlMetadata2) : null;
+
+    Field[] declaredFields = DataCiteMetadata.class.getDeclaredFields();
+    for (Field field : declaredFields) {
+      field.setAccessible(true);
+      Object value1 = field.get(dataCiteMetadata1);
+      Object value2 = field.get(dataCiteMetadata2);
+
+      if (!Objects.equals(value1, value2)) {
+        result.add(new Difference.DifferenceItem(field.getName(), value1, value2));
+      }
+    }
+
+    return new Difference(result);
   }
 }
