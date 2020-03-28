@@ -78,16 +78,14 @@ public final class MetadataUtils {
    * Compare two metadata objects. First convert them to {@link DataCiteMetadata} and apply {@link
    * MetadataUtils#metadataEquals(DataCiteMetadata, DataCiteMetadata)} afterwards.
    */
-  public static boolean metadataEquals(String metadata1, String metadata2) {
+  public static boolean metadataEquals(String xmlMetadata1, String xmlMetadata2) {
     try {
-      DataCiteMetadata registryDoiMetadata =
-          metadata1 != null ? DataCiteValidator.fromXml(metadata1) : null;
-      DataCiteMetadata dataCiteDoiMetadata =
-          metadata2 != null ? DataCiteValidator.fromXml(metadata2) : null;
+      DataCiteMetadata dataCiteMetadata1 =
+          xmlMetadata1 != null ? DataCiteValidator.fromXml(xmlMetadata1) : null;
+      DataCiteMetadata dataCiteMetadata2 =
+          xmlMetadata2 != null ? DataCiteValidator.fromXml(xmlMetadata2) : null;
 
-      // Use this method unless it's always false because the DataCite store DOI in uppercase a
-      // nd the registry store in lower case
-      return metadataEquals(registryDoiMetadata, dataCiteDoiMetadata);
+      return metadataEquals(dataCiteMetadata1, dataCiteMetadata2);
     } catch (JAXBException e) {
       LOG.error("Invalid metadata", e);
     }
