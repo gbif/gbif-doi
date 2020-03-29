@@ -15,6 +15,8 @@
  */
 package org.gbif.doi.util;
 
+import org.gbif.api.annotation.Generated;
+
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -25,20 +27,20 @@ public class Difference {
 
   private static final String DIFFERENCE_DELIMITER = "--------------------";
 
-  private final Set<DifferenceItem> difference;
+  private final Set<DifferenceItem> items;
 
-  public Difference(Set<DifferenceItem> difference) {
-    this.difference = difference;
+  public Difference(Set<DifferenceItem> items) {
+    this.items = items;
   }
 
-  public Set<DifferenceItem> getDifference() {
-    return Collections.unmodifiableSet(difference);
+  public Set<DifferenceItem> getItems() {
+    return Collections.unmodifiableSet(items);
   }
 
   @Override
   @Generated
   public String toString() {
-    return difference.stream()
+    return items.stream()
         .map(DifferenceItem::toString)
         .collect(
             Collectors.joining(DIFFERENCE_DELIMITER, DIFFERENCE_DELIMITER, DIFFERENCE_DELIMITER));

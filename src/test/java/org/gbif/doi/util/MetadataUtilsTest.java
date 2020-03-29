@@ -22,7 +22,6 @@ import org.gbif.doi.util.Difference.DifferenceItem;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -99,7 +98,7 @@ public class MetadataUtilsTest {
 
     // then
     List<String> fields =
-        metadataDifference.getDifference().stream()
+        metadataDifference.getItems().stream()
             .map(DifferenceItem::getFieldName)
             .collect(Collectors.toList());
     assertEquals(3, fields.size());
@@ -114,7 +113,7 @@ public class MetadataUtilsTest {
     Difference metadataDifference = MetadataUtils.metadataDifference(null, null);
 
     // then
-    assertEquals(0, metadataDifference.getDifference().size());
+    assertEquals(0, metadataDifference.getItems().size());
   }
 
   @Test
@@ -124,27 +123,6 @@ public class MetadataUtilsTest {
         MetadataUtils.metadataDifference(null, metadataXmlLowerCaseIdentifier);
 
     // then
-    assertEquals(0, metadataDifference.getDifference().size());
-  }
-
-  @Test
-  public void testMetadataDifferenceEquals() {
-    // when
-    Difference metadataDifference1 =
-        MetadataUtils.metadataDifference(
-            metadataXmlLowerCaseIdentifier, metadataXmlLowerCaseIdentifierAnother);
-    Difference metadataDifference2 =
-        MetadataUtils.metadataDifference(
-            metadataXmlLowerCaseIdentifierAnother, metadataXmlLowerCaseIdentifier);
-    System.out.println(metadataDifference1);
-    System.out.println(metadataDifference2);
-
-    List<DifferenceItem> differenceItems1 = new ArrayList<>(metadataDifference1.getDifference());
-    List<DifferenceItem> differenceItems2 = new ArrayList<>(metadataDifference2.getDifference());
-
-    boolean result = differenceItems1.get(0).equals(differenceItems2.get(0));
-
-    // then
-    assertFalse(result);
+    assertEquals(0, metadataDifference.getItems().size());
   }
 }
