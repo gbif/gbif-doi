@@ -36,6 +36,7 @@ public class Difference {
   }
 
   @Override
+  @Generated
   public String toString() {
     return difference.stream()
         .map(DifferenceItem::toString)
@@ -68,6 +69,7 @@ public class Difference {
     }
 
     @Override
+    @Generated
     public boolean equals(Object o) {
       if (this == o) {
         return true;
@@ -82,11 +84,13 @@ public class Difference {
     }
 
     @Override
+    @Generated
     public int hashCode() {
       return Objects.hash(fieldName, value1, value2);
     }
 
     @Override
+    @Generated
     public String toString() {
       return '\n' + fieldName + '\n' + value1 + '\n' + value2 + '\n';
     }
