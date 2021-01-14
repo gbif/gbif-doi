@@ -33,6 +33,9 @@ public final class MetadataUtils {
 
   private static final Logger LOG = LoggerFactory.getLogger(MetadataUtils.class);
 
+  public static final String XMLNS_METADATA_SCHEMA_VERSION_4 =
+      "xmlns=\"http://datacite.org/schema/kernel-4\"";
+
   private MetadataUtils() {}
 
   /**
@@ -82,11 +85,21 @@ public final class MetadataUtils {
    * MetadataUtils#metadataEquals(DataCiteMetadata, DataCiteMetadata)} afterwards.
    */
   public static boolean metadataEquals(String xmlMetadata1, String xmlMetadata2) {
+    if (xmlMetadata1 == null && xmlMetadata2 == null) {
+      return true;
+    }
+
+    if (xmlMetadata1 == null || xmlMetadata2 == null) {
+      return false;
+    }
+
+    if (isNotCompatibleMetadata(xmlMetadata1) || isNotCompatibleMetadata(xmlMetadata2)) {
+      return false;
+    }
+
     try {
-      DataCiteMetadata dataCiteMetadata1 =
-          xmlMetadata1 != null ? DataCiteValidator.fromXml(xmlMetadata1) : null;
-      DataCiteMetadata dataCiteMetadata2 =
-          xmlMetadata2 != null ? DataCiteValidator.fromXml(xmlMetadata2) : null;
+      DataCiteMetadata dataCiteMetadata1 = DataCiteValidator.fromXml(xmlMetadata1);
+      DataCiteMetadata dataCiteMetadata2 = DataCiteValidator.fromXml(xmlMetadata2);
 
       return metadataEquals(dataCiteMetadata1, dataCiteMetadata2);
     } catch (JAXBException e) {
@@ -96,28 +109,40 @@ public final class MetadataUtils {
     return false;
   }
 
+  public static boolean isCompatibleMetadata(String xmlMetadata) {
+    return xmlMetadata.contains(XMLNS_METADATA_SCHEMA_VERSION_4);
+  }
+
+  public static boolean isNotCompatibleMetadata(String xmlMetadata) {
+    return !xmlMetadata.contains(XMLNS_METADATA_SCHEMA_VERSION_4);
+  }
+
   /** Compare two metadata objects and get {@link Difference} between them. */
   public static Difference metadataDifference(String xmlMetadata1, String xmlMetadata2) {
     Set<Difference.DifferenceItem> result = new LinkedHashSet<>();
 
+    if (xmlMetadata1 == null || xmlMetadata2 == null) {
+      LOG.error("Can't get difference: null argument(s)");
+      return new Difference(Difference.Status.NULL_OBJECTS, result);
+    }
+
+    if (isNotCompatibleMetadata(xmlMetadata1) || isNotCompatibleMetadata(xmlMetadata2)) {
+      LOG.error("Can't get difference: incompatible objects");
+      return new Difference(Difference.Status.INCOMPATIBLE_OBJECTS, result);
+    }
+
     try {
-      DataCiteMetadata dataCiteMetadata1 =
-          xmlMetadata1 != null ? DataCiteValidator.fromXml(xmlMetadata1) : null;
-      DataCiteMetadata dataCiteMetadata2 =
-          xmlMetadata2 != null ? DataCiteValidator.fromXml(xmlMetadata2) : null;
+      DataCiteMetadata dataCiteMetadata1 = DataCiteValidator.fromXml(xmlMetadata1);
+      DataCiteMetadata dataCiteMetadata2 = DataCiteValidator.fromXml(xmlMetadata2);
 
-      if (dataCiteMetadata1 == null || dataCiteMetadata2 == null) {
-        LOG.error("Can't get difference: null argument(s)");
-      } else {
-        Field[] declaredFields = DataCiteMetadata.class.getDeclaredFields();
-        for (Field field : declaredFields) {
-          field.setAccessible(true);
-          Object value1 = field.get(dataCiteMetadata1);
-          Object value2 = field.get(dataCiteMetadata2);
+      Field[] declaredFields = DataCiteMetadata.class.getDeclaredFields();
+      for (Field field : declaredFields) {
+        field.setAccessible(true);
+        Object value1 = field.get(dataCiteMetadata1);
+        Object value2 = field.get(dataCiteMetadata2);
 
-          if (!Objects.equals(value1, value2)) {
-            result.add(new Difference.DifferenceItem(field.getName(), value1, value2));
-          }
+        if (!Objects.equals(value1, value2)) {
+          result.add(new Difference.DifferenceItem(field.getName(), value1, value2));
         }
       }
     } catch (JAXBException e) {
@@ -126,6 +151,6 @@ public final class MetadataUtils {
       LOG.error("Access exception", e);
     }
 
-    return new Difference(result);
+    return new Difference(Difference.Status.COMPATIBLE_OBJECTS, result);
   }
 }

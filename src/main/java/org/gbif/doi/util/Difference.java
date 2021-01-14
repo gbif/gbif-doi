@@ -27,10 +27,16 @@ public class Difference {
 
   private static final String DIFFERENCE_DELIMITER = "--------------------";
 
+  private final Status comparisonStatus;
   private final Set<DifferenceItem> items;
 
-  public Difference(Set<DifferenceItem> items) {
+  public Difference(Status status, Set<DifferenceItem> items) {
+    this.comparisonStatus = status;
     this.items = items;
+  }
+
+  public Status getComparisonStatus() {
+    return comparisonStatus;
   }
 
   public Set<DifferenceItem> getItems() {
@@ -40,10 +46,18 @@ public class Difference {
   @Override
   @Generated
   public String toString() {
-    return items.stream()
-        .map(DifferenceItem::toString)
-        .collect(
-            Collectors.joining(DIFFERENCE_DELIMITER, DIFFERENCE_DELIMITER, DIFFERENCE_DELIMITER));
+    if (items.isEmpty()) {
+      return "Status: " + comparisonStatus + "\n";
+    } else {
+      return "Status: "
+          + comparisonStatus
+          + "\n"
+          + items.stream()
+              .map(DifferenceItem::toString)
+              .collect(
+                  Collectors.joining(
+                      DIFFERENCE_DELIMITER, DIFFERENCE_DELIMITER, DIFFERENCE_DELIMITER));
+    }
   }
 
   public static class DifferenceItem {
@@ -95,6 +109,22 @@ public class Difference {
     @Generated
     public String toString() {
       return '\n' + fieldName + '\n' + value1 + '\n' + value2 + '\n';
+    }
+  }
+
+  public enum Status {
+    INCOMPATIBLE_OBJECTS("Objects are incompatible"),
+    NULL_OBJECTS("One or both objects are nulls"),
+    COMPATIBLE_OBJECTS("Compatible objects");
+
+    Status(String value) {
+      this.value = value;
+    }
+
+    private final String value;
+
+    public String getValue() {
+      return value;
     }
   }
 }
