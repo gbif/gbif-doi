@@ -31,11 +31,8 @@ import org.gbif.utils.file.FileUtils;
 import java.io.InputStream;
 import java.net.URI;
 
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,15 +45,15 @@ import static org.gbif.api.model.common.DoiStatus.FAILED;
 import static org.gbif.api.model.common.DoiStatus.NEW;
 import static org.gbif.api.model.common.DoiStatus.REGISTERED;
 import static org.gbif.api.model.common.DoiStatus.RESERVED;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /** Test DoiService and its implementation RestJsonApiDataCiteService. */
-@RunWith(MockitoJUnitRunner.class)
 public class DoiServiceIT {
   private static final URI TEST_TARGET = URI.create("http://www.gbif.org/datasets");
   private static final String PREFIX = "10.21373";
@@ -68,7 +65,7 @@ public class DoiServiceIT {
   // for mocking exception cases (HTTP errors)
   private static DataCiteClient dataCiteClientMock;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     try (InputStream dc = FileUtils.classpathStream("datacite.yaml")) {
       ObjectMapper mapper =
@@ -89,14 +86,14 @@ public class DoiServiceIT {
     return new DOI(PREFIX, SHOULDER + System.nanoTime());
   }
 
-  @Test(expected = DoiHttpException.class)
-  public void resolveOnHttpErrorExcept404ShouldThrowDoiHttpException() throws Exception {
+  @Test
+  public void resolveOnHttpErrorExcept404ShouldThrowDoiHttpException() {
     // given
     final DOI doi = newDoi();
     prepareExceptionThrown(doi, 400);
 
     // when
-    serviceWithMockClient.resolve(doi);
+    assertThrows(DoiHttpException.class, () -> serviceWithMockClient.resolve(doi));
 
     // then exception is expected
     verify(dataCiteClientMock).getDoi(doi.getDoiName());
@@ -157,20 +154,18 @@ public class DoiServiceIT {
     assertEquals(new DoiData(REGISTERED, TEST_TARGET), actual);
   }
 
-  @Test(expected = DoiExistsException.class)
+  @Test
   public void reservePerformedTwiceShouldThrowDoiExistsException() throws Exception {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "reserve test");
 
-    // when
+    // when & then
     service.reserve(doi, meta);
-    service.reserve(doi, meta);
-
-    // then exception is expected
+    assertThrows(DoiExistsException.class, () -> service.reserve(doi, meta));
   }
 
-  @Ignore("temporarily switched off because of DataCite Internal Server Error 500")
+//  @Disabled("temporarily switched off because of DataCite Internal Server Error 500")
   @Test
   public void deleteReservedDoiShouldBeOk() throws Exception {
     // given
@@ -185,17 +180,15 @@ public class DoiServiceIT {
     assertTrue(isDeletedOne);
   }
 
-  @Test(expected = DoiException.class)
+  @Test
   public void deleteRegisteredDoiShouldThrowDoiException() throws Exception {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "delete test");
     service.register(doi, TEST_TARGET, meta);
 
-    // when
-    service.delete(doi);
-
-    // then exception is expected
+    // when & then
+    assertThrows(DoiException.class, () -> service.delete(doi));
   }
 
   @Test
@@ -212,74 +205,61 @@ public class DoiServiceIT {
     assertEquals(new DoiData(REGISTERED, TEST_TARGET), service.resolve(doi));
   }
 
-  @Test(expected = NullPointerException.class)
-  public void registerWithoutUrlShouldThrowNPE() throws Exception {
+  @Test
+  public void registerWithoutUrlShouldThrowNPE() {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "register test");
 
-    // when
-    service.register(doi, null, meta);
-
-    // then exception is expected
+    // when & then
+    assertThrows(NullPointerException.class, () -> service.register(doi, null, meta));
   }
 
-  @Test(expected = NullPointerException.class)
-  public void registerWithoutMetaShouldThrowNPE() throws Exception {
+  @Test
+  public void registerWithoutMetaShouldThrowNPE() {
     // given
     final DOI doi = newDoi();
 
-    // when
-    service.register(doi, TEST_TARGET, (DataCiteMetadata) null);
-
-    // then exception is expected
+    // when & then
+    assertThrows(NullPointerException.class, () -> service.register(doi, TEST_TARGET, (DataCiteMetadata) null));
   }
 
-  @Test(expected = NullPointerException.class)
-  public void registerWithoutIdentifierShouldThrowNPE() throws Exception {
+  @Test
+  public void registerWithoutIdentifierShouldThrowNPE() {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "register test");
 
-    // when
-    service.register(null, TEST_TARGET, meta);
-
-    // then exception is expected
+    // when & then
+    assertThrows(NullPointerException.class, () -> service.register(null, TEST_TARGET, meta));
   }
 
-  @Test(expected = DoiNotFoundException.class)
-  public void deleteNewDoiShouldThrowDoiNotFoundException() throws Exception {
+  @Test
+  public void deleteNewDoiShouldThrowDoiNotFoundException() {
     // given
     final DOI doi = newDoi();
 
-    // when
-    final boolean actual = service.delete(doi);
-
-    // then
-    assertFalse(actual);
+    // when & then
+    assertThrows(DoiNotFoundException.class, () -> service.delete(doi));
   }
 
-  @Test(expected = DoiNotFoundException.class)
-  public void updateNewDoiWithNewUrlShouldThrowDoiNotFoundException() throws Exception {
+  @Test
+  public void updateNewDoiWithNewUrlShouldThrowDoiNotFoundException() {
     // given
     final DOI doi = newDoi();
 
-    // when
-    service.update(doi, TEST_TARGET);
-
-    // then exception is expected
+    // when & then
+    assertThrows(DoiNotFoundException.class, () -> service.update(doi, TEST_TARGET));
   }
 
-  @Test(expected = DoiNotFoundException.class)
-  public void updateNewDoiWithNewMetaShouldThrowDoiNotFoundException() throws Exception {
+  @Test
+  public void updateNewDoiWithNewMetaShouldThrowDoiNotFoundException() {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "update test");
 
-    // when
-    service.update(doi, meta);
-
-    // then exception is expected
+    // when & then
+    assertThrows(DoiNotFoundException.class, () -> service.update(doi, meta));
   }
 
   @Test
@@ -322,27 +302,25 @@ public class DoiServiceIT {
     assertEquals(new DoiData(REGISTERED, TEST_TARGET), service.resolve(doi2));
   }
 
-  @Test(expected = DoiExistsException.class)
+  @Test
   public void registerPerformedTwiceShouldThrowDoiExistsException() throws Exception {
     // given
     final DOI doi = newDoi();
     DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "register test");
 
-    // when
+    // when & then
     service.register(doi, TEST_TARGET, meta);
-    service.register(doi, TEST_TARGET, meta);
-
-    // then exception is expected
+    assertThrows(DoiExistsException.class, () -> service.register(doi, TEST_TARGET, meta));
   }
 
-  @Test(expected = DoiHttpException.class)
-  public void existsOnHttpErrorExcept404ShouldThrowDoiHttpException() throws Exception {
+  @Test
+  public void existsOnHttpErrorExcept404ShouldThrowDoiHttpException() {
     // given
     final DOI doi = newDoi();
     prepareExceptionThrown(doi, 500);
 
     // when
-    serviceWithMockClient.exists(doi);
+    assertThrows(DoiHttpException.class, () -> serviceWithMockClient.exists(doi));
 
     // then exception is expected
     verify(dataCiteClientMock).getDoi(doi.getDoiName());
@@ -402,14 +380,14 @@ public class DoiServiceIT {
     assertTrue(actual);
   }
 
-  @Test(expected = DoiHttpException.class)
-  public void getMetadataOnHttpErrorShouldTrowDoiHttpException() throws Exception {
+  @Test
+  public void getMetadataOnHttpErrorShouldTrowDoiHttpException() {
     // given
     final DOI doi = newDoi();
     prepareExceptionThrown(doi, 404);
 
     // when
-    serviceWithMockClient.getMetadata(doi);
+    assertThrows(DoiHttpException.class, () -> serviceWithMockClient.getMetadata(doi));
 
     // then exception is expected
     verify(dataCiteClientMock).getMetadata(doi.getDoiName());

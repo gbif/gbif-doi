@@ -26,13 +26,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SuppressWarnings("ConstantConditions")
 public class MetadataUtilsTest {
@@ -42,7 +41,7 @@ public class MetadataUtilsTest {
   private static String metadataXmlUpperCaseIdentifier;
   private static String metadataXmlVersion3;
 
-  @BeforeClass
+  @BeforeAll
   public static void before() throws Exception {
     metadataXmlLowerCaseIdentifier = readFileData("metadata/datacite-example-full-v4.xml");
     metadataXmlUpperCaseIdentifier =
@@ -52,7 +51,6 @@ public class MetadataUtilsTest {
     metadataXmlVersion3 = readFileData("metadata/datacite-example-full-v3.xml");
   }
 
-  @NotNull
   private static String readFileData(String s) throws IOException {
     return new String(
         Files.readAllBytes(Paths.get(ClassLoader.getSystemClassLoader().getResource(s).getFile())));

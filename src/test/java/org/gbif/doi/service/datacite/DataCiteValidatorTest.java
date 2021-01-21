@@ -30,10 +30,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Test DataCiteValidator. */
 public class DataCiteValidatorTest {
@@ -78,63 +79,57 @@ public class DataCiteValidatorTest {
     assertEquals(metadataFromXmlResult, metadataFromBuildersResult);
   }
 
-  @Test(expected = InvalidMetadataException.class)
+  @Test
   public void
-      testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException()
-          throws Exception {
-    DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml"));
+      testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException() {
+    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml")));
   }
 
-  @Test(expected = InvalidMetadataException.class)
+  @Test
   public void
-      testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException()
-          throws Exception {
-    DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml"));
+      testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException() {
+    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml")));
   }
 
-  @Test(expected = InvalidMetadataException.class)
+  @Test
   public void
-      testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException()
-          throws Exception {
-    DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml"));
+      testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException() {
+    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml")));
   }
 
-  @Test(expected = InvalidMetadataException.class)
+  @Test
   public void
-      testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException()
-          throws Exception {
-    DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml"));
+      testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException() {
+    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml")));
   }
 
-  @Test(expected = InvalidMetadataException.class)
+  @Test
   public void
-      testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException()
-          throws Exception {
-    DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml"));
+      testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException() {
+    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml")));
   }
 
-  @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException()
-      throws Exception {
-    DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml"));
+  @Test
+  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException() {
+    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml")));
   }
 
-  @Test(expected = InvalidMetadataException.class)
-  public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException()
-      throws Exception {
-    DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml"));
+  @Test
+  public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException() {
+    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
+        FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml")));
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void testValidateMetadataIfWrongSourceShouldThrowIllegalStateException() throws Exception {
-    DataCiteValidator.validateMetadata(FileUtils.classpathStream("wrong_path"));
+  @Test
+  public void testValidateMetadataIfWrongSourceShouldThrowIllegalStateException() {
+    assertThrows(IllegalStateException.class,
+        () -> DataCiteValidator.validateMetadata(FileUtils.classpathStream("wrong_path")));
   }
 
   /** Since javax.xml.validation.Validator is NOT thread-safe, make sure our usage of it is. */
