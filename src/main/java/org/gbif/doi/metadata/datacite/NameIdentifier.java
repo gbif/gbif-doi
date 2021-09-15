@@ -17,6 +17,8 @@ package org.gbif.doi.metadata.datacite;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +27,6 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-import com.google.common.base.Objects;
 import com.kscs.util.jaxb.Buildable;
 import com.kscs.util.jaxb.PropertyTree;
 import com.kscs.util.jaxb.PropertyTreeUse;
@@ -218,33 +219,28 @@ public class NameIdentifier {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
-        .add("value", value)
-        .add("nameIdentifierScheme", nameIdentifierScheme)
-        .add("schemeURI", schemeURI)
+    return new StringJoiner(", ", NameIdentifier.class.getSimpleName() + "[", "]")
+        .add("value='" + value + "'")
+        .add("nameIdentifierScheme='" + nameIdentifierScheme + "'")
+        .add("schemeURI='" + schemeURI + "'")
         .toString();
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hashCode(value, nameIdentifierScheme, schemeURI);
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NameIdentifier that = (NameIdentifier) o;
+
+    return Objects.equals(value, that.value)
+        && Objects.equals(nameIdentifierScheme, that.nameIdentifierScheme)
+        && Objects.equals(schemeURI, that.schemeURI);
   }
 
   @Override
-  public boolean equals(Object other) {
-    if (this == other) {
-      return true;
-    }
-    if (other == null) {
-      return false;
-    }
-    if (getClass() != other.getClass()) {
-      return false;
-    }
-    final NameIdentifier o = ((NameIdentifier) other);
-    return ((Objects.equal(value, o.value)
-            && Objects.equal(nameIdentifierScheme, o.nameIdentifierScheme))
-        && Objects.equal(schemeURI, o.schemeURI));
+  public int hashCode() {
+    return Objects.hash(value, nameIdentifierScheme, schemeURI);
   }
 
   public static class Builder<_B> implements Buildable {

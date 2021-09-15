@@ -15,7 +15,6 @@
  */
 package com.kscs.util.jaxb;
 
-/** @author Mirko Klemm 2015-09-03 */
 public interface Buildable {
   Object build();
 

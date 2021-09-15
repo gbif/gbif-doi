@@ -17,12 +17,13 @@ package org.gbif.doi.metadata.datacite;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Objects;
 import com.kscs.util.jaxb.Buildable;
 import com.kscs.util.jaxb.PropertyTree;
 import com.kscs.util.jaxb.PropertyTreeUse;
@@ -202,36 +203,30 @@ public class Box {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
-        .add("westBoundLongitude", westBoundLongitude)
-        .add("eastBoundLongitude", eastBoundLongitude)
-        .add("southBoundLatitude", southBoundLatitude)
-        .add("northBoundLatitude", northBoundLatitude)
+    return new StringJoiner(", ", Box.class.getSimpleName() + "[", "]")
+        .add("westBoundLongitude=" + westBoundLongitude)
+        .add("eastBoundLongitude=" + eastBoundLongitude)
+        .add("southBoundLatitude=" + southBoundLatitude)
+        .add("northBoundLatitude=" + northBoundLatitude)
         .toString();
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hashCode(
-        westBoundLongitude, eastBoundLongitude, southBoundLatitude, northBoundLatitude);
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Box box = (Box) o;
+
+    return Float.compare(box.westBoundLongitude, westBoundLongitude) == 0
+        && Float.compare(box.eastBoundLongitude, eastBoundLongitude) == 0
+        && Float.compare(box.southBoundLatitude, southBoundLatitude) == 0
+        && Float.compare(box.northBoundLatitude, northBoundLatitude) == 0;
   }
 
   @Override
-  public boolean equals(Object other) {
-    if (this == other) {
-      return true;
-    }
-    if (other == null) {
-      return false;
-    }
-    if (getClass() != other.getClass()) {
-      return false;
-    }
-    final Box o = ((Box) other);
-    return (((Objects.equal(westBoundLongitude, o.westBoundLongitude)
-                && Objects.equal(eastBoundLongitude, o.eastBoundLongitude))
-            && Objects.equal(southBoundLatitude, o.southBoundLatitude))
-        && Objects.equal(northBoundLatitude, o.northBoundLatitude));
+  public int hashCode() {
+    return Objects.hash(westBoundLongitude, eastBoundLongitude, southBoundLatitude, northBoundLatitude);
   }
 
   public static class Builder<_B> implements Buildable {

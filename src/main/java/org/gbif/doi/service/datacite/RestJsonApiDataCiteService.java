@@ -34,6 +34,7 @@ import org.gbif.doi.service.DoiService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Base64;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -41,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.jasminb.jsonapi.JSONAPIDocument;
-import com.google.common.base.Preconditions;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -81,7 +81,7 @@ public class RestJsonApiDataCiteService implements DoiService {
   @Nonnull
   @Override
   public DoiData resolve(DOI doi) throws DoiException {
-    Preconditions.checkNotNull(doi);
+    Objects.requireNonNull(doi);
     Response<JSONAPIDocument<Datacite42Schema>> doiResponse;
 
     doiResponse = dataCiteClient.getDoi(doi.getDoiName());
@@ -120,7 +120,7 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public boolean exists(DOI doi) throws DoiException {
-    Preconditions.checkNotNull(doi);
+    Objects.requireNonNull(doi);
     Response<JSONAPIDocument<Datacite42Schema>> doiResponse =
         dataCiteClient.getDoi(doi.getDoiName());
     throwExceptionOnBadResponseExcept404(doiResponse);
@@ -149,8 +149,8 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void reserve(DOI doi, String metadata) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be reserved with 'null' identifier");
-    Preconditions.checkNotNull(metadata, "DOI can't be reserved with 'null' metadata");
+    Objects.requireNonNull(doi, "DOI can't be reserved with 'null' identifier");
+    Objects.requireNonNull(metadata, "DOI can't be reserved with 'null' metadata");
 
     DoiData doiData = resolve(doi);
 
@@ -172,8 +172,8 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be reserved with 'null' identifier");
-    Preconditions.checkNotNull(metadata, "DOI can't be reserved with 'null' metadata");
+    Objects.requireNonNull(doi, "DOI can't be reserved with 'null' identifier");
+    Objects.requireNonNull(metadata, "DOI can't be reserved with 'null' metadata");
     String xmlMetadata = DataCiteValidator.toXml(doi, metadata);
     reserve(doi, xmlMetadata);
   }
@@ -186,9 +186,9 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void register(DOI doi, URI target, String metadata) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be registered without identifier");
-    Preconditions.checkNotNull(target, "DOI can't be registered without target URL");
-    Preconditions.checkNotNull(metadata, "DOI can't be registered without metadata");
+    Objects.requireNonNull(doi, "DOI can't be registered without identifier");
+    Objects.requireNonNull(target, "DOI can't be registered without target URL");
+    Objects.requireNonNull(metadata, "DOI can't be registered without metadata");
 
     DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
     model.setEvent(EventType.PUBLISH.getValue());
@@ -215,9 +215,9 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be registered without identifier");
-    Preconditions.checkNotNull(target, "DOI can't be registered without target URL");
-    Preconditions.checkNotNull(metadata, "DOI can't be registered without metadata");
+    Objects.requireNonNull(doi, "DOI can't be registered without identifier");
+    Objects.requireNonNull(target, "DOI can't be registered without target URL");
+    Objects.requireNonNull(metadata, "DOI can't be registered without metadata");
     String xmlMetadata = DataCiteValidator.toXml(doi, metadata);
     register(doi, target, xmlMetadata);
   }
@@ -245,7 +245,7 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public boolean delete(DOI doi) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be deleted without identifier");
+    Objects.requireNonNull(doi, "DOI can't be deleted without identifier");
 
     DoiData doiData = resolve(doi);
 
@@ -269,8 +269,8 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void update(DOI doi, String metadata) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be updated with 'null' identifier");
-    Preconditions.checkNotNull(metadata, "DOI can't be updated with 'null' metadata");
+    Objects.requireNonNull(doi, "DOI can't be updated with 'null' identifier");
+    Objects.requireNonNull(metadata, "DOI can't be updated with 'null' metadata");
 
     DoiData doiData = resolve(doi);
 
@@ -294,8 +294,8 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void update(DOI doi, DataCiteMetadata metadata) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be updated with 'null' identifier");
-    Preconditions.checkNotNull(metadata, "DOI can't be updated with 'null' metadata");
+    Objects.requireNonNull(doi, "DOI can't be updated with 'null' identifier");
+    Objects.requireNonNull(metadata, "DOI can't be updated with 'null' metadata");
     String xmlMetadata = DataCiteValidator.toXml(doi, metadata);
     update(doi, xmlMetadata);
   }
@@ -308,8 +308,8 @@ public class RestJsonApiDataCiteService implements DoiService {
    */
   @Override
   public void update(DOI doi, URI target) throws DoiException {
-    Preconditions.checkNotNull(doi, "DOI can't be updated with 'null' identifier");
-    Preconditions.checkNotNull(target, "DOI can't be updated with 'null' target URL");
+    Objects.requireNonNull(doi, "DOI can't be updated with 'null' identifier");
+    Objects.requireNonNull(target, "DOI can't be updated with 'null' target URL");
 
     DoiData doiData = resolve(doi);
 

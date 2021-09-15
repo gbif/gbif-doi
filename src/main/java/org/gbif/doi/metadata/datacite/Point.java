@@ -17,12 +17,13 @@ package org.gbif.doi.metadata.datacite;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Objects;
 import com.kscs.util.jaxb.Buildable;
 import com.kscs.util.jaxb.PropertyTree;
 import com.kscs.util.jaxb.PropertyTreeUse;
@@ -161,31 +162,26 @@ public class Point {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
-        .add("pointLongitude", pointLongitude)
-        .add("pointLatitude", pointLatitude)
+    return new StringJoiner(", ", Point.class.getSimpleName() + "[", "]")
+        .add("pointLongitude=" + pointLongitude)
+        .add("pointLatitude=" + pointLatitude)
         .toString();
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hashCode(pointLongitude, pointLatitude);
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Point point = (Point) o;
+
+    return Float.compare(point.pointLongitude, pointLongitude) == 0
+        && Float.compare(point.pointLatitude, pointLatitude) == 0;
   }
 
   @Override
-  public boolean equals(Object other) {
-    if (this == other) {
-      return true;
-    }
-    if (other == null) {
-      return false;
-    }
-    if (getClass() != other.getClass()) {
-      return false;
-    }
-    final Point o = ((Point) other);
-    return (Objects.equal(pointLongitude, o.pointLongitude)
-        && Objects.equal(pointLatitude, o.pointLatitude));
+  public int hashCode() {
+    return Objects.hash(pointLongitude, pointLatitude);
   }
 
   public static class Builder<_B> implements Buildable {

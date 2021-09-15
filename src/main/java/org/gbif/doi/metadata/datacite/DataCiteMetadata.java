@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -37,7 +39,6 @@ import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.google.common.base.Objects;
 import com.kscs.util.jaxb.Buildable;
 import com.kscs.util.jaxb.PropertyTree;
 import com.kscs.util.jaxb.PropertyTreeUse;
@@ -1106,92 +1107,62 @@ public class DataCiteMetadata {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this)
-        .add("identifier", identifier)
-        .add("creators", creators)
-        .add("titles", titles)
-        .add("publisher", publisher)
-        .add("publicationYear", publicationYear)
-        .add("resourceType", resourceType)
-        .add("subjects", subjects)
-        .add("contributors", contributors)
-        .add("dates", dates)
-        .add("language", language)
-        .add("alternateIdentifiers", alternateIdentifiers)
-        .add("relatedIdentifiers", relatedIdentifiers)
-        .add("sizes", sizes)
-        .add("formats", formats)
-        .add("version", version)
-        .add("rightsList", rightsList)
-        .add("descriptions", descriptions)
-        .add("geoLocations", geoLocations)
-        .add("fundingReferences", fundingReferences)
+    return new StringJoiner(", ", DataCiteMetadata.class.getSimpleName() + "[", "]")
+        .add("identifier=" + identifier)
+        .add("creators=" + creators)
+        .add("titles=" + titles)
+        .add("publisher=" + publisher)
+        .add("publicationYear='" + publicationYear + "'")
+        .add("resourceType=" + resourceType)
+        .add("subjects=" + subjects)
+        .add("contributors=" + contributors)
+        .add("dates=" + dates)
+        .add("language='" + language + "'")
+        .add("alternateIdentifiers=" + alternateIdentifiers)
+        .add("relatedIdentifiers=" + relatedIdentifiers)
+        .add("sizes=" + sizes)
+        .add("formats=" + formats)
+        .add("version='" + version + "'")
+        .add("rightsList=" + rightsList)
+        .add("descriptions=" + descriptions)
+        .add("geoLocations=" + geoLocations)
+        .add("fundingReferences=" + fundingReferences)
         .toString();
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hashCode(
-        identifier,
-        creators,
-        titles,
-        publisher,
-        publicationYear,
-        resourceType,
-        subjects,
-        contributors,
-        dates,
-        language,
-        alternateIdentifiers,
-        relatedIdentifiers,
-        sizes,
-        formats,
-        version,
-        rightsList,
-        descriptions,
-        geoLocations,
-        fundingReferences);
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    DataCiteMetadata that = (DataCiteMetadata) o;
+
+    return Objects.equals(identifier, that.identifier)
+        && Objects.equals(creators, that.creators)
+        && Objects.equals(titles, that.titles)
+        && Objects.equals(publisher, that.publisher)
+        && Objects.equals(publicationYear, that.publicationYear)
+        && Objects.equals(resourceType, that.resourceType)
+        && Objects.equals(subjects, that.subjects)
+        && Objects.equals(contributors, that.contributors)
+        && Objects.equals(dates, that.dates)
+        && Objects.equals(language, that.language)
+        && Objects.equals(alternateIdentifiers, that.alternateIdentifiers)
+        && Objects.equals(relatedIdentifiers, that.relatedIdentifiers)
+        && Objects.equals(sizes, that.sizes)
+        && Objects.equals(formats, that.formats)
+        && Objects.equals(version, that.version)
+        && Objects.equals(rightsList, that.rightsList)
+        && Objects.equals(descriptions, that.descriptions)
+        && Objects.equals(geoLocations, that.geoLocations)
+        && Objects.equals(fundingReferences, that.fundingReferences);
   }
 
   @Override
-  public boolean equals(Object other) {
-    if (this == other) {
-      return true;
-    }
-    if (other == null) {
-      return false;
-    }
-    if (getClass() != other.getClass()) {
-      return false;
-    }
-    final DataCiteMetadata o = ((DataCiteMetadata) other);
-    return ((((((((((((((((((Objects.equal(identifier, o.identifier)
-                                                                            && Objects.equal(
-                                                                                creators,
-                                                                                o.creators))
-                                                                        && Objects.equal(
-                                                                            titles, o.titles))
-                                                                    && Objects.equal(
-                                                                        publisher, o.publisher))
-                                                                && Objects.equal(
-                                                                    publicationYear,
-                                                                    o.publicationYear))
-                                                            && Objects.equal(
-                                                                resourceType, o.resourceType))
-                                                        && Objects.equal(subjects, o.subjects))
-                                                    && Objects.equal(contributors, o.contributors))
-                                                && Objects.equal(dates, o.dates))
-                                            && Objects.equal(language, o.language))
-                                        && Objects.equal(
-                                            alternateIdentifiers, o.alternateIdentifiers))
-                                    && Objects.equal(relatedIdentifiers, o.relatedIdentifiers))
-                                && Objects.equal(sizes, o.sizes))
-                            && Objects.equal(formats, o.formats))
-                        && Objects.equal(version, o.version))
-                    && Objects.equal(rightsList, o.rightsList))
-                && Objects.equal(descriptions, o.descriptions))
-            && Objects.equal(geoLocations, o.geoLocations))
-        && Objects.equal(fundingReferences, o.fundingReferences));
+  public int hashCode() {
+    return Objects.hash(identifier, creators, titles, publisher, publicationYear, resourceType, subjects, contributors,
+        dates, language, alternateIdentifiers, relatedIdentifiers, sizes, formats, version, rightsList, descriptions,
+        geoLocations, fundingReferences);
   }
 
   /**
@@ -1364,30 +1335,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this)
-          .add("alternateIdentifier", alternateIdentifier)
+      return new StringJoiner(", ", AlternateIdentifiers.class.getSimpleName() + "[", "]")
+          .add("alternateIdentifier=" + alternateIdentifier)
           .toString();
     }
 
     @Override
-    public int hashCode() {
-      return Objects.hashCode(alternateIdentifier);
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      AlternateIdentifiers that = (AlternateIdentifiers) o;
+      return Objects.equals(alternateIdentifier, that.alternateIdentifier);
     }
 
     @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.AlternateIdentifiers o =
-          ((DataCiteMetadata.AlternateIdentifiers) other);
-      return Objects.equal(alternateIdentifier, o.alternateIdentifier);
+    public int hashCode() {
+      return Objects.hash(alternateIdentifier);
     }
 
     /**
@@ -1562,32 +1525,23 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", value)
-            .add("alternateIdentifierType", alternateIdentifierType)
+        return new StringJoiner(", ", AlternateIdentifier.class.getSimpleName() + "[", "]")
+            .add("value='" + value + "'")
+            .add("alternateIdentifierType='" + alternateIdentifierType + "'")
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(value, alternateIdentifierType);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AlternateIdentifier that = (AlternateIdentifier) o;
+        return Objects.equals(value, that.value) && Objects.equals(alternateIdentifierType, that.alternateIdentifierType);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.AlternateIdentifiers.AlternateIdentifier o =
-            ((DataCiteMetadata.AlternateIdentifiers.AlternateIdentifier) other);
-        return (Objects.equal(value, o.value)
-            && Objects.equal(alternateIdentifierType, o.alternateIdentifierType));
+      public int hashCode() {
+        return Objects.hash(value, alternateIdentifierType);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -3107,27 +3061,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("contributor", contributor).toString();
+      return new StringJoiner(", ", Contributors.class.getSimpleName() + "[", "]")
+          .add("contributor=" + contributor)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Contributors that = (Contributors) o;
+      return Objects.equals(contributor, that.contributor);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(contributor);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Contributors o = ((DataCiteMetadata.Contributors) other);
-      return Objects.equal(contributor, o.contributor);
+      return Objects.hash(contributor);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -3674,41 +3623,34 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("contributorName", contributorName)
-            .add("givenName", givenName)
-            .add("familyName", familyName)
-            .add("nameIdentifier", nameIdentifier)
-            .add("affiliation", affiliation)
-            .add("contributorType", contributorType)
+        return new StringJoiner(", ", Contributor.class.getSimpleName() + "[", "]")
+            .add("contributorName=" + contributorName)
+            .add("givenName=" + givenName)
+            .add("familyName=" + familyName)
+            .add("nameIdentifier=" + nameIdentifier)
+            .add("affiliation=" + affiliation)
+            .add("contributorType=" + contributorType)
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(
-            contributorName, givenName, familyName, nameIdentifier, affiliation, contributorType);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contributor that = (Contributor) o;
+
+        return Objects.equals(contributorName, that.contributorName)
+            && Objects.equals(givenName, that.givenName)
+            && Objects.equals(familyName, that.familyName)
+            && Objects.equals(nameIdentifier, that.nameIdentifier)
+            && Objects.equals(affiliation, that.affiliation)
+            && contributorType == that.contributorType;
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.Contributors.Contributor o =
-            ((DataCiteMetadata.Contributors.Contributor) other);
-        return (((((Objects.equal(contributorName, o.contributorName)
-                            && Objects.equal(givenName, o.givenName))
-                        && Objects.equal(familyName, o.familyName))
-                    && Objects.equal(nameIdentifier, o.nameIdentifier))
-                && Objects.equal(affiliation, o.affiliation))
-            && Objects.equal(contributorType, o.contributorType));
+      public int hashCode() {
+        return Objects.hash(contributorName, givenName, familyName, nameIdentifier, affiliation, contributorType);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -4356,33 +4298,24 @@ public class DataCiteMetadata {
 
         @Override
         public String toString() {
-          return Objects.toStringHelper(this)
-              .add("value", value)
-              .add("nameType", nameType)
-              .add("lang", lang)
+          return new StringJoiner(", ", ContributorName.class.getSimpleName() + "[", "]")
+              .add("value='" + value + "'")
+              .add("nameType=" + nameType)
+              .add("lang='" + lang + "'")
               .toString();
         }
 
         @Override
-        public int hashCode() {
-          return Objects.hashCode(value, nameType, lang);
+        public boolean equals(Object o) {
+          if (this == o) return true;
+          if (o == null || getClass() != o.getClass()) return false;
+          ContributorName that = (ContributorName) o;
+          return Objects.equals(value, that.value) && nameType == that.nameType && Objects.equals(lang, that.lang);
         }
 
         @Override
-        public boolean equals(Object other) {
-          if (this == other) {
-            return true;
-          }
-          if (other == null) {
-            return false;
-          }
-          if (getClass() != other.getClass()) {
-            return false;
-          }
-          final DataCiteMetadata.Contributors.Contributor.ContributorName o =
-              ((DataCiteMetadata.Contributors.Contributor.ContributorName) other);
-          return ((Objects.equal(value, o.value) && Objects.equal(nameType, o.nameType))
-              && Objects.equal(lang, o.lang));
+        public int hashCode() {
+          return Objects.hash(value, nameType, lang);
         }
 
         public static class Builder<_B> implements Buildable {
@@ -4969,27 +4902,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("creator", creator).toString();
+      return new StringJoiner(", ", Creators.class.getSimpleName() + "[", "]")
+          .add("creator=" + creator)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Creators creators = (Creators) o;
+      return Objects.equals(creator, creators.creator);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(creator);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Creators o = ((DataCiteMetadata.Creators) other);
-      return Objects.equal(creator, o.creator);
+      return Objects.hash(creator);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -5488,37 +5416,30 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("creatorName", creatorName)
-            .add("givenName", givenName)
-            .add("familyName", familyName)
-            .add("nameIdentifier", nameIdentifier)
-            .add("affiliation", affiliation)
+        return new StringJoiner(", ", Creator.class.getSimpleName() + "[", "]")
+            .add("creatorName=" + creatorName)
+            .add("givenName=" + givenName)
+            .add("familyName=" + familyName)
+            .add("nameIdentifier=" + nameIdentifier)
+            .add("affiliation=" + affiliation)
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(creatorName, givenName, familyName, nameIdentifier, affiliation);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Creator creator = (Creator) o;
+        return Objects.equals(creatorName, creator.creatorName)
+            && Objects.equals(givenName, creator.givenName)
+            && Objects.equals(familyName, creator.familyName)
+            && Objects.equals(nameIdentifier, creator.nameIdentifier)
+            && Objects.equals(affiliation, creator.affiliation);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.Creators.Creator o = ((DataCiteMetadata.Creators.Creator) other);
-        return ((((Objects.equal(creatorName, o.creatorName)
-                        && Objects.equal(givenName, o.givenName))
-                    && Objects.equal(familyName, o.familyName))
-                && Objects.equal(nameIdentifier, o.nameIdentifier))
-            && Objects.equal(affiliation, o.affiliation));
+      public int hashCode() {
+        return Objects.hash(creatorName, givenName, familyName, nameIdentifier, affiliation);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -6117,33 +6038,26 @@ public class DataCiteMetadata {
 
         @Override
         public String toString() {
-          return Objects.toStringHelper(this)
-              .add("value", value)
-              .add("nameType", nameType)
-              .add("lang", lang)
+          return new StringJoiner(", ", CreatorName.class.getSimpleName() + "[", "]")
+              .add("value='" + value + "'")
+              .add("nameType=" + nameType)
+              .add("lang='" + lang + "'")
               .toString();
         }
 
         @Override
-        public int hashCode() {
-          return Objects.hashCode(value, nameType, lang);
+        public boolean equals(Object o) {
+          if (this == o) return true;
+          if (o == null || getClass() != o.getClass()) return false;
+          CreatorName that = (CreatorName) o;
+          return Objects.equals(value, that.value)
+              && nameType == that.nameType
+              && Objects.equals(lang, that.lang);
         }
 
         @Override
-        public boolean equals(Object other) {
-          if (this == other) {
-            return true;
-          }
-          if (other == null) {
-            return false;
-          }
-          if (getClass() != other.getClass()) {
-            return false;
-          }
-          final DataCiteMetadata.Creators.Creator.CreatorName o =
-              ((DataCiteMetadata.Creators.Creator.CreatorName) other);
-          return ((Objects.equal(value, o.value) && Objects.equal(nameType, o.nameType))
-              && Objects.equal(lang, o.lang));
+        public int hashCode() {
+          return Objects.hash(value, nameType, lang);
         }
 
         public static class Builder<_B> implements Buildable {
@@ -6685,27 +6599,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("date", date).toString();
+      return new StringJoiner(", ", Dates.class.getSimpleName() + "[", "]")
+          .add("date=" + date)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Dates dates = (Dates) o;
+      return Objects.equals(date, dates.date);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(date);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Dates o = ((DataCiteMetadata.Dates) other);
-      return Objects.equal(date, o.date);
+      return Objects.hash(date);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -7075,32 +6984,26 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", value)
-            .add("dateType", dateType)
-            .add("dateInformation", dateInformation)
+        return new StringJoiner(", ", Date.class.getSimpleName() + "[", "]")
+            .add("value='" + value + "'")
+            .add("dateType=" + dateType)
+            .add("dateInformation='" + dateInformation + "'")
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(value, dateType, dateInformation);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Date date = (Date) o;
+        return Objects.equals(value, date.value)
+            && dateType == date.dateType
+            && Objects.equals(dateInformation, date.dateInformation);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.Dates.Date o = ((DataCiteMetadata.Dates.Date) other);
-        return ((Objects.equal(value, o.value) && Objects.equal(dateType, o.dateType))
-            && Objects.equal(dateInformation, o.dateInformation));
+      public int hashCode() {
+        return Objects.hash(value, dateType, dateInformation);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -7533,27 +7436,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("description", description).toString();
+      return new StringJoiner(", ", Descriptions.class.getSimpleName() + "[", "]")
+          .add("description=" + description)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Descriptions that = (Descriptions) o;
+      return Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(description);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Descriptions o = ((DataCiteMetadata.Descriptions) other);
-      return Objects.equal(description, o.description);
+      return Objects.hash(description);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -7980,34 +7878,26 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("content", content)
-            .add("descriptionType", descriptionType)
-            .add("lang", lang)
+        return new StringJoiner(", ", Description.class.getSimpleName() + "[", "]")
+            .add("content=" + content)
+            .add("descriptionType=" + descriptionType)
+            .add("lang='" + lang + "'")
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(content, descriptionType, lang);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Description that = (Description) o;
+        return Objects.equals(content, that.content)
+            && descriptionType == that.descriptionType
+            && Objects.equals(lang, that.lang);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.Descriptions.Description o =
-            ((DataCiteMetadata.Descriptions.Description) other);
-        return ((Objects.equal(content, o.content)
-                && Objects.equal(descriptionType, o.descriptionType))
-            && Objects.equal(lang, o.lang));
+      public int hashCode() {
+        return Objects.hash(content, descriptionType, lang);
       }
 
       /**
@@ -8108,7 +7998,8 @@ public class DataCiteMetadata {
 
         @Override
         public String toString() {
-          return Objects.toStringHelper(this).toString();
+          return new StringJoiner(", ", Br.class.getSimpleName() + "[", "]")
+              .toString();
         }
 
         public static class Builder<_B> implements Buildable {
@@ -8677,27 +8568,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("format", format).toString();
+      return new StringJoiner(", ", Formats.class.getSimpleName() + "[", "]")
+          .add("format=" + format)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Formats formats = (Formats) o;
+      return Objects.equals(format, formats.format);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(format);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Formats o = ((DataCiteMetadata.Formats) other);
-      return Objects.equal(format, o.format);
+      return Objects.hash(format);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -9083,27 +8969,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("fundingReference", fundingReference).toString();
+      return new StringJoiner(", ", FundingReferences.class.getSimpleName() + "[", "]")
+          .add("fundingReference=" + fundingReference)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      FundingReferences that = (FundingReferences) o;
+      return Objects.equals(fundingReference, that.fundingReference);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(fundingReference);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.FundingReferences o = ((DataCiteMetadata.FundingReferences) other);
-      return Objects.equal(fundingReference, o.fundingReference);
+      return Objects.hash(fundingReference);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -9573,36 +9454,25 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("funderName", funderName)
-            .add("funderIdentifier", funderIdentifier)
-            .add("awardNumber", awardNumber)
-            .add("awardTitle", awardTitle)
+        return new StringJoiner(", ", FundingReference.class.getSimpleName() + "[", "]")
+            .add("funderName='" + funderName + "'")
+            .add("funderIdentifier=" + funderIdentifier)
+            .add("awardNumber=" + awardNumber)
+            .add("awardTitle=" + awardTitle)
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(funderName, funderIdentifier, awardNumber, awardTitle);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FundingReference that = (FundingReference) o;
+        return Objects.equals(funderName, that.funderName) && Objects.equals(funderIdentifier, that.funderIdentifier) && Objects.equals(awardNumber, that.awardNumber) && Objects.equals(awardTitle, that.awardTitle);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.FundingReferences.FundingReference o =
-            ((DataCiteMetadata.FundingReferences.FundingReference) other);
-        return (((Objects.equal(funderName, o.funderName)
-                    && Objects.equal(funderIdentifier, o.funderIdentifier))
-                && Objects.equal(awardNumber, o.awardNumber))
-            && Objects.equal(awardTitle, o.awardTitle));
+      public int hashCode() {
+        return Objects.hash(funderName, funderIdentifier, awardNumber, awardTitle);
       }
 
       /**
@@ -9783,31 +9653,23 @@ public class DataCiteMetadata {
 
         @Override
         public String toString() {
-          return Objects.toStringHelper(this)
-              .add("value", value)
-              .add("awardURI", awardURI)
+          return new StringJoiner(", ", AwardNumber.class.getSimpleName() + "[", "]")
+              .add("value='" + value + "'")
+              .add("awardURI='" + awardURI + "'")
               .toString();
         }
 
         @Override
-        public int hashCode() {
-          return Objects.hashCode(value, awardURI);
+        public boolean equals(Object o) {
+          if (this == o) return true;
+          if (o == null || getClass() != o.getClass()) return false;
+          AwardNumber that = (AwardNumber) o;
+          return Objects.equals(value, that.value) && Objects.equals(awardURI, that.awardURI);
         }
 
         @Override
-        public boolean equals(Object other) {
-          if (this == other) {
-            return true;
-          }
-          if (other == null) {
-            return false;
-          }
-          if (getClass() != other.getClass()) {
-            return false;
-          }
-          final DataCiteMetadata.FundingReferences.FundingReference.AwardNumber o =
-              ((DataCiteMetadata.FundingReferences.FundingReference.AwardNumber) other);
-          return (Objects.equal(value, o.value) && Objects.equal(awardURI, o.awardURI));
+        public int hashCode() {
+          return Objects.hash(value, awardURI);
         }
 
         public static class Builder<_B> implements Buildable {
@@ -10439,34 +10301,24 @@ public class DataCiteMetadata {
 
         @Override
         public String toString() {
-          return Objects.toStringHelper(this)
-              .add("value", value)
-              .add("funderIdentifierType", funderIdentifierType)
-              .add("schemeURI", schemeURI)
+          return new StringJoiner(", ", FunderIdentifier.class.getSimpleName() + "[", "]")
+              .add("value='" + value + "'")
+              .add("funderIdentifierType=" + funderIdentifierType)
+              .add("schemeURI='" + schemeURI + "'")
               .toString();
         }
 
         @Override
-        public int hashCode() {
-          return Objects.hashCode(value, funderIdentifierType, schemeURI);
+        public boolean equals(Object o) {
+          if (this == o) return true;
+          if (o == null || getClass() != o.getClass()) return false;
+          FunderIdentifier that = (FunderIdentifier) o;
+          return Objects.equals(value, that.value) && funderIdentifierType == that.funderIdentifierType && Objects.equals(schemeURI, that.schemeURI);
         }
 
         @Override
-        public boolean equals(Object other) {
-          if (this == other) {
-            return true;
-          }
-          if (other == null) {
-            return false;
-          }
-          if (getClass() != other.getClass()) {
-            return false;
-          }
-          final DataCiteMetadata.FundingReferences.FundingReference.FunderIdentifier o =
-              ((DataCiteMetadata.FundingReferences.FundingReference.FunderIdentifier) other);
-          return ((Objects.equal(value, o.value)
-                  && Objects.equal(funderIdentifierType, o.funderIdentifierType))
-              && Objects.equal(schemeURI, o.schemeURI));
+        public int hashCode() {
+          return Objects.hash(value, funderIdentifierType, schemeURI);
         }
 
         public static class Builder<_B> implements Buildable {
@@ -11039,27 +10891,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("geoLocation", geoLocation).toString();
+      return new StringJoiner(", ", GeoLocations.class.getSimpleName() + "[", "]")
+          .add("geoLocation=" + geoLocation)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      GeoLocations that = (GeoLocations) o;
+      return Objects.equals(geoLocation, that.geoLocation);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(geoLocation);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.GeoLocations o = ((DataCiteMetadata.GeoLocations) other);
-      return Objects.equal(geoLocation, o.geoLocation);
+      return Objects.hash(geoLocation);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -11440,34 +11287,22 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add(
-                "geoLocationPlaceOrGeoLocationPointOrGeoLocationBox",
-                geoLocationPlaceOrGeoLocationPointOrGeoLocationBox)
+        return new StringJoiner(", ", GeoLocation.class.getSimpleName() + "[", "]")
+            .add("geoLocationPlaceOrGeoLocationPointOrGeoLocationBox=" + geoLocationPlaceOrGeoLocationPointOrGeoLocationBox)
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(geoLocationPlaceOrGeoLocationPointOrGeoLocationBox);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GeoLocation that = (GeoLocation) o;
+        return Objects.equals(geoLocationPlaceOrGeoLocationPointOrGeoLocationBox, that.geoLocationPlaceOrGeoLocationPointOrGeoLocationBox);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.GeoLocations.GeoLocation o =
-            ((DataCiteMetadata.GeoLocations.GeoLocation) other);
-        return Objects.equal(
-            geoLocationPlaceOrGeoLocationPointOrGeoLocationBox,
-            o.geoLocationPlaceOrGeoLocationPointOrGeoLocationBox);
+      public int hashCode() {
+        return Objects.hash(geoLocationPlaceOrGeoLocationPointOrGeoLocationBox);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -12043,32 +11878,24 @@ public class DataCiteMetadata {
 
         @Override
         public String toString() {
-          return Objects.toStringHelper(this)
-              .add("polygonPoint", polygonPoint)
-              .add("inPolygonPoint", inPolygonPoint)
+          return new StringJoiner(", ", GeoLocationPolygon.class.getSimpleName() + "[", "]")
+              .add("polygonPoint=" + polygonPoint)
+              .add("inPolygonPoint=" + inPolygonPoint)
               .toString();
         }
 
         @Override
-        public int hashCode() {
-          return Objects.hashCode(polygonPoint, inPolygonPoint);
+        public boolean equals(Object o) {
+          if (this == o) return true;
+          if (o == null || getClass() != o.getClass()) return false;
+          GeoLocationPolygon that = (GeoLocationPolygon) o;
+          return Objects.equals(polygonPoint, that.polygonPoint)
+              && Objects.equals(inPolygonPoint, that.inPolygonPoint);
         }
 
         @Override
-        public boolean equals(Object other) {
-          if (this == other) {
-            return true;
-          }
-          if (other == null) {
-            return false;
-          }
-          if (getClass() != other.getClass()) {
-            return false;
-          }
-          final DataCiteMetadata.GeoLocations.GeoLocation.GeoLocationPolygon o =
-              ((DataCiteMetadata.GeoLocations.GeoLocation.GeoLocationPolygon) other);
-          return (Objects.equal(polygonPoint, o.polygonPoint)
-              && Objects.equal(inPolygonPoint, o.inPolygonPoint));
+        public int hashCode() {
+          return Objects.hash(polygonPoint, inPolygonPoint);
         }
 
         public static class Builder<_B> implements Buildable {
@@ -12663,30 +12490,23 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this)
-          .add("value", value)
-          .add("identifierType", identifierType)
+      return new StringJoiner(", ", Identifier.class.getSimpleName() + "[", "]")
+          .add("value='" + value + "'")
+          .add("identifierType='" + identifierType + "'")
           .toString();
     }
 
     @Override
-    public int hashCode() {
-      return Objects.hashCode(value, identifierType);
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Identifier that = (Identifier) o;
+      return Objects.equals(value, that.value) && Objects.equals(identifierType, that.identifierType);
     }
 
     @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Identifier o = ((DataCiteMetadata.Identifier) other);
-      return (Objects.equal(value, o.value) && Objects.equal(identifierType, o.identifierType));
+    public int hashCode() {
+      return Objects.hash(value, identifierType);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -13014,27 +12834,23 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("value", value).add("lang", lang).toString();
+      return new StringJoiner(", ", Publisher.class.getSimpleName() + "[", "]")
+          .add("value='" + value + "'")
+          .add("lang='" + lang + "'")
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Publisher publisher = (Publisher) o;
+      return Objects.equals(value, publisher.value) && Objects.equals(lang, publisher.lang);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(value, lang);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Publisher o = ((DataCiteMetadata.Publisher) other);
-      return (Objects.equal(value, o.value) && Objects.equal(lang, o.lang));
+      return Objects.hash(value, lang);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -13376,27 +13192,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("relatedIdentifier", relatedIdentifier).toString();
+      return new StringJoiner(", ", RelatedIdentifiers.class.getSimpleName() + "[", "]")
+          .add("relatedIdentifier=" + relatedIdentifier)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      RelatedIdentifiers that = (RelatedIdentifiers) o;
+      return Objects.equals(relatedIdentifier, that.relatedIdentifier);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(relatedIdentifier);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.RelatedIdentifiers o = ((DataCiteMetadata.RelatedIdentifiers) other);
-      return Objects.equal(relatedIdentifier, o.relatedIdentifier);
+      return Objects.hash(relatedIdentifier);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -13924,49 +13735,35 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", value)
-            .add("resourceTypeGeneral", resourceTypeGeneral)
-            .add("relatedIdentifierType", relatedIdentifierType)
-            .add("relationType", relationType)
-            .add("relatedMetadataScheme", relatedMetadataScheme)
-            .add("schemeURI", schemeURI)
-            .add("schemeType", schemeType)
+        return new StringJoiner(", ", RelatedIdentifier.class.getSimpleName() + "[", "]")
+            .add("value='" + value + "'")
+            .add("resourceTypeGeneral=" + resourceTypeGeneral)
+            .add("relatedIdentifierType=" + relatedIdentifierType)
+            .add("relationType=" + relationType)
+            .add("relatedMetadataScheme='" + relatedMetadataScheme + "'")
+            .add("schemeURI='" + schemeURI + "'")
+            .add("schemeType='" + schemeType + "'")
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(
-            value,
-            resourceTypeGeneral,
-            relatedIdentifierType,
-            relationType,
-            relatedMetadataScheme,
-            schemeURI,
-            schemeType);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RelatedIdentifier that = (RelatedIdentifier) o;
+        return Objects.equals(value, that.value)
+            && resourceTypeGeneral == that.resourceTypeGeneral
+            && relatedIdentifierType == that.relatedIdentifierType
+            && relationType == that.relationType
+            && Objects.equals(relatedMetadataScheme, that.relatedMetadataScheme)
+            && Objects.equals(schemeURI, that.schemeURI)
+            && Objects.equals(schemeType, that.schemeType);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.RelatedIdentifiers.RelatedIdentifier o =
-            ((DataCiteMetadata.RelatedIdentifiers.RelatedIdentifier) other);
-        return ((((((Objects.equal(value, o.value)
-                                && Objects.equal(resourceTypeGeneral, o.resourceTypeGeneral))
-                            && Objects.equal(relatedIdentifierType, o.relatedIdentifierType))
-                        && Objects.equal(relationType, o.relationType))
-                    && Objects.equal(relatedMetadataScheme, o.relatedMetadataScheme))
-                && Objects.equal(schemeURI, o.schemeURI))
-            && Objects.equal(schemeType, o.schemeType));
+      public int hashCode() {
+        return Objects.hash(value, resourceTypeGeneral, relatedIdentifierType, relationType, relatedMetadataScheme,
+            schemeURI, schemeType);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -14561,31 +14358,24 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this)
-          .add("value", value)
-          .add("resourceTypeGeneral", resourceTypeGeneral)
+      return new StringJoiner(", ", ResourceType.class.getSimpleName() + "[", "]")
+          .add("value='" + value + "'")
+          .add("resourceTypeGeneral=" + resourceTypeGeneral)
           .toString();
     }
 
     @Override
-    public int hashCode() {
-      return Objects.hashCode(value, resourceTypeGeneral);
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      ResourceType that = (ResourceType) o;
+      return Objects.equals(value, that.value)
+          && resourceTypeGeneral == that.resourceTypeGeneral;
     }
 
     @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.ResourceType o = ((DataCiteMetadata.ResourceType) other);
-      return (Objects.equal(value, o.value)
-          && Objects.equal(resourceTypeGeneral, o.resourceTypeGeneral));
+    public int hashCode() {
+      return Objects.hash(value, resourceTypeGeneral);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -14928,27 +14718,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("rights", rights).toString();
+      return new StringJoiner(", ", RightsList.class.getSimpleName() + "[", "]")
+          .add("rights=" + rights)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      RightsList that = (RightsList) o;
+      return Objects.equals(rights, that.rights);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(rights);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.RightsList o = ((DataCiteMetadata.RightsList) other);
-      return Objects.equal(rights, o.rights);
+      return Objects.hash(rights);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -15425,39 +15210,27 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", value)
-            .add("rightsURI", rightsURI)
-            .add("rightsIdentifier", rightsIdentifier)
-            .add("rightsIdentifierScheme", rightsIdentifierScheme)
-            .add("schemeURI", schemeURI)
-            .add("lang", lang)
+        return new StringJoiner(", ", Rights.class.getSimpleName() + "[", "]")
+            .add("value='" + value + "'")
+            .add("rightsURI='" + rightsURI + "'")
+            .add("rightsIdentifier='" + rightsIdentifier + "'")
+            .add("rightsIdentifierScheme='" + rightsIdentifierScheme + "'")
+            .add("schemeURI='" + schemeURI + "'")
+            .add("lang='" + lang + "'")
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(
-            value, rightsURI, rightsIdentifier, rightsIdentifierScheme, schemeURI, lang);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rights rights = (Rights) o;
+        return Objects.equals(value, rights.value) && Objects.equals(rightsURI, rights.rightsURI) && Objects.equals(rightsIdentifier, rights.rightsIdentifier) && Objects.equals(rightsIdentifierScheme, rights.rightsIdentifierScheme) && Objects.equals(schemeURI, rights.schemeURI) && Objects.equals(lang, rights.lang);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.RightsList.Rights o = ((DataCiteMetadata.RightsList.Rights) other);
-        return (((((Objects.equal(value, o.value) && Objects.equal(rightsURI, o.rightsURI))
-                        && Objects.equal(rightsIdentifier, o.rightsIdentifier))
-                    && Objects.equal(rightsIdentifierScheme, o.rightsIdentifierScheme))
-                && Objects.equal(schemeURI, o.schemeURI))
-            && Objects.equal(lang, o.lang));
+      public int hashCode() {
+        return Objects.hash(value, rightsURI, rightsIdentifier, rightsIdentifierScheme, schemeURI, lang);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -16282,27 +16055,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("size", size).toString();
+      return new StringJoiner(", ", Sizes.class.getSimpleName() + "[", "]")
+          .add("size=" + size)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Sizes sizes = (Sizes) o;
+      return Objects.equals(size, sizes.size);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(size);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Sizes o = ((DataCiteMetadata.Sizes) other);
-      return Objects.equal(size, o.size);
+      return Objects.hash(size);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -16658,27 +16426,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("subject", subject).toString();
+      return new StringJoiner(", ", Subjects.class.getSimpleName() + "[", "]")
+          .add("subject=" + subject)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Subjects subjects = (Subjects) o;
+      return Objects.equals(subject, subjects.subject);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(subject);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Subjects o = ((DataCiteMetadata.Subjects) other);
-      return Objects.equal(subject, o.subject);
+      return Objects.hash(subject);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -17165,36 +16928,26 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", value)
-            .add("subjectScheme", subjectScheme)
-            .add("schemeURI", schemeURI)
-            .add("valueURI", valueURI)
-            .add("lang", lang)
+        return new StringJoiner(", ", Subject.class.getSimpleName() + "[", "]")
+            .add("value='" + value + "'")
+            .add("subjectScheme='" + subjectScheme + "'")
+            .add("schemeURI='" + schemeURI + "'")
+            .add("valueURI='" + valueURI + "'")
+            .add("lang='" + lang + "'")
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(value, subjectScheme, schemeURI, valueURI, lang);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subject subject = (Subject) o;
+        return Objects.equals(value, subject.value) && Objects.equals(subjectScheme, subject.subjectScheme) && Objects.equals(schemeURI, subject.schemeURI) && Objects.equals(valueURI, subject.valueURI) && Objects.equals(lang, subject.lang);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.Subjects.Subject o = ((DataCiteMetadata.Subjects.Subject) other);
-        return ((((Objects.equal(value, o.value) && Objects.equal(subjectScheme, o.subjectScheme))
-                    && Objects.equal(schemeURI, o.schemeURI))
-                && Objects.equal(valueURI, o.valueURI))
-            && Objects.equal(lang, o.lang));
+      public int hashCode() {
+        return Objects.hash(value, subjectScheme, schemeURI, valueURI, lang);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -17646,27 +17399,22 @@ public class DataCiteMetadata {
 
     @Override
     public String toString() {
-      return Objects.toStringHelper(this).add("title", title).toString();
+      return new StringJoiner(", ", Titles.class.getSimpleName() + "[", "]")
+          .add("title=" + title)
+          .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Titles titles = (Titles) o;
+      return Objects.equals(title, titles.title);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hashCode(title);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (this == other) {
-        return true;
-      }
-      if (other == null) {
-        return false;
-      }
-      if (getClass() != other.getClass()) {
-        return false;
-      }
-      final DataCiteMetadata.Titles o = ((DataCiteMetadata.Titles) other);
-      return Objects.equal(title, o.title);
+      return Objects.hash(title);
     }
 
     public static class Builder<_B> implements Buildable {
@@ -18084,32 +17832,26 @@ public class DataCiteMetadata {
 
       @Override
       public String toString() {
-        return Objects.toStringHelper(this)
-            .add("value", value)
-            .add("titleType", titleType)
-            .add("lang", lang)
+        return new StringJoiner(", ", Title.class.getSimpleName() + "[", "]")
+            .add("value='" + value + "'")
+            .add("titleType=" + titleType)
+            .add("lang='" + lang + "'")
             .toString();
       }
 
       @Override
-      public int hashCode() {
-        return Objects.hashCode(value, titleType, lang);
+      public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Title title = (Title) o;
+        return Objects.equals(value, title.value)
+            && titleType == title.titleType
+            && Objects.equals(lang, title.lang);
       }
 
       @Override
-      public boolean equals(Object other) {
-        if (this == other) {
-          return true;
-        }
-        if (other == null) {
-          return false;
-        }
-        if (getClass() != other.getClass()) {
-          return false;
-        }
-        final DataCiteMetadata.Titles.Title o = ((DataCiteMetadata.Titles.Title) other);
-        return ((Objects.equal(value, o.value) && Objects.equal(titleType, o.titleType))
-            && Objects.equal(lang, o.lang));
+      public int hashCode() {
+        return Objects.hash(value, titleType, lang);
       }
 
       public static class Builder<_B> implements Buildable {

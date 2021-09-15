@@ -21,8 +21,6 @@ import java.util.Map;
 /**
  * Helper class acting as base class for all selectors and concrete implementation of leaf
  * selectors.
- *
- * @author mirko 2014-04-04
  */
 public class Selector<TRoot extends Selector<TRoot, ?>, TParent> {
   public final TRoot _root;
