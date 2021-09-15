@@ -38,151 +38,146 @@
 <span class="sourceLineNo">030</span>import java.util.concurrent.Executors;<a name="line.30"></a>
 <span class="sourceLineNo">031</span>import java.util.concurrent.Future;<a name="line.31"></a>
 <span class="sourceLineNo">032</span><a name="line.32"></a>
-<span class="sourceLineNo">033</span>import org.junit.Test;<a name="line.33"></a>
+<span class="sourceLineNo">033</span>import org.junit.jupiter.api.Test;<a name="line.33"></a>
 <span class="sourceLineNo">034</span><a name="line.34"></a>
-<span class="sourceLineNo">035</span>import static org.junit.Assert.assertEquals;<a name="line.35"></a>
-<span class="sourceLineNo">036</span>import static org.junit.Assert.assertTrue;<a name="line.36"></a>
-<span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>/** Test DataCiteValidator. */<a name="line.38"></a>
-<span class="sourceLineNo">039</span>public class DataCiteValidatorTest {<a name="line.39"></a>
-<span class="sourceLineNo">040</span><a name="line.40"></a>
-<span class="sourceLineNo">041</span>  private static final String DATACITE_FULL_EXAMPLE_PATH = "metadata/datacite-example-full-v4.xml";<a name="line.41"></a>
-<span class="sourceLineNo">042</span>  private static final String DATACITE_MINIMAL_EXAMPLE_PATH = "metadata/minimal-v4.xml";<a name="line.42"></a>
-<span class="sourceLineNo">043</span><a name="line.43"></a>
-<span class="sourceLineNo">044</span>  @Test<a name="line.44"></a>
-<span class="sourceLineNo">045</span>  public void testValidateMetadataDataCiteMetadataExamplesShouldBeValid() throws Exception {<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_MINIMAL_EXAMPLE_PATH));<a name="line.47"></a>
-<span class="sourceLineNo">048</span>  }<a name="line.48"></a>
-<span class="sourceLineNo">049</span><a name="line.49"></a>
-<span class="sourceLineNo">050</span>  @Test<a name="line.50"></a>
-<span class="sourceLineNo">051</span>  public void testRoundTripFromXmlFile() throws Exception {<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    final DOI doi = new DOI("10.21373/example-full");<a name="line.52"></a>
-<span class="sourceLineNo">053</span><a name="line.53"></a>
-<span class="sourceLineNo">054</span>    DataCiteMetadata m =<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    String xml = DataCiteValidator.toXml(doi, m);<a name="line.56"></a>
-<span class="sourceLineNo">057</span><a name="line.57"></a>
-<span class="sourceLineNo">058</span>    DataCiteMetadata m2 = DataCiteValidator.fromXml(xml);<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    String xml2 = DataCiteValidator.toXml(doi, m2);<a name="line.59"></a>
-<span class="sourceLineNo">060</span><a name="line.60"></a>
-<span class="sourceLineNo">061</span>    assertEquals(m, m2);<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    assertEquals(xml, xml2);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>  }<a name="line.63"></a>
-<span class="sourceLineNo">064</span><a name="line.64"></a>
-<span class="sourceLineNo">065</span>  @Test<a name="line.65"></a>
-<span class="sourceLineNo">066</span>  public void testMetadataFromXmlAgainstFromBuilders() throws Exception {<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    final DOI doi = new DOI("10.21373/example-full");<a name="line.67"></a>
-<span class="sourceLineNo">068</span><a name="line.68"></a>
-<span class="sourceLineNo">069</span>    final DataCiteMetadata metadataFromXml =<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    final String metadataFromXmlResult = DataCiteValidator.toXml(doi, metadataFromXml);<a name="line.71"></a>
-<span class="sourceLineNo">072</span><a name="line.72"></a>
-<span class="sourceLineNo">073</span>    final DataCiteMetadata metadataFromBuilders =<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        DataCiteMetadataTest.getMockMetadata(doi, "Full DataCite XML Example");<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    final String metadataFromBuildersResult = DataCiteValidator.toXml(doi, metadataFromBuilders);<a name="line.75"></a>
-<span class="sourceLineNo">076</span><a name="line.76"></a>
-<span class="sourceLineNo">077</span>    assertEquals(metadataFromXml, metadataFromBuilders);<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    assertEquals(metadataFromXmlResult, metadataFromBuildersResult);<a name="line.78"></a>
-<span class="sourceLineNo">079</span>  }<a name="line.79"></a>
-<span class="sourceLineNo">080</span><a name="line.80"></a>
-<span class="sourceLineNo">081</span>  @Test(expected = InvalidMetadataException.class)<a name="line.81"></a>
-<span class="sourceLineNo">082</span>  public void<a name="line.82"></a>
-<span class="sourceLineNo">083</span>      testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException()<a name="line.83"></a>
-<span class="sourceLineNo">084</span>          throws Exception {<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    DataCiteValidator.validateMetadata(<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml"));<a name="line.86"></a>
+<span class="sourceLineNo">035</span>import static org.junit.jupiter.api.Assertions.assertEquals;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import static org.junit.jupiter.api.Assertions.assertThrows;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import static org.junit.jupiter.api.Assertions.assertTrue;<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>/** Test DataCiteValidator. */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>public class DataCiteValidatorTest {<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>  private static final String DATACITE_FULL_EXAMPLE_PATH = "metadata/datacite-example-full-v4.xml";<a name="line.42"></a>
+<span class="sourceLineNo">043</span>  private static final String DATACITE_MINIMAL_EXAMPLE_PATH = "metadata/minimal-v4.xml";<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>  @Test<a name="line.45"></a>
+<span class="sourceLineNo">046</span>  public void testValidateMetadataDataCiteMetadataExamplesShouldBeValid() throws Exception {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    DataCiteValidator.validateMetadata(FileUtils.classpathStream(DATACITE_MINIMAL_EXAMPLE_PATH));<a name="line.48"></a>
+<span class="sourceLineNo">049</span>  }<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>  @Test<a name="line.51"></a>
+<span class="sourceLineNo">052</span>  public void testRoundTripFromXmlFile() throws Exception {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    final DOI doi = new DOI("10.21373/example-full");<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    DataCiteMetadata m =<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    String xml = DataCiteValidator.toXml(doi, m);<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    DataCiteMetadata m2 = DataCiteValidator.fromXml(xml);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    String xml2 = DataCiteValidator.toXml(doi, m2);<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>    assertEquals(m, m2);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    assertEquals(xml, xml2);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>  }<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>  @Test<a name="line.66"></a>
+<span class="sourceLineNo">067</span>  public void testMetadataFromXmlAgainstFromBuilders() throws Exception {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    final DOI doi = new DOI("10.21373/example-full");<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>    final DataCiteMetadata metadataFromXml =<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        DataCiteValidator.fromXml(FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    final String metadataFromXmlResult = DataCiteValidator.toXml(doi, metadataFromXml);<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>    final DataCiteMetadata metadataFromBuilders =<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        DataCiteMetadataTest.getMockMetadata(doi, "Full DataCite XML Example");<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    final String metadataFromBuildersResult = DataCiteValidator.toXml(doi, metadataFromBuilders);<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    assertEquals(metadataFromXml, metadataFromBuilders);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    assertEquals(metadataFromXmlResult, metadataFromBuildersResult);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>  }<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>  @Test<a name="line.82"></a>
+<span class="sourceLineNo">083</span>  public void<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException() {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    assertThrows(InvalidMetadataException.class, () -&gt; DataCiteValidator.validateMetadata(<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml")));<a name="line.86"></a>
 <span class="sourceLineNo">087</span>  }<a name="line.87"></a>
 <span class="sourceLineNo">088</span><a name="line.88"></a>
-<span class="sourceLineNo">089</span>  @Test(expected = InvalidMetadataException.class)<a name="line.89"></a>
+<span class="sourceLineNo">089</span>  @Test<a name="line.89"></a>
 <span class="sourceLineNo">090</span>  public void<a name="line.90"></a>
-<span class="sourceLineNo">091</span>      testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException()<a name="line.91"></a>
-<span class="sourceLineNo">092</span>          throws Exception {<a name="line.92"></a>
-<span class="sourceLineNo">093</span>    DataCiteValidator.validateMetadata(<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml"));<a name="line.94"></a>
-<span class="sourceLineNo">095</span>  }<a name="line.95"></a>
-<span class="sourceLineNo">096</span><a name="line.96"></a>
-<span class="sourceLineNo">097</span>  @Test(expected = InvalidMetadataException.class)<a name="line.97"></a>
-<span class="sourceLineNo">098</span>  public void<a name="line.98"></a>
-<span class="sourceLineNo">099</span>      testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException()<a name="line.99"></a>
-<span class="sourceLineNo">100</span>          throws Exception {<a name="line.100"></a>
-<span class="sourceLineNo">101</span>    DataCiteValidator.validateMetadata(<a name="line.101"></a>
-<span class="sourceLineNo">102</span>        FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml"));<a name="line.102"></a>
-<span class="sourceLineNo">103</span>  }<a name="line.103"></a>
-<span class="sourceLineNo">104</span><a name="line.104"></a>
-<span class="sourceLineNo">105</span>  @Test(expected = InvalidMetadataException.class)<a name="line.105"></a>
-<span class="sourceLineNo">106</span>  public void<a name="line.106"></a>
-<span class="sourceLineNo">107</span>      testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException()<a name="line.107"></a>
-<span class="sourceLineNo">108</span>          throws Exception {<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    DataCiteValidator.validateMetadata(<a name="line.109"></a>
-<span class="sourceLineNo">110</span>        FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml"));<a name="line.110"></a>
-<span class="sourceLineNo">111</span>  }<a name="line.111"></a>
-<span class="sourceLineNo">112</span><a name="line.112"></a>
-<span class="sourceLineNo">113</span>  @Test(expected = InvalidMetadataException.class)<a name="line.113"></a>
-<span class="sourceLineNo">114</span>  public void<a name="line.114"></a>
-<span class="sourceLineNo">115</span>      testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException()<a name="line.115"></a>
-<span class="sourceLineNo">116</span>          throws Exception {<a name="line.116"></a>
-<span class="sourceLineNo">117</span>    DataCiteValidator.validateMetadata(<a name="line.117"></a>
-<span class="sourceLineNo">118</span>        FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml"));<a name="line.118"></a>
-<span class="sourceLineNo">119</span>  }<a name="line.119"></a>
-<span class="sourceLineNo">120</span><a name="line.120"></a>
-<span class="sourceLineNo">121</span>  @Test(expected = InvalidMetadataException.class)<a name="line.121"></a>
-<span class="sourceLineNo">122</span>  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException()<a name="line.122"></a>
-<span class="sourceLineNo">123</span>      throws Exception {<a name="line.123"></a>
-<span class="sourceLineNo">124</span>    DataCiteValidator.validateMetadata(<a name="line.124"></a>
-<span class="sourceLineNo">125</span>        FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml"));<a name="line.125"></a>
-<span class="sourceLineNo">126</span>  }<a name="line.126"></a>
-<span class="sourceLineNo">127</span><a name="line.127"></a>
-<span class="sourceLineNo">128</span>  @Test(expected = InvalidMetadataException.class)<a name="line.128"></a>
-<span class="sourceLineNo">129</span>  public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException()<a name="line.129"></a>
-<span class="sourceLineNo">130</span>      throws Exception {<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    DataCiteValidator.validateMetadata(<a name="line.131"></a>
-<span class="sourceLineNo">132</span>        FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml"));<a name="line.132"></a>
+<span class="sourceLineNo">091</span>      testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException() {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    assertThrows(InvalidMetadataException.class, () -&gt; DataCiteValidator.validateMetadata(<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml")));<a name="line.93"></a>
+<span class="sourceLineNo">094</span>  }<a name="line.94"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>  @Test<a name="line.96"></a>
+<span class="sourceLineNo">097</span>  public void<a name="line.97"></a>
+<span class="sourceLineNo">098</span>      testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException() {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    assertThrows(InvalidMetadataException.class, () -&gt; DataCiteValidator.validateMetadata(<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml")));<a name="line.100"></a>
+<span class="sourceLineNo">101</span>  }<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>  @Test<a name="line.103"></a>
+<span class="sourceLineNo">104</span>  public void<a name="line.104"></a>
+<span class="sourceLineNo">105</span>      testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException() {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    assertThrows(InvalidMetadataException.class, () -&gt; DataCiteValidator.validateMetadata(<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml")));<a name="line.107"></a>
+<span class="sourceLineNo">108</span>  }<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>  @Test<a name="line.110"></a>
+<span class="sourceLineNo">111</span>  public void<a name="line.111"></a>
+<span class="sourceLineNo">112</span>      testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException() {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    assertThrows(InvalidMetadataException.class, () -&gt; DataCiteValidator.validateMetadata(<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml")));<a name="line.114"></a>
+<span class="sourceLineNo">115</span>  }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>  @Test<a name="line.117"></a>
+<span class="sourceLineNo">118</span>  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException() {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    assertThrows(InvalidMetadataException.class, () -&gt; DataCiteValidator.validateMetadata(<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml")));<a name="line.120"></a>
+<span class="sourceLineNo">121</span>  }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>  @Test<a name="line.123"></a>
+<span class="sourceLineNo">124</span>  public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException() {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    assertThrows(InvalidMetadataException.class, () -&gt; DataCiteValidator.validateMetadata(<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml")));<a name="line.126"></a>
+<span class="sourceLineNo">127</span>  }<a name="line.127"></a>
+<span class="sourceLineNo">128</span><a name="line.128"></a>
+<span class="sourceLineNo">129</span>  @Test<a name="line.129"></a>
+<span class="sourceLineNo">130</span>  public void testValidateMetadataIfWrongSourceShouldThrowIllegalStateException() {<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    assertThrows(IllegalStateException.class,<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        () -&gt; DataCiteValidator.validateMetadata(FileUtils.classpathStream("wrong_path")));<a name="line.132"></a>
 <span class="sourceLineNo">133</span>  }<a name="line.133"></a>
 <span class="sourceLineNo">134</span><a name="line.134"></a>
-<span class="sourceLineNo">135</span>  @Test(expected = IllegalStateException.class)<a name="line.135"></a>
-<span class="sourceLineNo">136</span>  public void testValidateMetadataIfWrongSourceShouldThrowIllegalStateException() throws Exception {<a name="line.136"></a>
-<span class="sourceLineNo">137</span>    DataCiteValidator.validateMetadata(FileUtils.classpathStream("wrong_path"));<a name="line.137"></a>
-<span class="sourceLineNo">138</span>  }<a name="line.138"></a>
+<span class="sourceLineNo">135</span>  /** Since javax.xml.validation.Validator is NOT thread-safe, make sure our usage of it is. */<a name="line.135"></a>
+<span class="sourceLineNo">136</span>  @Test<a name="line.136"></a>
+<span class="sourceLineNo">137</span>  public void testValidationMultiThread() throws InterruptedException, ExecutionException {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    int numberOfParallelTask = 50;<a name="line.138"></a>
 <span class="sourceLineNo">139</span><a name="line.139"></a>
-<span class="sourceLineNo">140</span>  /** Since javax.xml.validation.Validator is NOT thread-safe, make sure our usage of it is. */<a name="line.140"></a>
-<span class="sourceLineNo">141</span>  @Test<a name="line.141"></a>
-<span class="sourceLineNo">142</span>  public void testValidationMultiThread() throws InterruptedException, ExecutionException {<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    int numberOfParallelTask = 50;<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
-<span class="sourceLineNo">145</span>    List&lt;Callable&lt;Boolean&gt;&gt; tasks = new ArrayList&lt;Callable&lt;Boolean&gt;&gt;();<a name="line.145"></a>
-<span class="sourceLineNo">146</span>    for (int i = 0; i &lt; numberOfParallelTask; i++) {<a name="line.146"></a>
-<span class="sourceLineNo">147</span>      Callable&lt;Boolean&gt; task =<a name="line.147"></a>
-<span class="sourceLineNo">148</span>          new Callable&lt;Boolean&gt;() {<a name="line.148"></a>
-<span class="sourceLineNo">149</span>            @Override<a name="line.149"></a>
-<span class="sourceLineNo">150</span>            public Boolean call() {<a name="line.150"></a>
-<span class="sourceLineNo">151</span>              boolean success = true;<a name="line.151"></a>
-<span class="sourceLineNo">152</span>              try {<a name="line.152"></a>
-<span class="sourceLineNo">153</span>                DataCiteValidator.validateMetadata(<a name="line.153"></a>
-<span class="sourceLineNo">154</span>                    FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.154"></a>
-<span class="sourceLineNo">155</span>              } catch (InvalidMetadataException imEx) {<a name="line.155"></a>
-<span class="sourceLineNo">156</span>                imEx.printStackTrace();<a name="line.156"></a>
-<span class="sourceLineNo">157</span>                success = false;<a name="line.157"></a>
-<span class="sourceLineNo">158</span>              } catch (IOException ioEx) {<a name="line.158"></a>
-<span class="sourceLineNo">159</span>                success = false;<a name="line.159"></a>
-<span class="sourceLineNo">160</span>              }<a name="line.160"></a>
-<span class="sourceLineNo">161</span>              return success;<a name="line.161"></a>
-<span class="sourceLineNo">162</span>            }<a name="line.162"></a>
-<span class="sourceLineNo">163</span>          };<a name="line.163"></a>
-<span class="sourceLineNo">164</span>      tasks.add(task);<a name="line.164"></a>
-<span class="sourceLineNo">165</span>    }<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    // use less Thread than the number of tasks<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelTask / 2);<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    // call all threads and wait for completion<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    List&lt;Future&lt;Boolean&gt;&gt; futures = executorService.invokeAll(tasks);<a name="line.169"></a>
-<span class="sourceLineNo">170</span><a name="line.170"></a>
-<span class="sourceLineNo">171</span>    // Validate<a name="line.171"></a>
-<span class="sourceLineNo">172</span>    assertEquals(futures.size(), numberOfParallelTask);<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    for (Future&lt;Boolean&gt; future : futures) {<a name="line.173"></a>
-<span class="sourceLineNo">174</span>      assertTrue(future.get());<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    }<a name="line.175"></a>
-<span class="sourceLineNo">176</span>  }<a name="line.176"></a>
-<span class="sourceLineNo">177</span>}<a name="line.177"></a>
+<span class="sourceLineNo">140</span>    List&lt;Callable&lt;Boolean&gt;&gt; tasks = new ArrayList&lt;Callable&lt;Boolean&gt;&gt;();<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    for (int i = 0; i &lt; numberOfParallelTask; i++) {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>      Callable&lt;Boolean&gt; task =<a name="line.142"></a>
+<span class="sourceLineNo">143</span>          new Callable&lt;Boolean&gt;() {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>            @Override<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            public Boolean call() {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>              boolean success = true;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>              try {<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                DataCiteValidator.validateMetadata(<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                    FileUtils.classpathStream(DATACITE_FULL_EXAMPLE_PATH));<a name="line.149"></a>
+<span class="sourceLineNo">150</span>              } catch (InvalidMetadataException imEx) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                imEx.printStackTrace();<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                success = false;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>              } catch (IOException ioEx) {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                success = false;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>              }<a name="line.155"></a>
+<span class="sourceLineNo">156</span>              return success;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            }<a name="line.157"></a>
+<span class="sourceLineNo">158</span>          };<a name="line.158"></a>
+<span class="sourceLineNo">159</span>      tasks.add(task);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    }<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    // use less Thread than the number of tasks<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelTask / 2);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    // call all threads and wait for completion<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    List&lt;Future&lt;Boolean&gt;&gt; futures = executorService.invokeAll(tasks);<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>    // Validate<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    assertEquals(futures.size(), numberOfParallelTask);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    for (Future&lt;Boolean&gt; future : futures) {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>      assertTrue(future.get());<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>  }<a name="line.171"></a>
+<span class="sourceLineNo">172</span>}<a name="line.172"></a>
 
 
 

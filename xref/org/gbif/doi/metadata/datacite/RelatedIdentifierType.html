@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *     <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *     <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
@@ -62,7 +62,7 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  @XmlType(name = <span class="jxr_string">"relatedIdentifierType"</span>)
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  @XmlEnum
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">public</strong> enum <a href="../../../../../org/gbif/doi/metadata/datacite/RelatedIdentifierType.html">RelatedIdentifierType</a> {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">public</strong> enum <a name="RelatedIdentifierType" href="../../../../../org/gbif/doi/metadata/datacite/RelatedIdentifierType.html#RelatedIdentifierType">RelatedIdentifierType</a> {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>    ARK(<span class="jxr_string">"ARK"</span>),
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>    @XmlEnumValue(<span class="jxr_string">"arXiv"</span>)
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>    AR_XIV(<span class="jxr_string">"arXiv"</span>),
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>    W_3_ID(<span class="jxr_string">"w3id"</span>);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String value;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>    <a href="../../../../../org/gbif/doi/metadata/datacite/RelatedIdentifierType.html">RelatedIdentifierType</a>(String v) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    <a name="RelatedIdentifierType" href="../../../../../org/gbif/doi/metadata/datacite/RelatedIdentifierType.html#RelatedIdentifierType">RelatedIdentifierType</a>(String v) {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      value = v;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>    }
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
@@ -97,8 +97,8 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">return</strong> value;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>    }
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../org/gbif/doi/metadata/datacite/RelatedIdentifierType.html">RelatedIdentifierType</a> fromValue(String v) {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">for</strong> (RelatedIdentifierType c : RelatedIdentifierType.values()) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="RelatedIdentifierType" href="../../../../../org/gbif/doi/metadata/datacite/RelatedIdentifierType.html#RelatedIdentifierType">RelatedIdentifierType</a> fromValue(String v) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">for</strong> (<a name="RelatedIdentifierType" href="../../../../../org/gbif/doi/metadata/datacite/RelatedIdentifierType.html#RelatedIdentifierType">RelatedIdentifierType</a> c : RelatedIdentifierType.values()) {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>        <strong class="jxr_keyword">if</strong> (c.value.equals(v)) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>        }
@@ -108,6 +108,6 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2021 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2021 <a href="https://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>

@@ -42,14 +42,14 @@
 <span class="sourceLineNo">034</span>import java.io.IOException;<a name="line.34"></a>
 <span class="sourceLineNo">035</span>import java.net.URI;<a name="line.35"></a>
 <span class="sourceLineNo">036</span>import java.util.Base64;<a name="line.36"></a>
-<span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>import javax.annotation.Nonnull;<a name="line.38"></a>
-<span class="sourceLineNo">039</span><a name="line.39"></a>
-<span class="sourceLineNo">040</span>import org.slf4j.Logger;<a name="line.40"></a>
-<span class="sourceLineNo">041</span>import org.slf4j.LoggerFactory;<a name="line.41"></a>
-<span class="sourceLineNo">042</span><a name="line.42"></a>
-<span class="sourceLineNo">043</span>import com.github.jasminb.jsonapi.JSONAPIDocument;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>import com.google.common.base.Preconditions;<a name="line.44"></a>
+<span class="sourceLineNo">037</span>import java.util.Objects;<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>import javax.annotation.Nonnull;<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.slf4j.Logger;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import org.slf4j.LoggerFactory;<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>import com.github.jasminb.jsonapi.JSONAPIDocument;<a name="line.44"></a>
 <span class="sourceLineNo">045</span><a name="line.45"></a>
 <span class="sourceLineNo">046</span>import okhttp3.ResponseBody;<a name="line.46"></a>
 <span class="sourceLineNo">047</span>import retrofit2.Response;<a name="line.47"></a>
@@ -89,7 +89,7 @@
 <span class="sourceLineNo">081</span>  @Nonnull<a name="line.81"></a>
 <span class="sourceLineNo">082</span>  @Override<a name="line.82"></a>
 <span class="sourceLineNo">083</span>  public DoiData resolve(DOI doi) throws DoiException {<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    Preconditions.checkNotNull(doi);<a name="line.84"></a>
+<span class="sourceLineNo">084</span>    Objects.requireNonNull(doi);<a name="line.84"></a>
 <span class="sourceLineNo">085</span>    Response&lt;JSONAPIDocument&lt;Datacite42Schema&gt;&gt; doiResponse;<a name="line.85"></a>
 <span class="sourceLineNo">086</span><a name="line.86"></a>
 <span class="sourceLineNo">087</span>    doiResponse = dataCiteClient.getDoi(doi.getDoiName());<a name="line.87"></a>
@@ -128,7 +128,7 @@
 <span class="sourceLineNo">120</span>   */<a name="line.120"></a>
 <span class="sourceLineNo">121</span>  @Override<a name="line.121"></a>
 <span class="sourceLineNo">122</span>  public boolean exists(DOI doi) throws DoiException {<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    Preconditions.checkNotNull(doi);<a name="line.123"></a>
+<span class="sourceLineNo">123</span>    Objects.requireNonNull(doi);<a name="line.123"></a>
 <span class="sourceLineNo">124</span>    Response&lt;JSONAPIDocument&lt;Datacite42Schema&gt;&gt; doiResponse =<a name="line.124"></a>
 <span class="sourceLineNo">125</span>        dataCiteClient.getDoi(doi.getDoiName());<a name="line.125"></a>
 <span class="sourceLineNo">126</span>    throwExceptionOnBadResponseExcept404(doiResponse);<a name="line.126"></a>
@@ -157,8 +157,8 @@
 <span class="sourceLineNo">149</span>   */<a name="line.149"></a>
 <span class="sourceLineNo">150</span>  @Override<a name="line.150"></a>
 <span class="sourceLineNo">151</span>  public void reserve(DOI doi, String metadata) throws DoiException {<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    Preconditions.checkNotNull(doi, "DOI can't be reserved with 'null' identifier");<a name="line.152"></a>
-<span class="sourceLineNo">153</span>    Preconditions.checkNotNull(metadata, "DOI can't be reserved with 'null' metadata");<a name="line.153"></a>
+<span class="sourceLineNo">152</span>    Objects.requireNonNull(doi, "DOI can't be reserved with 'null' identifier");<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    Objects.requireNonNull(metadata, "DOI can't be reserved with 'null' metadata");<a name="line.153"></a>
 <span class="sourceLineNo">154</span><a name="line.154"></a>
 <span class="sourceLineNo">155</span>    DoiData doiData = resolve(doi);<a name="line.155"></a>
 <span class="sourceLineNo">156</span><a name="line.156"></a>
@@ -180,8 +180,8 @@
 <span class="sourceLineNo">172</span>   */<a name="line.172"></a>
 <span class="sourceLineNo">173</span>  @Override<a name="line.173"></a>
 <span class="sourceLineNo">174</span>  public void reserve(DOI doi, DataCiteMetadata metadata) throws DoiException {<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    Preconditions.checkNotNull(doi, "DOI can't be reserved with 'null' identifier");<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    Preconditions.checkNotNull(metadata, "DOI can't be reserved with 'null' metadata");<a name="line.176"></a>
+<span class="sourceLineNo">175</span>    Objects.requireNonNull(doi, "DOI can't be reserved with 'null' identifier");<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    Objects.requireNonNull(metadata, "DOI can't be reserved with 'null' metadata");<a name="line.176"></a>
 <span class="sourceLineNo">177</span>    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);<a name="line.177"></a>
 <span class="sourceLineNo">178</span>    reserve(doi, xmlMetadata);<a name="line.178"></a>
 <span class="sourceLineNo">179</span>  }<a name="line.179"></a>
@@ -194,9 +194,9 @@
 <span class="sourceLineNo">186</span>   */<a name="line.186"></a>
 <span class="sourceLineNo">187</span>  @Override<a name="line.187"></a>
 <span class="sourceLineNo">188</span>  public void register(DOI doi, URI target, String metadata) throws DoiException {<a name="line.188"></a>
-<span class="sourceLineNo">189</span>    Preconditions.checkNotNull(doi, "DOI can't be registered without identifier");<a name="line.189"></a>
-<span class="sourceLineNo">190</span>    Preconditions.checkNotNull(target, "DOI can't be registered without target URL");<a name="line.190"></a>
-<span class="sourceLineNo">191</span>    Preconditions.checkNotNull(metadata, "DOI can't be registered without metadata");<a name="line.191"></a>
+<span class="sourceLineNo">189</span>    Objects.requireNonNull(doi, "DOI can't be registered without identifier");<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    Objects.requireNonNull(target, "DOI can't be registered without target URL");<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    Objects.requireNonNull(metadata, "DOI can't be registered without metadata");<a name="line.191"></a>
 <span class="sourceLineNo">192</span><a name="line.192"></a>
 <span class="sourceLineNo">193</span>    DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);<a name="line.193"></a>
 <span class="sourceLineNo">194</span>    model.setEvent(EventType.PUBLISH.getValue());<a name="line.194"></a>
@@ -223,9 +223,9 @@
 <span class="sourceLineNo">215</span>   */<a name="line.215"></a>
 <span class="sourceLineNo">216</span>  @Override<a name="line.216"></a>
 <span class="sourceLineNo">217</span>  public void register(DOI doi, URI target, DataCiteMetadata metadata) throws DoiException {<a name="line.217"></a>
-<span class="sourceLineNo">218</span>    Preconditions.checkNotNull(doi, "DOI can't be registered without identifier");<a name="line.218"></a>
-<span class="sourceLineNo">219</span>    Preconditions.checkNotNull(target, "DOI can't be registered without target URL");<a name="line.219"></a>
-<span class="sourceLineNo">220</span>    Preconditions.checkNotNull(metadata, "DOI can't be registered without metadata");<a name="line.220"></a>
+<span class="sourceLineNo">218</span>    Objects.requireNonNull(doi, "DOI can't be registered without identifier");<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    Objects.requireNonNull(target, "DOI can't be registered without target URL");<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    Objects.requireNonNull(metadata, "DOI can't be registered without metadata");<a name="line.220"></a>
 <span class="sourceLineNo">221</span>    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);<a name="line.221"></a>
 <span class="sourceLineNo">222</span>    register(doi, target, xmlMetadata);<a name="line.222"></a>
 <span class="sourceLineNo">223</span>  }<a name="line.223"></a>
@@ -253,7 +253,7 @@
 <span class="sourceLineNo">245</span>   */<a name="line.245"></a>
 <span class="sourceLineNo">246</span>  @Override<a name="line.246"></a>
 <span class="sourceLineNo">247</span>  public boolean delete(DOI doi) throws DoiException {<a name="line.247"></a>
-<span class="sourceLineNo">248</span>    Preconditions.checkNotNull(doi, "DOI can't be deleted without identifier");<a name="line.248"></a>
+<span class="sourceLineNo">248</span>    Objects.requireNonNull(doi, "DOI can't be deleted without identifier");<a name="line.248"></a>
 <span class="sourceLineNo">249</span><a name="line.249"></a>
 <span class="sourceLineNo">250</span>    DoiData doiData = resolve(doi);<a name="line.250"></a>
 <span class="sourceLineNo">251</span><a name="line.251"></a>
@@ -277,8 +277,8 @@
 <span class="sourceLineNo">269</span>   */<a name="line.269"></a>
 <span class="sourceLineNo">270</span>  @Override<a name="line.270"></a>
 <span class="sourceLineNo">271</span>  public void update(DOI doi, String metadata) throws DoiException {<a name="line.271"></a>
-<span class="sourceLineNo">272</span>    Preconditions.checkNotNull(doi, "DOI can't be updated with 'null' identifier");<a name="line.272"></a>
-<span class="sourceLineNo">273</span>    Preconditions.checkNotNull(metadata, "DOI can't be updated with 'null' metadata");<a name="line.273"></a>
+<span class="sourceLineNo">272</span>    Objects.requireNonNull(doi, "DOI can't be updated with 'null' identifier");<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    Objects.requireNonNull(metadata, "DOI can't be updated with 'null' metadata");<a name="line.273"></a>
 <span class="sourceLineNo">274</span><a name="line.274"></a>
 <span class="sourceLineNo">275</span>    DoiData doiData = resolve(doi);<a name="line.275"></a>
 <span class="sourceLineNo">276</span><a name="line.276"></a>
@@ -302,8 +302,8 @@
 <span class="sourceLineNo">294</span>   */<a name="line.294"></a>
 <span class="sourceLineNo">295</span>  @Override<a name="line.295"></a>
 <span class="sourceLineNo">296</span>  public void update(DOI doi, DataCiteMetadata metadata) throws DoiException {<a name="line.296"></a>
-<span class="sourceLineNo">297</span>    Preconditions.checkNotNull(doi, "DOI can't be updated with 'null' identifier");<a name="line.297"></a>
-<span class="sourceLineNo">298</span>    Preconditions.checkNotNull(metadata, "DOI can't be updated with 'null' metadata");<a name="line.298"></a>
+<span class="sourceLineNo">297</span>    Objects.requireNonNull(doi, "DOI can't be updated with 'null' identifier");<a name="line.297"></a>
+<span class="sourceLineNo">298</span>    Objects.requireNonNull(metadata, "DOI can't be updated with 'null' metadata");<a name="line.298"></a>
 <span class="sourceLineNo">299</span>    String xmlMetadata = DataCiteValidator.toXml(doi, metadata);<a name="line.299"></a>
 <span class="sourceLineNo">300</span>    update(doi, xmlMetadata);<a name="line.300"></a>
 <span class="sourceLineNo">301</span>  }<a name="line.301"></a>
@@ -316,8 +316,8 @@
 <span class="sourceLineNo">308</span>   */<a name="line.308"></a>
 <span class="sourceLineNo">309</span>  @Override<a name="line.309"></a>
 <span class="sourceLineNo">310</span>  public void update(DOI doi, URI target) throws DoiException {<a name="line.310"></a>
-<span class="sourceLineNo">311</span>    Preconditions.checkNotNull(doi, "DOI can't be updated with 'null' identifier");<a name="line.311"></a>
-<span class="sourceLineNo">312</span>    Preconditions.checkNotNull(target, "DOI can't be updated with 'null' target URL");<a name="line.312"></a>
+<span class="sourceLineNo">311</span>    Objects.requireNonNull(doi, "DOI can't be updated with 'null' identifier");<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    Objects.requireNonNull(target, "DOI can't be updated with 'null' target URL");<a name="line.312"></a>
 <span class="sourceLineNo">313</span><a name="line.313"></a>
 <span class="sourceLineNo">314</span>    DoiData doiData = resolve(doi);<a name="line.314"></a>
 <span class="sourceLineNo">315</span><a name="line.315"></a>

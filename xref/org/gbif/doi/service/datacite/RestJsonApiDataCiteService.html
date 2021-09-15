@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *     <a href="http://www.apache.org/licenses/LICENSE-2." target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.</a>0</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *     <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
@@ -42,14 +42,14 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> java.net.URI;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> java.util.Base64;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> javax.annotation.Nonnull;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> com.github.jasminb.jsonapi.JSONAPIDocument;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Preconditions;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Objects;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> javax.annotation.Nonnull;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> com.github.jasminb.jsonapi.JSONAPIDocument;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> okhttp3.ResponseBody;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> retrofit2.Response;
@@ -58,17 +58,17 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.FINDABLE;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">/** DataCite service implementation with REST and JSON:API. */</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/gbif/doi/service/datacite/RestJsonApiDataCiteService.html">RestJsonApiDataCiteService</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../org/gbif/doi/service/DoiService.html">DoiService</a> {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="RestJsonApiDataCiteService" href="../../../../../org/gbif/doi/service/datacite/RestJsonApiDataCiteService.html#RestJsonApiDataCiteService">RestJsonApiDataCiteService</a> <strong class="jxr_keyword">implements</strong> <a name="DoiService" href="../../../../../org/gbif/doi/service/DoiService.html#DoiService">DoiService</a> {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOG = LoggerFactory.getLogger(RestJsonApiDataCiteService.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>    <strong class="jxr_keyword">private</strong> DataCiteClient dataCiteClient;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/doi/service/datacite/RestJsonApiDataCiteService.html">RestJsonApiDataCiteService</a>(DataCiteClient dataCiteClient) {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>    <strong class="jxr_keyword">public</strong> <a name="RestJsonApiDataCiteService" href="../../../../../org/gbif/doi/service/datacite/RestJsonApiDataCiteService.html#RestJsonApiDataCiteService">RestJsonApiDataCiteService</a>(DataCiteClient dataCiteClient) {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">this</strong>.dataCiteClient = dataCiteClient;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>    }
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../../org/gbif/doi/service/datacite/RestJsonApiDataCiteService.html">RestJsonApiDataCiteService</a>(String api, String user, String password) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>    <strong class="jxr_keyword">public</strong> <a name="RestJsonApiDataCiteService" href="../../../../../org/gbif/doi/service/datacite/RestJsonApiDataCiteService.html#RestJsonApiDataCiteService">RestJsonApiDataCiteService</a>(String api, String user, String password) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      ClientConfiguration cfg =
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          ClientConfiguration.builder()
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              .withBaseApiUrl(api)
@@ -88,8 +88,8 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>    @Nonnull
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>    @Override
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>    <strong class="jxr_keyword">public</strong> DoiData resolve(DOI doi) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      Preconditions.checkNotNull(doi);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>    <strong class="jxr_keyword">public</strong> DoiData resolve(DOI doi) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      Objects.requireNonNull(doi);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      Response&lt;JSONAPIDocument&lt;Datacite42Schema&gt;&gt; doiResponse;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      doiResponse = dataCiteClient.getDoi(doi.getDoiName());
@@ -127,8 +127,8 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">   * @return exists DOI or not</em>
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>   @Override
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> exists(DOI doi) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>     Preconditions.checkNotNull(doi);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> exists(DOI doi) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     Objects.requireNonNull(doi);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>     Response&lt;JSONAPIDocument&lt;Datacite42Schema&gt;&gt; doiResponse =
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>         dataCiteClient.getDoi(doi.getDoiName());
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>     throwExceptionOnBadResponseExcept404(doiResponse);
@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">   * @return xml metadata</em>
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>   @Override
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>   <strong class="jxr_keyword">public</strong> String getMetadata(DOI doi) <strong class="jxr_keyword">throws</strong> DoiException {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>   <strong class="jxr_keyword">public</strong> String getMetadata(DOI doi) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>     Response&lt;String&gt; response = dataCiteClient.getMetadata(doi.getDoiName());
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>     throwExceptionOnBadResponse(response);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">return</strong> response.body();
@@ -156,14 +156,14 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">   * @param metadata the metadata to be associated with the doi</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>   @Override
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reserve(DOI doi, String metadata) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be reserved with 'null' identifier"</span>);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     Preconditions.checkNotNull(metadata, <span class="jxr_string">"DOI can't be reserved with 'null' metadata"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reserve(DOI doi, String metadata) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be reserved with 'null' identifier"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     Objects.requireNonNull(metadata, <span class="jxr_string">"DOI can't be reserved with 'null' metadata"</span>);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>     <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiExistsException.html">DoiExistsException</a>(
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiExistsException" href="../../../../../org/gbif/doi/service/DoiExistsException.html#DoiExistsException">DoiExistsException</a>(
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>           <span class="jxr_string">"Can't reserve a DOI which is already registered/reserved "</span> + doi.getDoiName(), doi);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>     } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>       DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
@@ -179,9 +179,9 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">   * @param metadata the metadata to be associated with the doi</em>
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>   @Override
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reserve(DOI doi, <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadata.html">DataCiteMetadata</a> metadata) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be reserved with 'null' identifier"</span>);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>     Preconditions.checkNotNull(metadata, <span class="jxr_string">"DOI can't be reserved with 'null' metadata"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reserve(DOI doi, DataCiteMetadata metadata) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be reserved with 'null' identifier"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>     Objects.requireNonNull(metadata, <span class="jxr_string">"DOI can't be reserved with 'null' metadata"</span>);
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>     String xmlMetadata = DataCiteValidator.toXml(doi, metadata);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>     reserve(doi, xmlMetadata);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>   }
@@ -193,10 +193,10 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">   * @param metadata the metadata to be associated with the doi</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>   @Override
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(DOI doi, URI target, String metadata) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be registered without identifier"</span>);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     Preconditions.checkNotNull(target, <span class="jxr_string">"DOI can't be registered without target URL"</span>);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     Preconditions.checkNotNull(metadata, <span class="jxr_string">"DOI can't be registered without metadata"</span>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(DOI doi, URI target, String metadata) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be registered without identifier"</span>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>     Objects.requireNonNull(target, <span class="jxr_string">"DOI can't be registered without target URL"</span>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     Objects.requireNonNull(metadata, <span class="jxr_string">"DOI can't be registered without metadata"</span>);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>     DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>     model.setEvent(EventType.PUBLISH.getValue());
@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.REGISTERED) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiExistsException.html">DoiExistsException</a>(
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiExistsException" href="../../../../../org/gbif/doi/service/DoiExistsException.html#DoiExistsException">DoiExistsException</a>(
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>           <span class="jxr_string">"Can't reserve a DOI which is already registered/reserved "</span> + doi.getDoiName(), doi);
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.RESERVED) {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
@@ -222,10 +222,10 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">   * @param metadata the metadata to be associated with the doi</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>   @Override
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(DOI doi, URI target, <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadata.html">DataCiteMetadata</a> metadata) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be registered without identifier"</span>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>     Preconditions.checkNotNull(target, <span class="jxr_string">"DOI can't be registered without target URL"</span>);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>     Preconditions.checkNotNull(metadata, <span class="jxr_string">"DOI can't be registered without metadata"</span>);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(DOI doi, URI target, DataCiteMetadata metadata) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be registered without identifier"</span>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>     Objects.requireNonNull(target, <span class="jxr_string">"DOI can't be registered without target URL"</span>);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     Objects.requireNonNull(metadata, <span class="jxr_string">"DOI can't be registered without metadata"</span>);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>     String xmlMetadata = DataCiteValidator.toXml(doi, metadata);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a>     register(doi, target, xmlMetadata);
 <a class="jxr_linenumber" name="L223" href="#L223">223</a>   }
@@ -252,15 +252,15 @@
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">   * @return true if successfully deleted, false otherwise</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a>   @Override
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> delete(DOI doi) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be deleted without identifier"</span>);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> delete(DOI doi) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be deleted without identifier"</span>);
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 
 <a class="jxr_linenumber" name="L252" href="#L252">252</a>     <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.REGISTERED) {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiException.html">DoiException</a>(<span class="jxr_string">"Registered DOI can't be deleted "</span> + doi.getDoiName());
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a>(<span class="jxr_string">"Registered DOI can't be deleted "</span> + doi.getDoiName());
 <a class="jxr_linenumber" name="L254" href="#L254">254</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (doiData.getStatus() == DoiStatus.NEW) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiNotFoundException.html">DoiNotFoundException</a>(<span class="jxr_string">"Can't delete non-existing DOI "</span> + doi.getDoiName(), doi);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiNotFoundException" href="../../../../../org/gbif/doi/service/DoiNotFoundException.html#DoiNotFoundException">DoiNotFoundException</a>(<span class="jxr_string">"Can't delete non-existing DOI "</span> + doi.getDoiName(), doi);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a>     }
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a>     Response&lt;Void&gt; deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());
@@ -276,9 +276,9 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">   * @param metadata the DataCite metadata</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a>   @Override
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(DOI doi, String metadata) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be updated with 'null' identifier"</span>);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>     Preconditions.checkNotNull(metadata, <span class="jxr_string">"DOI can't be updated with 'null' metadata"</span>);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(DOI doi, String metadata) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be updated with 'null' identifier"</span>);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     Objects.requireNonNull(metadata, <span class="jxr_string">"DOI can't be updated with 'null' metadata"</span>);
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 
 <a class="jxr_linenumber" name="L275" href="#L275">275</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a>       JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = <strong class="jxr_keyword">new</strong> JSONAPIDocument&lt;&gt;(model);
 <a class="jxr_linenumber" name="L282" href="#L282">282</a>       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
 <a class="jxr_linenumber" name="L283" href="#L283">283</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiNotFoundException.html">DoiNotFoundException</a>(<span class="jxr_string">"Can't update non-existing DOI "</span> + doi.getDoiName(), doi);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiNotFoundException" href="../../../../../org/gbif/doi/service/DoiNotFoundException.html#DoiNotFoundException">DoiNotFoundException</a>(<span class="jxr_string">"Can't update non-existing DOI "</span> + doi.getDoiName(), doi);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a>     }
 <a class="jxr_linenumber" name="L286" href="#L286">286</a>   }
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 
@@ -301,9 +301,9 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">   * @throws DoiException if some problems occur while xml serializing</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a>   @Override
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(DOI doi, <a href="../../../../../org/gbif/doi/metadata/datacite/DataCiteMetadata.html">DataCiteMetadata</a> metadata) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be updated with 'null' identifier"</span>);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>     Preconditions.checkNotNull(metadata, <span class="jxr_string">"DOI can't be updated with 'null' metadata"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(DOI doi, DataCiteMetadata metadata) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be updated with 'null' identifier"</span>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>     Objects.requireNonNull(metadata, <span class="jxr_string">"DOI can't be updated with 'null' metadata"</span>);
 <a class="jxr_linenumber" name="L299" href="#L299">299</a>     String xmlMetadata = DataCiteValidator.toXml(doi, metadata);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a>     update(doi, xmlMetadata);
 <a class="jxr_linenumber" name="L301" href="#L301">301</a>   }
@@ -315,9 +315,9 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">   * @param target the new URL the DOI should resolve to</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="L309" href="#L309">309</a>   @Override
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(DOI doi, URI target) <strong class="jxr_keyword">throws</strong> DoiException {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     Preconditions.checkNotNull(doi, <span class="jxr_string">"DOI can't be updated with 'null' identifier"</span>);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>     Preconditions.checkNotNull(target, <span class="jxr_string">"DOI can't be updated with 'null' target URL"</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(DOI doi, URI target) <strong class="jxr_keyword">throws</strong> <a name="DoiException" href="../../../../../org/gbif/doi/service/DoiException.html#DoiException">DoiException</a> {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     Objects.requireNonNull(doi, <span class="jxr_string">"DOI can't be updated with 'null' identifier"</span>);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>     Objects.requireNonNull(target, <span class="jxr_string">"DOI can't be updated with 'null' target URL"</span>);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>     DoiData doiData = resolve(doi);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 
@@ -328,7 +328,7 @@
 <a class="jxr_linenumber" name="L320" href="#L320">320</a>       JSONAPIDocument&lt;DoiSimplifiedModel&gt; jsonApiWrapper = <strong class="jxr_keyword">new</strong> JSONAPIDocument&lt;&gt;(model);
 <a class="jxr_linenumber" name="L321" href="#L321">321</a>       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
 <a class="jxr_linenumber" name="L322" href="#L322">322</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiNotFoundException.html">DoiNotFoundException</a>(
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiNotFoundException" href="../../../../../org/gbif/doi/service/DoiNotFoundException.html#DoiNotFoundException">DoiNotFoundException</a>(
 <a class="jxr_linenumber" name="L324" href="#L324">324</a>           <span class="jxr_string">"Only a reserved/registered doi can be updated. DOI "</span>
 <a class="jxr_linenumber" name="L325" href="#L325">325</a>               + doi.getDoiName()
 <a class="jxr_linenumber" name="L326" href="#L326">326</a>               + <span class="jxr_string">" status is "</span>
@@ -338,16 +338,16 @@
 <a class="jxr_linenumber" name="L330" href="#L330">330</a>   }
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
 <a class="jxr_linenumber" name="L332" href="#L332">332</a>   <em class="jxr_comment">// check the response is unsuccessful and throw an exception</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> throwExceptionOnBadResponse(Response response) <strong class="jxr_keyword">throws</strong> DoiHttpException {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> throwExceptionOnBadResponse(Response response) <strong class="jxr_keyword">throws</strong> <a name="DoiHttpException" href="../../../../../org/gbif/doi/service/DoiHttpException.html#DoiHttpException">DoiHttpException</a> {
 <a class="jxr_linenumber" name="L334" href="#L334">334</a>     <strong class="jxr_keyword">if</strong> (!response.isSuccessful()) {
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiHttpException.html">DoiHttpException</a>(response.code(), response.message(), getErrorBody(response));
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiHttpException" href="../../../../../org/gbif/doi/service/DoiHttpException.html#DoiHttpException">DoiHttpException</a>(response.code(), response.message(), getErrorBody(response));
 <a class="jxr_linenumber" name="L336" href="#L336">336</a>     }
 <a class="jxr_linenumber" name="L337" href="#L337">337</a>   }
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 
 <a class="jxr_linenumber" name="L339" href="#L339">339</a>   <em class="jxr_comment">// check the response is unsuccessful and throw an exception (except 404 status)</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> throwExceptionOnBadResponseExcept404(Response response) <strong class="jxr_keyword">throws</strong> DoiHttpException {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> throwExceptionOnBadResponseExcept404(Response response) <strong class="jxr_keyword">throws</strong> <a name="DoiHttpException" href="../../../../../org/gbif/doi/service/DoiHttpException.html#DoiHttpException">DoiHttpException</a> {
 <a class="jxr_linenumber" name="L341" href="#L341">341</a>     <strong class="jxr_keyword">if</strong> (!response.isSuccessful() &amp;&amp; response.code() != 404) {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/gbif/doi/service/DoiHttpException.html">DoiHttpException</a>(response.code(), response.message(), getErrorBody(response));
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="DoiHttpException" href="../../../../../org/gbif/doi/service/DoiHttpException.html#DoiHttpException">DoiHttpException</a>(response.code(), response.message(), getErrorBody(response));
 <a class="jxr_linenumber" name="L343" href="#L343">343</a>     }
 <a class="jxr_linenumber" name="L344" href="#L344">344</a>   }
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 
@@ -369,6 +369,6 @@
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2021 <a href="http://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2021 <a href="https://www.gbif.org">Global Biodiversity Information Facility</a>. All rights reserved.</div>
 </body>
 </html>

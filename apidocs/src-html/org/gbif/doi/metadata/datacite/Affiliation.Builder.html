@@ -25,493 +25,489 @@
 <span class="sourceLineNo">017</span><a name="line.17"></a>
 <span class="sourceLineNo">018</span>import java.util.HashMap;<a name="line.18"></a>
 <span class="sourceLineNo">019</span>import java.util.Map;<a name="line.19"></a>
-<span class="sourceLineNo">020</span><a name="line.20"></a>
-<span class="sourceLineNo">021</span>import javax.xml.bind.annotation.XmlAccessType;<a name="line.21"></a>
-<span class="sourceLineNo">022</span>import javax.xml.bind.annotation.XmlAccessorType;<a name="line.22"></a>
-<span class="sourceLineNo">023</span>import javax.xml.bind.annotation.XmlAttribute;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>import javax.xml.bind.annotation.XmlSchemaType;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>import javax.xml.bind.annotation.XmlType;<a name="line.25"></a>
-<span class="sourceLineNo">026</span>import javax.xml.bind.annotation.XmlValue;<a name="line.26"></a>
-<span class="sourceLineNo">027</span><a name="line.27"></a>
-<span class="sourceLineNo">028</span>import com.google.common.base.Objects;<a name="line.28"></a>
-<span class="sourceLineNo">029</span>import com.kscs.util.jaxb.Buildable;<a name="line.29"></a>
-<span class="sourceLineNo">030</span>import com.kscs.util.jaxb.PropertyTree;<a name="line.30"></a>
-<span class="sourceLineNo">031</span>import com.kscs.util.jaxb.PropertyTreeUse;<a name="line.31"></a>
-<span class="sourceLineNo">032</span><a name="line.32"></a>
-<span class="sourceLineNo">033</span>/**<a name="line.33"></a>
-<span class="sourceLineNo">034</span> * Uniquely identifies an affiliation, according to various identifier schemes.<a name="line.34"></a>
-<span class="sourceLineNo">035</span> *<a name="line.35"></a>
-<span class="sourceLineNo">036</span> * &lt;p&gt;Java class for affiliation complex type.<a name="line.36"></a>
-<span class="sourceLineNo">037</span> *<a name="line.37"></a>
-<span class="sourceLineNo">038</span> * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.<a name="line.38"></a>
-<span class="sourceLineNo">039</span> *<a name="line.39"></a>
-<span class="sourceLineNo">040</span> * &lt;pre&gt;<a name="line.40"></a>
-<span class="sourceLineNo">041</span> * &amp;lt;complexType name="affiliation"&amp;gt;<a name="line.41"></a>
-<span class="sourceLineNo">042</span> *   &amp;lt;simpleContent&amp;gt;<a name="line.42"></a>
-<span class="sourceLineNo">043</span> *     &amp;lt;extension base="&amp;lt;http://datacite.org/schema/kernel-4&amp;gt;nonemptycontentStringType"&amp;gt;<a name="line.43"></a>
-<span class="sourceLineNo">044</span> *       &amp;lt;attribute name="affiliationIdentifier" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&amp;gt;<a name="line.44"></a>
-<span class="sourceLineNo">045</span> *       &amp;lt;attribute name="affiliationIdentifierScheme" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&amp;gt;<a name="line.45"></a>
-<span class="sourceLineNo">046</span> *       &amp;lt;attribute name="schemeURI" type="{http://www.w3.org/2001/XMLSchema}anyURI" /&amp;gt;<a name="line.46"></a>
-<span class="sourceLineNo">047</span> *     &amp;lt;/extension&amp;gt;<a name="line.47"></a>
-<span class="sourceLineNo">048</span> *   &amp;lt;/simpleContent&amp;gt;<a name="line.48"></a>
-<span class="sourceLineNo">049</span> * &amp;lt;/complexType&amp;gt;<a name="line.49"></a>
-<span class="sourceLineNo">050</span> * &lt;/pre&gt;<a name="line.50"></a>
-<span class="sourceLineNo">051</span> */<a name="line.51"></a>
-<span class="sourceLineNo">052</span>@XmlAccessorType(XmlAccessType.FIELD)<a name="line.52"></a>
-<span class="sourceLineNo">053</span>@XmlType(<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    name = "affiliation",<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    propOrder = {"value"})<a name="line.55"></a>
-<span class="sourceLineNo">056</span>public class Affiliation {<a name="line.56"></a>
-<span class="sourceLineNo">057</span><a name="line.57"></a>
-<span class="sourceLineNo">058</span>  @XmlValue protected String value;<a name="line.58"></a>
-<span class="sourceLineNo">059</span><a name="line.59"></a>
-<span class="sourceLineNo">060</span>  @XmlAttribute(name = "affiliationIdentifier")<a name="line.60"></a>
-<span class="sourceLineNo">061</span>  @XmlSchemaType(name = "anySimpleType")<a name="line.61"></a>
-<span class="sourceLineNo">062</span>  protected String affiliationIdentifier;<a name="line.62"></a>
-<span class="sourceLineNo">063</span><a name="line.63"></a>
-<span class="sourceLineNo">064</span>  @XmlAttribute(name = "affiliationIdentifierScheme")<a name="line.64"></a>
-<span class="sourceLineNo">065</span>  @XmlSchemaType(name = "anySimpleType")<a name="line.65"></a>
-<span class="sourceLineNo">066</span>  protected String affiliationIdentifierScheme;<a name="line.66"></a>
-<span class="sourceLineNo">067</span><a name="line.67"></a>
-<span class="sourceLineNo">068</span>  @XmlAttribute(name = "schemeURI")<a name="line.68"></a>
-<span class="sourceLineNo">069</span>  @XmlSchemaType(name = "anyURI")<a name="line.69"></a>
-<span class="sourceLineNo">070</span>  protected String schemeURI;<a name="line.70"></a>
-<span class="sourceLineNo">071</span><a name="line.71"></a>
-<span class="sourceLineNo">072</span>  /**<a name="line.72"></a>
-<span class="sourceLineNo">073</span>   * Gets the value of the value property.<a name="line.73"></a>
-<span class="sourceLineNo">074</span>   *<a name="line.74"></a>
-<span class="sourceLineNo">075</span>   * @return possible object is {@link String }<a name="line.75"></a>
-<span class="sourceLineNo">076</span>   */<a name="line.76"></a>
-<span class="sourceLineNo">077</span>  public String getValue() {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    return value;<a name="line.78"></a>
-<span class="sourceLineNo">079</span>  }<a name="line.79"></a>
-<span class="sourceLineNo">080</span><a name="line.80"></a>
-<span class="sourceLineNo">081</span>  /**<a name="line.81"></a>
-<span class="sourceLineNo">082</span>   * Sets the value of the value property.<a name="line.82"></a>
-<span class="sourceLineNo">083</span>   *<a name="line.83"></a>
-<span class="sourceLineNo">084</span>   * @param value allowed object is {@link String }<a name="line.84"></a>
-<span class="sourceLineNo">085</span>   */<a name="line.85"></a>
-<span class="sourceLineNo">086</span>  public void setValue(String value) {<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    this.value = value;<a name="line.87"></a>
-<span class="sourceLineNo">088</span>  }<a name="line.88"></a>
-<span class="sourceLineNo">089</span><a name="line.89"></a>
-<span class="sourceLineNo">090</span>  /**<a name="line.90"></a>
-<span class="sourceLineNo">091</span>   * Gets the value of the affiliationIdentifier property.<a name="line.91"></a>
-<span class="sourceLineNo">092</span>   *<a name="line.92"></a>
-<span class="sourceLineNo">093</span>   * @return possible object is {@link String }<a name="line.93"></a>
-<span class="sourceLineNo">094</span>   */<a name="line.94"></a>
-<span class="sourceLineNo">095</span>  public String getAffiliationIdentifier() {<a name="line.95"></a>
-<span class="sourceLineNo">096</span>    return affiliationIdentifier;<a name="line.96"></a>
-<span class="sourceLineNo">097</span>  }<a name="line.97"></a>
-<span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>  /**<a name="line.99"></a>
-<span class="sourceLineNo">100</span>   * Sets the value of the affiliationIdentifier property.<a name="line.100"></a>
-<span class="sourceLineNo">101</span>   *<a name="line.101"></a>
-<span class="sourceLineNo">102</span>   * @param value allowed object is {@link String }<a name="line.102"></a>
-<span class="sourceLineNo">103</span>   */<a name="line.103"></a>
-<span class="sourceLineNo">104</span>  public void setAffiliationIdentifier(String value) {<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    this.affiliationIdentifier = value;<a name="line.105"></a>
-<span class="sourceLineNo">106</span>  }<a name="line.106"></a>
-<span class="sourceLineNo">107</span><a name="line.107"></a>
-<span class="sourceLineNo">108</span>  /**<a name="line.108"></a>
-<span class="sourceLineNo">109</span>   * Gets the value of the affiliationIdentifierScheme property.<a name="line.109"></a>
-<span class="sourceLineNo">110</span>   *<a name="line.110"></a>
-<span class="sourceLineNo">111</span>   * @return possible object is {@link String }<a name="line.111"></a>
-<span class="sourceLineNo">112</span>   */<a name="line.112"></a>
-<span class="sourceLineNo">113</span>  public String getAffiliationIdentifierScheme() {<a name="line.113"></a>
-<span class="sourceLineNo">114</span>    return affiliationIdentifierScheme;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>  }<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>  /**<a name="line.117"></a>
-<span class="sourceLineNo">118</span>   * Sets the value of the affiliationIdentifierScheme property.<a name="line.118"></a>
-<span class="sourceLineNo">119</span>   *<a name="line.119"></a>
-<span class="sourceLineNo">120</span>   * @param value allowed object is {@link String }<a name="line.120"></a>
-<span class="sourceLineNo">121</span>   */<a name="line.121"></a>
-<span class="sourceLineNo">122</span>  public void setAffiliationIdentifierScheme(String value) {<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    this.affiliationIdentifierScheme = value;<a name="line.123"></a>
-<span class="sourceLineNo">124</span>  }<a name="line.124"></a>
-<span class="sourceLineNo">125</span><a name="line.125"></a>
-<span class="sourceLineNo">126</span>  /**<a name="line.126"></a>
-<span class="sourceLineNo">127</span>   * Gets the value of the schemeURI property.<a name="line.127"></a>
-<span class="sourceLineNo">128</span>   *<a name="line.128"></a>
-<span class="sourceLineNo">129</span>   * @return possible object is {@link String }<a name="line.129"></a>
-<span class="sourceLineNo">130</span>   */<a name="line.130"></a>
-<span class="sourceLineNo">131</span>  public String getSchemeURI() {<a name="line.131"></a>
-<span class="sourceLineNo">132</span>    return schemeURI;<a name="line.132"></a>
-<span class="sourceLineNo">133</span>  }<a name="line.133"></a>
-<span class="sourceLineNo">134</span><a name="line.134"></a>
-<span class="sourceLineNo">135</span>  /**<a name="line.135"></a>
-<span class="sourceLineNo">136</span>   * Sets the value of the schemeURI property.<a name="line.136"></a>
-<span class="sourceLineNo">137</span>   *<a name="line.137"></a>
-<span class="sourceLineNo">138</span>   * @param value allowed object is {@link String }<a name="line.138"></a>
-<span class="sourceLineNo">139</span>   */<a name="line.139"></a>
-<span class="sourceLineNo">140</span>  public void setSchemeURI(String value) {<a name="line.140"></a>
-<span class="sourceLineNo">141</span>    this.schemeURI = value;<a name="line.141"></a>
-<span class="sourceLineNo">142</span>  }<a name="line.142"></a>
-<span class="sourceLineNo">143</span><a name="line.143"></a>
-<span class="sourceLineNo">144</span>  /**<a name="line.144"></a>
-<span class="sourceLineNo">145</span>   * Copies all state of this object to a builder. This method is used by the {@link #copyOf} method<a name="line.145"></a>
-<span class="sourceLineNo">146</span>   * and should not be called directly by client code.<a name="line.146"></a>
-<span class="sourceLineNo">147</span>   *<a name="line.147"></a>
-<span class="sourceLineNo">148</span>   * @param _other A builder instance to which the state of this object will be copied.<a name="line.148"></a>
-<span class="sourceLineNo">149</span>   */<a name="line.149"></a>
-<span class="sourceLineNo">150</span>  public &lt;_B&gt; void copyTo(final Affiliation.Builder&lt;_B&gt; _other) {<a name="line.150"></a>
-<span class="sourceLineNo">151</span>    _other.value = this.value;<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    _other.affiliationIdentifier = this.affiliationIdentifier;<a name="line.152"></a>
-<span class="sourceLineNo">153</span>    _other.affiliationIdentifierScheme = this.affiliationIdentifierScheme;<a name="line.153"></a>
-<span class="sourceLineNo">154</span>    _other.schemeURI = this.schemeURI;<a name="line.154"></a>
-<span class="sourceLineNo">155</span>  }<a name="line.155"></a>
-<span class="sourceLineNo">156</span><a name="line.156"></a>
-<span class="sourceLineNo">157</span>  public &lt;_B&gt; Affiliation.Builder&lt;_B&gt; newCopyBuilder(final _B _parentBuilder) {<a name="line.157"></a>
-<span class="sourceLineNo">158</span>    return new Affiliation.Builder&lt;_B&gt;(_parentBuilder, this, true);<a name="line.158"></a>
-<span class="sourceLineNo">159</span>  }<a name="line.159"></a>
-<span class="sourceLineNo">160</span><a name="line.160"></a>
-<span class="sourceLineNo">161</span>  public Affiliation.Builder&lt;Void&gt; newCopyBuilder() {<a name="line.161"></a>
-<span class="sourceLineNo">162</span>    return newCopyBuilder(null);<a name="line.162"></a>
-<span class="sourceLineNo">163</span>  }<a name="line.163"></a>
-<span class="sourceLineNo">164</span><a name="line.164"></a>
-<span class="sourceLineNo">165</span>  public static Affiliation.Builder&lt;Void&gt; builder() {<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    return new Affiliation.Builder&lt;Void&gt;(null, null, false);<a name="line.166"></a>
-<span class="sourceLineNo">167</span>  }<a name="line.167"></a>
-<span class="sourceLineNo">168</span><a name="line.168"></a>
-<span class="sourceLineNo">169</span>  public static &lt;_B&gt; Affiliation.Builder&lt;_B&gt; copyOf(final Affiliation _other) {<a name="line.169"></a>
-<span class="sourceLineNo">170</span>    final Affiliation.Builder&lt;_B&gt; _newBuilder = new Affiliation.Builder&lt;_B&gt;(null, null, false);<a name="line.170"></a>
-<span class="sourceLineNo">171</span>    _other.copyTo(_newBuilder);<a name="line.171"></a>
-<span class="sourceLineNo">172</span>    return _newBuilder;<a name="line.172"></a>
-<span class="sourceLineNo">173</span>  }<a name="line.173"></a>
-<span class="sourceLineNo">174</span><a name="line.174"></a>
-<span class="sourceLineNo">175</span>  /**<a name="line.175"></a>
-<span class="sourceLineNo">176</span>   * Copies all state of this object to a builder. This method is used by the {@link #copyOf} method<a name="line.176"></a>
-<span class="sourceLineNo">177</span>   * and should not be called directly by client code.<a name="line.177"></a>
-<span class="sourceLineNo">178</span>   *<a name="line.178"></a>
-<span class="sourceLineNo">179</span>   * @param _other A builder instance to which the state of this object will be copied.<a name="line.179"></a>
-<span class="sourceLineNo">180</span>   */<a name="line.180"></a>
-<span class="sourceLineNo">181</span>  public &lt;_B&gt; void copyTo(<a name="line.181"></a>
-<span class="sourceLineNo">182</span>      final Affiliation.Builder&lt;_B&gt; _other,<a name="line.182"></a>
-<span class="sourceLineNo">183</span>      final PropertyTree _propertyTree,<a name="line.183"></a>
-<span class="sourceLineNo">184</span>      final PropertyTreeUse _propertyTreeUse) {<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    final PropertyTree valuePropertyTree =<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        ((_propertyTree == null) ? null : _propertyTree.get("value"));<a name="line.186"></a>
-<span class="sourceLineNo">187</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        ? (valuePropertyTree != null)<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        : ((valuePropertyTree == null) || (!valuePropertyTree.isLeaf())))) {<a name="line.189"></a>
-<span class="sourceLineNo">190</span>      _other.value = this.value;<a name="line.190"></a>
-<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
-<span class="sourceLineNo">192</span>    final PropertyTree affiliationIdentifierPropertyTree =<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifier"));<a name="line.193"></a>
-<span class="sourceLineNo">194</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        ? (affiliationIdentifierPropertyTree != null)<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        : ((affiliationIdentifierPropertyTree == null)<a name="line.196"></a>
-<span class="sourceLineNo">197</span>            || (!affiliationIdentifierPropertyTree.isLeaf())))) {<a name="line.197"></a>
-<span class="sourceLineNo">198</span>      _other.affiliationIdentifier = this.affiliationIdentifier;<a name="line.198"></a>
-<span class="sourceLineNo">199</span>    }<a name="line.199"></a>
-<span class="sourceLineNo">200</span>    final PropertyTree affiliationIdentifierSchemePropertyTree =<a name="line.200"></a>
-<span class="sourceLineNo">201</span>        ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifierScheme"));<a name="line.201"></a>
-<span class="sourceLineNo">202</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        ? (affiliationIdentifierSchemePropertyTree != null)<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        : ((affiliationIdentifierSchemePropertyTree == null)<a name="line.204"></a>
-<span class="sourceLineNo">205</span>            || (!affiliationIdentifierSchemePropertyTree.isLeaf())))) {<a name="line.205"></a>
-<span class="sourceLineNo">206</span>      _other.affiliationIdentifierScheme = this.affiliationIdentifierScheme;<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
-<span class="sourceLineNo">208</span>    final PropertyTree schemeURIPropertyTree =<a name="line.208"></a>
-<span class="sourceLineNo">209</span>        ((_propertyTree == null) ? null : _propertyTree.get("schemeURI"));<a name="line.209"></a>
-<span class="sourceLineNo">210</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.210"></a>
-<span class="sourceLineNo">211</span>        ? (schemeURIPropertyTree != null)<a name="line.211"></a>
-<span class="sourceLineNo">212</span>        : ((schemeURIPropertyTree == null) || (!schemeURIPropertyTree.isLeaf())))) {<a name="line.212"></a>
-<span class="sourceLineNo">213</span>      _other.schemeURI = this.schemeURI;<a name="line.213"></a>
-<span class="sourceLineNo">214</span>    }<a name="line.214"></a>
-<span class="sourceLineNo">215</span>  }<a name="line.215"></a>
-<span class="sourceLineNo">216</span><a name="line.216"></a>
-<span class="sourceLineNo">217</span>  public &lt;_B&gt; Affiliation.Builder&lt;_B&gt; newCopyBuilder(<a name="line.217"></a>
-<span class="sourceLineNo">218</span>      final _B _parentBuilder,<a name="line.218"></a>
-<span class="sourceLineNo">219</span>      final PropertyTree _propertyTree,<a name="line.219"></a>
-<span class="sourceLineNo">220</span>      final PropertyTreeUse _propertyTreeUse) {<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    return new Affiliation.Builder&lt;_B&gt;(_parentBuilder, this, true, _propertyTree, _propertyTreeUse);<a name="line.221"></a>
-<span class="sourceLineNo">222</span>  }<a name="line.222"></a>
-<span class="sourceLineNo">223</span><a name="line.223"></a>
-<span class="sourceLineNo">224</span>  public Affiliation.Builder&lt;Void&gt; newCopyBuilder(<a name="line.224"></a>
-<span class="sourceLineNo">225</span>      final PropertyTree _propertyTree, final PropertyTreeUse _propertyTreeUse) {<a name="line.225"></a>
-<span class="sourceLineNo">226</span>    return newCopyBuilder(null, _propertyTree, _propertyTreeUse);<a name="line.226"></a>
-<span class="sourceLineNo">227</span>  }<a name="line.227"></a>
-<span class="sourceLineNo">228</span><a name="line.228"></a>
-<span class="sourceLineNo">229</span>  public static &lt;_B&gt; Affiliation.Builder&lt;_B&gt; copyOf(<a name="line.229"></a>
-<span class="sourceLineNo">230</span>      final Affiliation _other,<a name="line.230"></a>
-<span class="sourceLineNo">231</span>      final PropertyTree _propertyTree,<a name="line.231"></a>
-<span class="sourceLineNo">232</span>      final PropertyTreeUse _propertyTreeUse) {<a name="line.232"></a>
-<span class="sourceLineNo">233</span>    final Affiliation.Builder&lt;_B&gt; _newBuilder = new Affiliation.Builder&lt;_B&gt;(null, null, false);<a name="line.233"></a>
-<span class="sourceLineNo">234</span>    _other.copyTo(_newBuilder, _propertyTree, _propertyTreeUse);<a name="line.234"></a>
-<span class="sourceLineNo">235</span>    return _newBuilder;<a name="line.235"></a>
-<span class="sourceLineNo">236</span>  }<a name="line.236"></a>
-<span class="sourceLineNo">237</span><a name="line.237"></a>
-<span class="sourceLineNo">238</span>  public static Affiliation.Builder&lt;Void&gt; copyExcept(<a name="line.238"></a>
-<span class="sourceLineNo">239</span>      final Affiliation _other, final PropertyTree _propertyTree) {<a name="line.239"></a>
-<span class="sourceLineNo">240</span>    return copyOf(_other, _propertyTree, PropertyTreeUse.EXCLUDE);<a name="line.240"></a>
-<span class="sourceLineNo">241</span>  }<a name="line.241"></a>
-<span class="sourceLineNo">242</span><a name="line.242"></a>
-<span class="sourceLineNo">243</span>  public static Affiliation.Builder&lt;Void&gt; copyOnly(<a name="line.243"></a>
-<span class="sourceLineNo">244</span>      final Affiliation _other, final PropertyTree _propertyTree) {<a name="line.244"></a>
-<span class="sourceLineNo">245</span>    return copyOf(_other, _propertyTree, PropertyTreeUse.INCLUDE);<a name="line.245"></a>
-<span class="sourceLineNo">246</span>  }<a name="line.246"></a>
-<span class="sourceLineNo">247</span><a name="line.247"></a>
-<span class="sourceLineNo">248</span>  @Override<a name="line.248"></a>
-<span class="sourceLineNo">249</span>  public String toString() {<a name="line.249"></a>
-<span class="sourceLineNo">250</span>    return Objects.toStringHelper(this)<a name="line.250"></a>
-<span class="sourceLineNo">251</span>        .add("value", value)<a name="line.251"></a>
-<span class="sourceLineNo">252</span>        .add("affiliationIdentifier", affiliationIdentifier)<a name="line.252"></a>
-<span class="sourceLineNo">253</span>        .add("affiliationIdentifierScheme", affiliationIdentifierScheme)<a name="line.253"></a>
-<span class="sourceLineNo">254</span>        .add("schemeURI", schemeURI)<a name="line.254"></a>
-<span class="sourceLineNo">255</span>        .toString();<a name="line.255"></a>
-<span class="sourceLineNo">256</span>  }<a name="line.256"></a>
-<span class="sourceLineNo">257</span><a name="line.257"></a>
-<span class="sourceLineNo">258</span>  @Override<a name="line.258"></a>
-<span class="sourceLineNo">259</span>  public int hashCode() {<a name="line.259"></a>
-<span class="sourceLineNo">260</span>    return Objects.hashCode(value, affiliationIdentifier, affiliationIdentifierScheme, schemeURI);<a name="line.260"></a>
-<span class="sourceLineNo">261</span>  }<a name="line.261"></a>
-<span class="sourceLineNo">262</span><a name="line.262"></a>
-<span class="sourceLineNo">263</span>  @Override<a name="line.263"></a>
-<span class="sourceLineNo">264</span>  public boolean equals(Object other) {<a name="line.264"></a>
-<span class="sourceLineNo">265</span>    if (this == other) {<a name="line.265"></a>
-<span class="sourceLineNo">266</span>      return true;<a name="line.266"></a>
-<span class="sourceLineNo">267</span>    }<a name="line.267"></a>
-<span class="sourceLineNo">268</span>    if (other == null) {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>      return false;<a name="line.269"></a>
-<span class="sourceLineNo">270</span>    }<a name="line.270"></a>
-<span class="sourceLineNo">271</span>    if (getClass() != other.getClass()) {<a name="line.271"></a>
-<span class="sourceLineNo">272</span>      return false;<a name="line.272"></a>
-<span class="sourceLineNo">273</span>    }<a name="line.273"></a>
-<span class="sourceLineNo">274</span>    final Affiliation o = ((Affiliation) other);<a name="line.274"></a>
-<span class="sourceLineNo">275</span>    return (((Objects.equal(value, o.value)<a name="line.275"></a>
-<span class="sourceLineNo">276</span>                &amp;&amp; Objects.equal(affiliationIdentifier, o.affiliationIdentifier))<a name="line.276"></a>
-<span class="sourceLineNo">277</span>            &amp;&amp; Objects.equal(affiliationIdentifierScheme, o.affiliationIdentifierScheme))<a name="line.277"></a>
-<span class="sourceLineNo">278</span>        &amp;&amp; Objects.equal(schemeURI, o.schemeURI));<a name="line.278"></a>
-<span class="sourceLineNo">279</span>  }<a name="line.279"></a>
-<span class="sourceLineNo">280</span><a name="line.280"></a>
-<span class="sourceLineNo">281</span>  public static class Builder&lt;_B&gt; implements Buildable {<a name="line.281"></a>
-<span class="sourceLineNo">282</span><a name="line.282"></a>
-<span class="sourceLineNo">283</span>    protected final _B _parentBuilder;<a name="line.283"></a>
-<span class="sourceLineNo">284</span>    protected final Affiliation _storedValue;<a name="line.284"></a>
-<span class="sourceLineNo">285</span>    private String value;<a name="line.285"></a>
-<span class="sourceLineNo">286</span>    private String affiliationIdentifier;<a name="line.286"></a>
-<span class="sourceLineNo">287</span>    private String affiliationIdentifierScheme;<a name="line.287"></a>
-<span class="sourceLineNo">288</span>    private String schemeURI;<a name="line.288"></a>
-<span class="sourceLineNo">289</span><a name="line.289"></a>
-<span class="sourceLineNo">290</span>    public Builder(final _B _parentBuilder, final Affiliation _other, final boolean _copy) {<a name="line.290"></a>
-<span class="sourceLineNo">291</span>      this._parentBuilder = _parentBuilder;<a name="line.291"></a>
-<span class="sourceLineNo">292</span>      if (_other != null) {<a name="line.292"></a>
-<span class="sourceLineNo">293</span>        if (_copy) {<a name="line.293"></a>
-<span class="sourceLineNo">294</span>          _storedValue = null;<a name="line.294"></a>
-<span class="sourceLineNo">295</span>          this.value = _other.value;<a name="line.295"></a>
-<span class="sourceLineNo">296</span>          this.affiliationIdentifier = _other.affiliationIdentifier;<a name="line.296"></a>
-<span class="sourceLineNo">297</span>          this.affiliationIdentifierScheme = _other.affiliationIdentifierScheme;<a name="line.297"></a>
-<span class="sourceLineNo">298</span>          this.schemeURI = _other.schemeURI;<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        } else {<a name="line.299"></a>
-<span class="sourceLineNo">300</span>          _storedValue = _other;<a name="line.300"></a>
-<span class="sourceLineNo">301</span>        }<a name="line.301"></a>
-<span class="sourceLineNo">302</span>      } else {<a name="line.302"></a>
-<span class="sourceLineNo">303</span>        _storedValue = null;<a name="line.303"></a>
-<span class="sourceLineNo">304</span>      }<a name="line.304"></a>
-<span class="sourceLineNo">305</span>    }<a name="line.305"></a>
-<span class="sourceLineNo">306</span><a name="line.306"></a>
-<span class="sourceLineNo">307</span>    public Builder(<a name="line.307"></a>
-<span class="sourceLineNo">308</span>        final _B _parentBuilder,<a name="line.308"></a>
-<span class="sourceLineNo">309</span>        final Affiliation _other,<a name="line.309"></a>
-<span class="sourceLineNo">310</span>        final boolean _copy,<a name="line.310"></a>
-<span class="sourceLineNo">311</span>        final PropertyTree _propertyTree,<a name="line.311"></a>
-<span class="sourceLineNo">312</span>        final PropertyTreeUse _propertyTreeUse) {<a name="line.312"></a>
-<span class="sourceLineNo">313</span>      this._parentBuilder = _parentBuilder;<a name="line.313"></a>
-<span class="sourceLineNo">314</span>      if (_other != null) {<a name="line.314"></a>
-<span class="sourceLineNo">315</span>        if (_copy) {<a name="line.315"></a>
-<span class="sourceLineNo">316</span>          _storedValue = null;<a name="line.316"></a>
-<span class="sourceLineNo">317</span>          final PropertyTree valuePropertyTree =<a name="line.317"></a>
-<span class="sourceLineNo">318</span>              ((_propertyTree == null) ? null : _propertyTree.get("value"));<a name="line.318"></a>
-<span class="sourceLineNo">319</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.319"></a>
-<span class="sourceLineNo">320</span>              ? (valuePropertyTree != null)<a name="line.320"></a>
-<span class="sourceLineNo">321</span>              : ((valuePropertyTree == null) || (!valuePropertyTree.isLeaf())))) {<a name="line.321"></a>
-<span class="sourceLineNo">322</span>            this.value = _other.value;<a name="line.322"></a>
-<span class="sourceLineNo">323</span>          }<a name="line.323"></a>
-<span class="sourceLineNo">324</span>          final PropertyTree affiliationIdentifierPropertyTree =<a name="line.324"></a>
-<span class="sourceLineNo">325</span>              ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifier"));<a name="line.325"></a>
-<span class="sourceLineNo">326</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.326"></a>
-<span class="sourceLineNo">327</span>              ? (affiliationIdentifierPropertyTree != null)<a name="line.327"></a>
-<span class="sourceLineNo">328</span>              : ((affiliationIdentifierPropertyTree == null)<a name="line.328"></a>
-<span class="sourceLineNo">329</span>                  || (!affiliationIdentifierPropertyTree.isLeaf())))) {<a name="line.329"></a>
-<span class="sourceLineNo">330</span>            this.affiliationIdentifier = _other.affiliationIdentifier;<a name="line.330"></a>
-<span class="sourceLineNo">331</span>          }<a name="line.331"></a>
-<span class="sourceLineNo">332</span>          final PropertyTree affiliationIdentifierSchemePropertyTree =<a name="line.332"></a>
-<span class="sourceLineNo">333</span>              ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifierScheme"));<a name="line.333"></a>
-<span class="sourceLineNo">334</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.334"></a>
-<span class="sourceLineNo">335</span>              ? (affiliationIdentifierSchemePropertyTree != null)<a name="line.335"></a>
-<span class="sourceLineNo">336</span>              : ((affiliationIdentifierSchemePropertyTree == null)<a name="line.336"></a>
-<span class="sourceLineNo">337</span>                  || (!affiliationIdentifierSchemePropertyTree.isLeaf())))) {<a name="line.337"></a>
-<span class="sourceLineNo">338</span>            this.affiliationIdentifierScheme = _other.affiliationIdentifierScheme;<a name="line.338"></a>
-<span class="sourceLineNo">339</span>          }<a name="line.339"></a>
-<span class="sourceLineNo">340</span>          final PropertyTree schemeURIPropertyTree =<a name="line.340"></a>
-<span class="sourceLineNo">341</span>              ((_propertyTree == null) ? null : _propertyTree.get("schemeURI"));<a name="line.341"></a>
-<span class="sourceLineNo">342</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.342"></a>
-<span class="sourceLineNo">343</span>              ? (schemeURIPropertyTree != null)<a name="line.343"></a>
-<span class="sourceLineNo">344</span>              : ((schemeURIPropertyTree == null) || (!schemeURIPropertyTree.isLeaf())))) {<a name="line.344"></a>
-<span class="sourceLineNo">345</span>            this.schemeURI = _other.schemeURI;<a name="line.345"></a>
-<span class="sourceLineNo">346</span>          }<a name="line.346"></a>
-<span class="sourceLineNo">347</span>        } else {<a name="line.347"></a>
-<span class="sourceLineNo">348</span>          _storedValue = _other;<a name="line.348"></a>
-<span class="sourceLineNo">349</span>        }<a name="line.349"></a>
-<span class="sourceLineNo">350</span>      } else {<a name="line.350"></a>
-<span class="sourceLineNo">351</span>        _storedValue = null;<a name="line.351"></a>
-<span class="sourceLineNo">352</span>      }<a name="line.352"></a>
+<span class="sourceLineNo">020</span>import java.util.Objects;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import java.util.StringJoiner;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>import javax.xml.bind.annotation.XmlAccessType;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import javax.xml.bind.annotation.XmlAccessorType;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import javax.xml.bind.annotation.XmlAttribute;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import javax.xml.bind.annotation.XmlSchemaType;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import javax.xml.bind.annotation.XmlType;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import javax.xml.bind.annotation.XmlValue;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import com.kscs.util.jaxb.Buildable;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import com.kscs.util.jaxb.PropertyTree;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import com.kscs.util.jaxb.PropertyTreeUse;<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>/**<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * Uniquely identifies an affiliation, according to various identifier schemes.<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * &lt;p&gt;Java class for affiliation complex type.<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;pre&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &amp;lt;complexType name="affiliation"&amp;gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *   &amp;lt;simpleContent&amp;gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *     &amp;lt;extension base="&amp;lt;http://datacite.org/schema/kernel-4&amp;gt;nonemptycontentStringType"&amp;gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *       &amp;lt;attribute name="affiliationIdentifier" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&amp;gt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *       &amp;lt;attribute name="affiliationIdentifierScheme" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&amp;gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *       &amp;lt;attribute name="schemeURI" type="{http://www.w3.org/2001/XMLSchema}anyURI" /&amp;gt;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *     &amp;lt;/extension&amp;gt;<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *   &amp;lt;/simpleContent&amp;gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &amp;lt;/complexType&amp;gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * &lt;/pre&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> */<a name="line.52"></a>
+<span class="sourceLineNo">053</span>@XmlAccessorType(XmlAccessType.FIELD)<a name="line.53"></a>
+<span class="sourceLineNo">054</span>@XmlType(<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    name = "affiliation",<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    propOrder = {"value"})<a name="line.56"></a>
+<span class="sourceLineNo">057</span>public class Affiliation {<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>  @XmlValue protected String value;<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>  @XmlAttribute(name = "affiliationIdentifier")<a name="line.61"></a>
+<span class="sourceLineNo">062</span>  @XmlSchemaType(name = "anySimpleType")<a name="line.62"></a>
+<span class="sourceLineNo">063</span>  protected String affiliationIdentifier;<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>  @XmlAttribute(name = "affiliationIdentifierScheme")<a name="line.65"></a>
+<span class="sourceLineNo">066</span>  @XmlSchemaType(name = "anySimpleType")<a name="line.66"></a>
+<span class="sourceLineNo">067</span>  protected String affiliationIdentifierScheme;<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>  @XmlAttribute(name = "schemeURI")<a name="line.69"></a>
+<span class="sourceLineNo">070</span>  @XmlSchemaType(name = "anyURI")<a name="line.70"></a>
+<span class="sourceLineNo">071</span>  protected String schemeURI;<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>  /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   * Gets the value of the value property.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   *<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   * @return possible object is {@link String }<a name="line.76"></a>
+<span class="sourceLineNo">077</span>   */<a name="line.77"></a>
+<span class="sourceLineNo">078</span>  public String getValue() {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    return value;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>  }<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>  /**<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   * Sets the value of the value property.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   *<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * @param value allowed object is {@link String }<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>  public void setValue(String value) {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    this.value = value;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>  }<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>  /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   * Gets the value of the affiliationIdentifier property.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   *<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   * @return possible object is {@link String }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   */<a name="line.95"></a>
+<span class="sourceLineNo">096</span>  public String getAffiliationIdentifier() {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    return affiliationIdentifier;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>  }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>  /**<a name="line.100"></a>
+<span class="sourceLineNo">101</span>   * Sets the value of the affiliationIdentifier property.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>   *<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   * @param value allowed object is {@link String }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>   */<a name="line.104"></a>
+<span class="sourceLineNo">105</span>  public void setAffiliationIdentifier(String value) {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    this.affiliationIdentifier = value;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>  }<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>  /**<a name="line.109"></a>
+<span class="sourceLineNo">110</span>   * Gets the value of the affiliationIdentifierScheme property.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>   *<a name="line.111"></a>
+<span class="sourceLineNo">112</span>   * @return possible object is {@link String }<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   */<a name="line.113"></a>
+<span class="sourceLineNo">114</span>  public String getAffiliationIdentifierScheme() {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    return affiliationIdentifierScheme;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>  }<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>  /**<a name="line.118"></a>
+<span class="sourceLineNo">119</span>   * Sets the value of the affiliationIdentifierScheme property.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>   *<a name="line.120"></a>
+<span class="sourceLineNo">121</span>   * @param value allowed object is {@link String }<a name="line.121"></a>
+<span class="sourceLineNo">122</span>   */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>  public void setAffiliationIdentifierScheme(String value) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    this.affiliationIdentifierScheme = value;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>  }<a name="line.125"></a>
+<span class="sourceLineNo">126</span><a name="line.126"></a>
+<span class="sourceLineNo">127</span>  /**<a name="line.127"></a>
+<span class="sourceLineNo">128</span>   * Gets the value of the schemeURI property.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>   *<a name="line.129"></a>
+<span class="sourceLineNo">130</span>   * @return possible object is {@link String }<a name="line.130"></a>
+<span class="sourceLineNo">131</span>   */<a name="line.131"></a>
+<span class="sourceLineNo">132</span>  public String getSchemeURI() {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    return schemeURI;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>  }<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>  /**<a name="line.136"></a>
+<span class="sourceLineNo">137</span>   * Sets the value of the schemeURI property.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>   *<a name="line.138"></a>
+<span class="sourceLineNo">139</span>   * @param value allowed object is {@link String }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>   */<a name="line.140"></a>
+<span class="sourceLineNo">141</span>  public void setSchemeURI(String value) {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    this.schemeURI = value;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>  }<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>  /**<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   * Copies all state of this object to a builder. This method is used by the {@link #copyOf} method<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   * and should not be called directly by client code.<a name="line.147"></a>
+<span class="sourceLineNo">148</span>   *<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   * @param _other A builder instance to which the state of this object will be copied.<a name="line.149"></a>
+<span class="sourceLineNo">150</span>   */<a name="line.150"></a>
+<span class="sourceLineNo">151</span>  public &lt;_B&gt; void copyTo(final Affiliation.Builder&lt;_B&gt; _other) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    _other.value = this.value;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    _other.affiliationIdentifier = this.affiliationIdentifier;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    _other.affiliationIdentifierScheme = this.affiliationIdentifierScheme;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    _other.schemeURI = this.schemeURI;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>  }<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>  public &lt;_B&gt; Affiliation.Builder&lt;_B&gt; newCopyBuilder(final _B _parentBuilder) {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    return new Affiliation.Builder&lt;_B&gt;(_parentBuilder, this, true);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>  }<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>  public Affiliation.Builder&lt;Void&gt; newCopyBuilder() {<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    return newCopyBuilder(null);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>  }<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>  public static Affiliation.Builder&lt;Void&gt; builder() {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    return new Affiliation.Builder&lt;Void&gt;(null, null, false);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>  }<a name="line.168"></a>
+<span class="sourceLineNo">169</span><a name="line.169"></a>
+<span class="sourceLineNo">170</span>  public static &lt;_B&gt; Affiliation.Builder&lt;_B&gt; copyOf(final Affiliation _other) {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    final Affiliation.Builder&lt;_B&gt; _newBuilder = new Affiliation.Builder&lt;_B&gt;(null, null, false);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    _other.copyTo(_newBuilder);<a name="line.172"></a>
+<span class="sourceLineNo">173</span>    return _newBuilder;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>  }<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>  /**<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   * Copies all state of this object to a builder. This method is used by the {@link #copyOf} method<a name="line.177"></a>
+<span class="sourceLineNo">178</span>   * and should not be called directly by client code.<a name="line.178"></a>
+<span class="sourceLineNo">179</span>   *<a name="line.179"></a>
+<span class="sourceLineNo">180</span>   * @param _other A builder instance to which the state of this object will be copied.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>   */<a name="line.181"></a>
+<span class="sourceLineNo">182</span>  public &lt;_B&gt; void copyTo(<a name="line.182"></a>
+<span class="sourceLineNo">183</span>      final Affiliation.Builder&lt;_B&gt; _other,<a name="line.183"></a>
+<span class="sourceLineNo">184</span>      final PropertyTree _propertyTree,<a name="line.184"></a>
+<span class="sourceLineNo">185</span>      final PropertyTreeUse _propertyTreeUse) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    final PropertyTree valuePropertyTree =<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        ((_propertyTree == null) ? null : _propertyTree.get("value"));<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        ? (valuePropertyTree != null)<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        : ((valuePropertyTree == null) || (!valuePropertyTree.isLeaf())))) {<a name="line.190"></a>
+<span class="sourceLineNo">191</span>      _other.value = this.value;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    }<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    final PropertyTree affiliationIdentifierPropertyTree =<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifier"));<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        ? (affiliationIdentifierPropertyTree != null)<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        : ((affiliationIdentifierPropertyTree == null)<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            || (!affiliationIdentifierPropertyTree.isLeaf())))) {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>      _other.affiliationIdentifier = this.affiliationIdentifier;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    final PropertyTree affiliationIdentifierSchemePropertyTree =<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifierScheme"));<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        ? (affiliationIdentifierSchemePropertyTree != null)<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        : ((affiliationIdentifierSchemePropertyTree == null)<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            || (!affiliationIdentifierSchemePropertyTree.isLeaf())))) {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>      _other.affiliationIdentifierScheme = this.affiliationIdentifierScheme;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    }<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    final PropertyTree schemeURIPropertyTree =<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        ((_propertyTree == null) ? null : _propertyTree.get("schemeURI"));<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        ? (schemeURIPropertyTree != null)<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        : ((schemeURIPropertyTree == null) || (!schemeURIPropertyTree.isLeaf())))) {<a name="line.213"></a>
+<span class="sourceLineNo">214</span>      _other.schemeURI = this.schemeURI;<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    }<a name="line.215"></a>
+<span class="sourceLineNo">216</span>  }<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>  public &lt;_B&gt; Affiliation.Builder&lt;_B&gt; newCopyBuilder(<a name="line.218"></a>
+<span class="sourceLineNo">219</span>      final _B _parentBuilder,<a name="line.219"></a>
+<span class="sourceLineNo">220</span>      final PropertyTree _propertyTree,<a name="line.220"></a>
+<span class="sourceLineNo">221</span>      final PropertyTreeUse _propertyTreeUse) {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    return new Affiliation.Builder&lt;_B&gt;(_parentBuilder, this, true, _propertyTree, _propertyTreeUse);<a name="line.222"></a>
+<span class="sourceLineNo">223</span>  }<a name="line.223"></a>
+<span class="sourceLineNo">224</span><a name="line.224"></a>
+<span class="sourceLineNo">225</span>  public Affiliation.Builder&lt;Void&gt; newCopyBuilder(<a name="line.225"></a>
+<span class="sourceLineNo">226</span>      final PropertyTree _propertyTree, final PropertyTreeUse _propertyTreeUse) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    return newCopyBuilder(null, _propertyTree, _propertyTreeUse);<a name="line.227"></a>
+<span class="sourceLineNo">228</span>  }<a name="line.228"></a>
+<span class="sourceLineNo">229</span><a name="line.229"></a>
+<span class="sourceLineNo">230</span>  public static &lt;_B&gt; Affiliation.Builder&lt;_B&gt; copyOf(<a name="line.230"></a>
+<span class="sourceLineNo">231</span>      final Affiliation _other,<a name="line.231"></a>
+<span class="sourceLineNo">232</span>      final PropertyTree _propertyTree,<a name="line.232"></a>
+<span class="sourceLineNo">233</span>      final PropertyTreeUse _propertyTreeUse) {<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    final Affiliation.Builder&lt;_B&gt; _newBuilder = new Affiliation.Builder&lt;_B&gt;(null, null, false);<a name="line.234"></a>
+<span class="sourceLineNo">235</span>    _other.copyTo(_newBuilder, _propertyTree, _propertyTreeUse);<a name="line.235"></a>
+<span class="sourceLineNo">236</span>    return _newBuilder;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>  }<a name="line.237"></a>
+<span class="sourceLineNo">238</span><a name="line.238"></a>
+<span class="sourceLineNo">239</span>  public static Affiliation.Builder&lt;Void&gt; copyExcept(<a name="line.239"></a>
+<span class="sourceLineNo">240</span>      final Affiliation _other, final PropertyTree _propertyTree) {<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    return copyOf(_other, _propertyTree, PropertyTreeUse.EXCLUDE);<a name="line.241"></a>
+<span class="sourceLineNo">242</span>  }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>  public static Affiliation.Builder&lt;Void&gt; copyOnly(<a name="line.244"></a>
+<span class="sourceLineNo">245</span>      final Affiliation _other, final PropertyTree _propertyTree) {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    return copyOf(_other, _propertyTree, PropertyTreeUse.INCLUDE);<a name="line.246"></a>
+<span class="sourceLineNo">247</span>  }<a name="line.247"></a>
+<span class="sourceLineNo">248</span><a name="line.248"></a>
+<span class="sourceLineNo">249</span>  @Override<a name="line.249"></a>
+<span class="sourceLineNo">250</span>  public String toString() {<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    return new StringJoiner(", ", Affiliation.class.getSimpleName() + "[", "]")<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        .add("value='" + value + "'")<a name="line.252"></a>
+<span class="sourceLineNo">253</span>        .add("affiliationIdentifier='" + affiliationIdentifier + "'")<a name="line.253"></a>
+<span class="sourceLineNo">254</span>        .add("affiliationIdentifierScheme='" + affiliationIdentifierScheme + "'")<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        .add("schemeURI='" + schemeURI + "'")<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        .toString();<a name="line.256"></a>
+<span class="sourceLineNo">257</span>  }<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>  @Override<a name="line.259"></a>
+<span class="sourceLineNo">260</span>  public boolean equals(Object o) {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    if (this == o) return true;<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    if (o == null || getClass() != o.getClass()) return false;<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    Affiliation that = (Affiliation) o;<a name="line.264"></a>
+<span class="sourceLineNo">265</span><a name="line.265"></a>
+<span class="sourceLineNo">266</span>    return Objects.equals(value, that.value)<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        &amp;&amp; Objects.equals(affiliationIdentifier, that.affiliationIdentifier)<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        &amp;&amp; Objects.equals(affiliationIdentifierScheme, that.affiliationIdentifierScheme)<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        &amp;&amp; Objects.equals(schemeURI, that.schemeURI);<a name="line.269"></a>
+<span class="sourceLineNo">270</span>  }<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span>  @Override<a name="line.272"></a>
+<span class="sourceLineNo">273</span>  public int hashCode() {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>    return Objects.hash(value, affiliationIdentifier, affiliationIdentifierScheme, schemeURI);<a name="line.274"></a>
+<span class="sourceLineNo">275</span>  }<a name="line.275"></a>
+<span class="sourceLineNo">276</span><a name="line.276"></a>
+<span class="sourceLineNo">277</span>  public static class Builder&lt;_B&gt; implements Buildable {<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>    protected final _B _parentBuilder;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    protected final Affiliation _storedValue;<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    private String value;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    private String affiliationIdentifier;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    private String affiliationIdentifierScheme;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    private String schemeURI;<a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>    public Builder(final _B _parentBuilder, final Affiliation _other, final boolean _copy) {<a name="line.286"></a>
+<span class="sourceLineNo">287</span>      this._parentBuilder = _parentBuilder;<a name="line.287"></a>
+<span class="sourceLineNo">288</span>      if (_other != null) {<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        if (_copy) {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>          _storedValue = null;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>          this.value = _other.value;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>          this.affiliationIdentifier = _other.affiliationIdentifier;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>          this.affiliationIdentifierScheme = _other.affiliationIdentifierScheme;<a name="line.293"></a>
+<span class="sourceLineNo">294</span>          this.schemeURI = _other.schemeURI;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        } else {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>          _storedValue = _other;<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        }<a name="line.297"></a>
+<span class="sourceLineNo">298</span>      } else {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        _storedValue = null;<a name="line.299"></a>
+<span class="sourceLineNo">300</span>      }<a name="line.300"></a>
+<span class="sourceLineNo">301</span>    }<a name="line.301"></a>
+<span class="sourceLineNo">302</span><a name="line.302"></a>
+<span class="sourceLineNo">303</span>    public Builder(<a name="line.303"></a>
+<span class="sourceLineNo">304</span>        final _B _parentBuilder,<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        final Affiliation _other,<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        final boolean _copy,<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        final PropertyTree _propertyTree,<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        final PropertyTreeUse _propertyTreeUse) {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>      this._parentBuilder = _parentBuilder;<a name="line.309"></a>
+<span class="sourceLineNo">310</span>      if (_other != null) {<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        if (_copy) {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>          _storedValue = null;<a name="line.312"></a>
+<span class="sourceLineNo">313</span>          final PropertyTree valuePropertyTree =<a name="line.313"></a>
+<span class="sourceLineNo">314</span>              ((_propertyTree == null) ? null : _propertyTree.get("value"));<a name="line.314"></a>
+<span class="sourceLineNo">315</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.315"></a>
+<span class="sourceLineNo">316</span>              ? (valuePropertyTree != null)<a name="line.316"></a>
+<span class="sourceLineNo">317</span>              : ((valuePropertyTree == null) || (!valuePropertyTree.isLeaf())))) {<a name="line.317"></a>
+<span class="sourceLineNo">318</span>            this.value = _other.value;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>          }<a name="line.319"></a>
+<span class="sourceLineNo">320</span>          final PropertyTree affiliationIdentifierPropertyTree =<a name="line.320"></a>
+<span class="sourceLineNo">321</span>              ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifier"));<a name="line.321"></a>
+<span class="sourceLineNo">322</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.322"></a>
+<span class="sourceLineNo">323</span>              ? (affiliationIdentifierPropertyTree != null)<a name="line.323"></a>
+<span class="sourceLineNo">324</span>              : ((affiliationIdentifierPropertyTree == null)<a name="line.324"></a>
+<span class="sourceLineNo">325</span>                  || (!affiliationIdentifierPropertyTree.isLeaf())))) {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            this.affiliationIdentifier = _other.affiliationIdentifier;<a name="line.326"></a>
+<span class="sourceLineNo">327</span>          }<a name="line.327"></a>
+<span class="sourceLineNo">328</span>          final PropertyTree affiliationIdentifierSchemePropertyTree =<a name="line.328"></a>
+<span class="sourceLineNo">329</span>              ((_propertyTree == null) ? null : _propertyTree.get("affiliationIdentifierScheme"));<a name="line.329"></a>
+<span class="sourceLineNo">330</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.330"></a>
+<span class="sourceLineNo">331</span>              ? (affiliationIdentifierSchemePropertyTree != null)<a name="line.331"></a>
+<span class="sourceLineNo">332</span>              : ((affiliationIdentifierSchemePropertyTree == null)<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                  || (!affiliationIdentifierSchemePropertyTree.isLeaf())))) {<a name="line.333"></a>
+<span class="sourceLineNo">334</span>            this.affiliationIdentifierScheme = _other.affiliationIdentifierScheme;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>          }<a name="line.335"></a>
+<span class="sourceLineNo">336</span>          final PropertyTree schemeURIPropertyTree =<a name="line.336"></a>
+<span class="sourceLineNo">337</span>              ((_propertyTree == null) ? null : _propertyTree.get("schemeURI"));<a name="line.337"></a>
+<span class="sourceLineNo">338</span>          if (((_propertyTreeUse == PropertyTreeUse.INCLUDE)<a name="line.338"></a>
+<span class="sourceLineNo">339</span>              ? (schemeURIPropertyTree != null)<a name="line.339"></a>
+<span class="sourceLineNo">340</span>              : ((schemeURIPropertyTree == null) || (!schemeURIPropertyTree.isLeaf())))) {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>            this.schemeURI = _other.schemeURI;<a name="line.341"></a>
+<span class="sourceLineNo">342</span>          }<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        } else {<a name="line.343"></a>
+<span class="sourceLineNo">344</span>          _storedValue = _other;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        }<a name="line.345"></a>
+<span class="sourceLineNo">346</span>      } else {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        _storedValue = null;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>      }<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    }<a name="line.349"></a>
+<span class="sourceLineNo">350</span><a name="line.350"></a>
+<span class="sourceLineNo">351</span>    public _B end() {<a name="line.351"></a>
+<span class="sourceLineNo">352</span>      return this._parentBuilder;<a name="line.352"></a>
 <span class="sourceLineNo">353</span>    }<a name="line.353"></a>
 <span class="sourceLineNo">354</span><a name="line.354"></a>
-<span class="sourceLineNo">355</span>    public _B end() {<a name="line.355"></a>
-<span class="sourceLineNo">356</span>      return this._parentBuilder;<a name="line.356"></a>
-<span class="sourceLineNo">357</span>    }<a name="line.357"></a>
-<span class="sourceLineNo">358</span><a name="line.358"></a>
-<span class="sourceLineNo">359</span>    protected &lt;_P extends Affiliation&gt; _P init(final _P _product) {<a name="line.359"></a>
-<span class="sourceLineNo">360</span>      _product.value = this.value;<a name="line.360"></a>
-<span class="sourceLineNo">361</span>      _product.affiliationIdentifier = this.affiliationIdentifier;<a name="line.361"></a>
-<span class="sourceLineNo">362</span>      _product.affiliationIdentifierScheme = this.affiliationIdentifierScheme;<a name="line.362"></a>
-<span class="sourceLineNo">363</span>      _product.schemeURI = this.schemeURI;<a name="line.363"></a>
-<span class="sourceLineNo">364</span>      return _product;<a name="line.364"></a>
-<span class="sourceLineNo">365</span>    }<a name="line.365"></a>
-<span class="sourceLineNo">366</span><a name="line.366"></a>
-<span class="sourceLineNo">367</span>    /**<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     * Sets the new value of "value" (any previous value will be replaced)<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     *<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     * @param value New value of the "value" property.<a name="line.370"></a>
-<span class="sourceLineNo">371</span>     */<a name="line.371"></a>
-<span class="sourceLineNo">372</span>    public Affiliation.Builder&lt;_B&gt; withValue(final String value) {<a name="line.372"></a>
-<span class="sourceLineNo">373</span>      this.value = value;<a name="line.373"></a>
-<span class="sourceLineNo">374</span>      return this;<a name="line.374"></a>
-<span class="sourceLineNo">375</span>    }<a name="line.375"></a>
-<span class="sourceLineNo">376</span><a name="line.376"></a>
-<span class="sourceLineNo">377</span>    /**<a name="line.377"></a>
-<span class="sourceLineNo">378</span>     * Sets the new value of "affiliationIdentifier" (any previous value will be replaced)<a name="line.378"></a>
-<span class="sourceLineNo">379</span>     *<a name="line.379"></a>
-<span class="sourceLineNo">380</span>     * @param affiliationIdentifier New value of the "affiliationIdentifier" property.<a name="line.380"></a>
-<span class="sourceLineNo">381</span>     */<a name="line.381"></a>
-<span class="sourceLineNo">382</span>    public Affiliation.Builder&lt;_B&gt; withAffiliationIdentifier(final String affiliationIdentifier) {<a name="line.382"></a>
-<span class="sourceLineNo">383</span>      this.affiliationIdentifier = affiliationIdentifier;<a name="line.383"></a>
-<span class="sourceLineNo">384</span>      return this;<a name="line.384"></a>
-<span class="sourceLineNo">385</span>    }<a name="line.385"></a>
-<span class="sourceLineNo">386</span><a name="line.386"></a>
-<span class="sourceLineNo">387</span>    /**<a name="line.387"></a>
-<span class="sourceLineNo">388</span>     * Sets the new value of "affiliationIdentifierScheme" (any previous value will be replaced)<a name="line.388"></a>
-<span class="sourceLineNo">389</span>     *<a name="line.389"></a>
-<span class="sourceLineNo">390</span>     * @param affiliationIdentifierScheme New value of the "affiliationIdentifierScheme" property.<a name="line.390"></a>
-<span class="sourceLineNo">391</span>     */<a name="line.391"></a>
-<span class="sourceLineNo">392</span>    public Affiliation.Builder&lt;_B&gt; withAffiliationIdentifierScheme(<a name="line.392"></a>
-<span class="sourceLineNo">393</span>        final String affiliationIdentifierScheme) {<a name="line.393"></a>
-<span class="sourceLineNo">394</span>      this.affiliationIdentifierScheme = affiliationIdentifierScheme;<a name="line.394"></a>
-<span class="sourceLineNo">395</span>      return this;<a name="line.395"></a>
-<span class="sourceLineNo">396</span>    }<a name="line.396"></a>
-<span class="sourceLineNo">397</span><a name="line.397"></a>
-<span class="sourceLineNo">398</span>    /**<a name="line.398"></a>
-<span class="sourceLineNo">399</span>     * Sets the new value of "schemeURI" (any previous value will be replaced)<a name="line.399"></a>
-<span class="sourceLineNo">400</span>     *<a name="line.400"></a>
-<span class="sourceLineNo">401</span>     * @param schemeURI New value of the "schemeURI" property.<a name="line.401"></a>
-<span class="sourceLineNo">402</span>     */<a name="line.402"></a>
-<span class="sourceLineNo">403</span>    public Affiliation.Builder&lt;_B&gt; withSchemeURI(final String schemeURI) {<a name="line.403"></a>
-<span class="sourceLineNo">404</span>      this.schemeURI = schemeURI;<a name="line.404"></a>
-<span class="sourceLineNo">405</span>      return this;<a name="line.405"></a>
-<span class="sourceLineNo">406</span>    }<a name="line.406"></a>
-<span class="sourceLineNo">407</span><a name="line.407"></a>
-<span class="sourceLineNo">408</span>    @Override<a name="line.408"></a>
-<span class="sourceLineNo">409</span>    public Affiliation build() {<a name="line.409"></a>
-<span class="sourceLineNo">410</span>      if (_storedValue == null) {<a name="line.410"></a>
-<span class="sourceLineNo">411</span>        return this.init(new Affiliation());<a name="line.411"></a>
-<span class="sourceLineNo">412</span>      } else {<a name="line.412"></a>
-<span class="sourceLineNo">413</span>        return ((Affiliation) _storedValue);<a name="line.413"></a>
-<span class="sourceLineNo">414</span>      }<a name="line.414"></a>
-<span class="sourceLineNo">415</span>    }<a name="line.415"></a>
-<span class="sourceLineNo">416</span><a name="line.416"></a>
-<span class="sourceLineNo">417</span>    public Affiliation.Builder&lt;_B&gt; copyOf(final Affiliation _other) {<a name="line.417"></a>
-<span class="sourceLineNo">418</span>      _other.copyTo(this);<a name="line.418"></a>
-<span class="sourceLineNo">419</span>      return this;<a name="line.419"></a>
+<span class="sourceLineNo">355</span>    protected &lt;_P extends Affiliation&gt; _P init(final _P _product) {<a name="line.355"></a>
+<span class="sourceLineNo">356</span>      _product.value = this.value;<a name="line.356"></a>
+<span class="sourceLineNo">357</span>      _product.affiliationIdentifier = this.affiliationIdentifier;<a name="line.357"></a>
+<span class="sourceLineNo">358</span>      _product.affiliationIdentifierScheme = this.affiliationIdentifierScheme;<a name="line.358"></a>
+<span class="sourceLineNo">359</span>      _product.schemeURI = this.schemeURI;<a name="line.359"></a>
+<span class="sourceLineNo">360</span>      return _product;<a name="line.360"></a>
+<span class="sourceLineNo">361</span>    }<a name="line.361"></a>
+<span class="sourceLineNo">362</span><a name="line.362"></a>
+<span class="sourceLineNo">363</span>    /**<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     * Sets the new value of "value" (any previous value will be replaced)<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     *<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     * @param value New value of the "value" property.<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     */<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    public Affiliation.Builder&lt;_B&gt; withValue(final String value) {<a name="line.368"></a>
+<span class="sourceLineNo">369</span>      this.value = value;<a name="line.369"></a>
+<span class="sourceLineNo">370</span>      return this;<a name="line.370"></a>
+<span class="sourceLineNo">371</span>    }<a name="line.371"></a>
+<span class="sourceLineNo">372</span><a name="line.372"></a>
+<span class="sourceLineNo">373</span>    /**<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     * Sets the new value of "affiliationIdentifier" (any previous value will be replaced)<a name="line.374"></a>
+<span class="sourceLineNo">375</span>     *<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     * @param affiliationIdentifier New value of the "affiliationIdentifier" property.<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     */<a name="line.377"></a>
+<span class="sourceLineNo">378</span>    public Affiliation.Builder&lt;_B&gt; withAffiliationIdentifier(final String affiliationIdentifier) {<a name="line.378"></a>
+<span class="sourceLineNo">379</span>      this.affiliationIdentifier = affiliationIdentifier;<a name="line.379"></a>
+<span class="sourceLineNo">380</span>      return this;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    }<a name="line.381"></a>
+<span class="sourceLineNo">382</span><a name="line.382"></a>
+<span class="sourceLineNo">383</span>    /**<a name="line.383"></a>
+<span class="sourceLineNo">384</span>     * Sets the new value of "affiliationIdentifierScheme" (any previous value will be replaced)<a name="line.384"></a>
+<span class="sourceLineNo">385</span>     *<a name="line.385"></a>
+<span class="sourceLineNo">386</span>     * @param affiliationIdentifierScheme New value of the "affiliationIdentifierScheme" property.<a name="line.386"></a>
+<span class="sourceLineNo">387</span>     */<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    public Affiliation.Builder&lt;_B&gt; withAffiliationIdentifierScheme(<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        final String affiliationIdentifierScheme) {<a name="line.389"></a>
+<span class="sourceLineNo">390</span>      this.affiliationIdentifierScheme = affiliationIdentifierScheme;<a name="line.390"></a>
+<span class="sourceLineNo">391</span>      return this;<a name="line.391"></a>
+<span class="sourceLineNo">392</span>    }<a name="line.392"></a>
+<span class="sourceLineNo">393</span><a name="line.393"></a>
+<span class="sourceLineNo">394</span>    /**<a name="line.394"></a>
+<span class="sourceLineNo">395</span>     * Sets the new value of "schemeURI" (any previous value will be replaced)<a name="line.395"></a>
+<span class="sourceLineNo">396</span>     *<a name="line.396"></a>
+<span class="sourceLineNo">397</span>     * @param schemeURI New value of the "schemeURI" property.<a name="line.397"></a>
+<span class="sourceLineNo">398</span>     */<a name="line.398"></a>
+<span class="sourceLineNo">399</span>    public Affiliation.Builder&lt;_B&gt; withSchemeURI(final String schemeURI) {<a name="line.399"></a>
+<span class="sourceLineNo">400</span>      this.schemeURI = schemeURI;<a name="line.400"></a>
+<span class="sourceLineNo">401</span>      return this;<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    }<a name="line.402"></a>
+<span class="sourceLineNo">403</span><a name="line.403"></a>
+<span class="sourceLineNo">404</span>    @Override<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    public Affiliation build() {<a name="line.405"></a>
+<span class="sourceLineNo">406</span>      if (_storedValue == null) {<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        return this.init(new Affiliation());<a name="line.407"></a>
+<span class="sourceLineNo">408</span>      } else {<a name="line.408"></a>
+<span class="sourceLineNo">409</span>        return ((Affiliation) _storedValue);<a name="line.409"></a>
+<span class="sourceLineNo">410</span>      }<a name="line.410"></a>
+<span class="sourceLineNo">411</span>    }<a name="line.411"></a>
+<span class="sourceLineNo">412</span><a name="line.412"></a>
+<span class="sourceLineNo">413</span>    public Affiliation.Builder&lt;_B&gt; copyOf(final Affiliation _other) {<a name="line.413"></a>
+<span class="sourceLineNo">414</span>      _other.copyTo(this);<a name="line.414"></a>
+<span class="sourceLineNo">415</span>      return this;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>    }<a name="line.416"></a>
+<span class="sourceLineNo">417</span><a name="line.417"></a>
+<span class="sourceLineNo">418</span>    public Affiliation.Builder&lt;_B&gt; copyOf(final Affiliation.Builder _other) {<a name="line.418"></a>
+<span class="sourceLineNo">419</span>      return copyOf(_other.build());<a name="line.419"></a>
 <span class="sourceLineNo">420</span>    }<a name="line.420"></a>
-<span class="sourceLineNo">421</span><a name="line.421"></a>
-<span class="sourceLineNo">422</span>    public Affiliation.Builder&lt;_B&gt; copyOf(final Affiliation.Builder _other) {<a name="line.422"></a>
-<span class="sourceLineNo">423</span>      return copyOf(_other.build());<a name="line.423"></a>
-<span class="sourceLineNo">424</span>    }<a name="line.424"></a>
-<span class="sourceLineNo">425</span>  }<a name="line.425"></a>
-<span class="sourceLineNo">426</span><a name="line.426"></a>
-<span class="sourceLineNo">427</span>  public static class Select extends Affiliation.Selector&lt;Affiliation.Select, Void&gt; {<a name="line.427"></a>
+<span class="sourceLineNo">421</span>  }<a name="line.421"></a>
+<span class="sourceLineNo">422</span><a name="line.422"></a>
+<span class="sourceLineNo">423</span>  public static class Select extends Affiliation.Selector&lt;Affiliation.Select, Void&gt; {<a name="line.423"></a>
+<span class="sourceLineNo">424</span><a name="line.424"></a>
+<span class="sourceLineNo">425</span>    Select() {<a name="line.425"></a>
+<span class="sourceLineNo">426</span>      super(null, null, null);<a name="line.426"></a>
+<span class="sourceLineNo">427</span>    }<a name="line.427"></a>
 <span class="sourceLineNo">428</span><a name="line.428"></a>
-<span class="sourceLineNo">429</span>    Select() {<a name="line.429"></a>
-<span class="sourceLineNo">430</span>      super(null, null, null);<a name="line.430"></a>
+<span class="sourceLineNo">429</span>    public static Affiliation.Select _root() {<a name="line.429"></a>
+<span class="sourceLineNo">430</span>      return new Affiliation.Select();<a name="line.430"></a>
 <span class="sourceLineNo">431</span>    }<a name="line.431"></a>
-<span class="sourceLineNo">432</span><a name="line.432"></a>
-<span class="sourceLineNo">433</span>    public static Affiliation.Select _root() {<a name="line.433"></a>
-<span class="sourceLineNo">434</span>      return new Affiliation.Select();<a name="line.434"></a>
-<span class="sourceLineNo">435</span>    }<a name="line.435"></a>
-<span class="sourceLineNo">436</span>  }<a name="line.436"></a>
-<span class="sourceLineNo">437</span><a name="line.437"></a>
-<span class="sourceLineNo">438</span>  public static class Selector&lt;TRoot extends com.kscs.util.jaxb.Selector&lt;TRoot, ?&gt;, TParent&gt;<a name="line.438"></a>
-<span class="sourceLineNo">439</span>      extends com.kscs.util.jaxb.Selector&lt;TRoot, TParent&gt; {<a name="line.439"></a>
-<span class="sourceLineNo">440</span><a name="line.440"></a>
-<span class="sourceLineNo">441</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; value = null;<a name="line.441"></a>
-<span class="sourceLineNo">442</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.442"></a>
-<span class="sourceLineNo">443</span>        affiliationIdentifier = null;<a name="line.443"></a>
-<span class="sourceLineNo">444</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.444"></a>
-<span class="sourceLineNo">445</span>        affiliationIdentifierScheme = null;<a name="line.445"></a>
-<span class="sourceLineNo">446</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; schemeURI =<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        null;<a name="line.447"></a>
+<span class="sourceLineNo">432</span>  }<a name="line.432"></a>
+<span class="sourceLineNo">433</span><a name="line.433"></a>
+<span class="sourceLineNo">434</span>  public static class Selector&lt;TRoot extends com.kscs.util.jaxb.Selector&lt;TRoot, ?&gt;, TParent&gt;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>      extends com.kscs.util.jaxb.Selector&lt;TRoot, TParent&gt; {<a name="line.435"></a>
+<span class="sourceLineNo">436</span><a name="line.436"></a>
+<span class="sourceLineNo">437</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; value = null;<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        affiliationIdentifier = null;<a name="line.439"></a>
+<span class="sourceLineNo">440</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>        affiliationIdentifierScheme = null;<a name="line.441"></a>
+<span class="sourceLineNo">442</span>    private com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; schemeURI =<a name="line.442"></a>
+<span class="sourceLineNo">443</span>        null;<a name="line.443"></a>
+<span class="sourceLineNo">444</span><a name="line.444"></a>
+<span class="sourceLineNo">445</span>    public Selector(final TRoot root, final TParent parent, final String propertyName) {<a name="line.445"></a>
+<span class="sourceLineNo">446</span>      super(root, parent, propertyName);<a name="line.446"></a>
+<span class="sourceLineNo">447</span>    }<a name="line.447"></a>
 <span class="sourceLineNo">448</span><a name="line.448"></a>
-<span class="sourceLineNo">449</span>    public Selector(final TRoot root, final TParent parent, final String propertyName) {<a name="line.449"></a>
-<span class="sourceLineNo">450</span>      super(root, parent, propertyName);<a name="line.450"></a>
-<span class="sourceLineNo">451</span>    }<a name="line.451"></a>
-<span class="sourceLineNo">452</span><a name="line.452"></a>
-<span class="sourceLineNo">453</span>    @Override<a name="line.453"></a>
-<span class="sourceLineNo">454</span>    public Map&lt;String, PropertyTree&gt; buildChildren() {<a name="line.454"></a>
-<span class="sourceLineNo">455</span>      final Map&lt;String, PropertyTree&gt; products = new HashMap&lt;String, PropertyTree&gt;();<a name="line.455"></a>
-<span class="sourceLineNo">456</span>      products.putAll(super.buildChildren());<a name="line.456"></a>
-<span class="sourceLineNo">457</span>      if (this.value != null) {<a name="line.457"></a>
-<span class="sourceLineNo">458</span>        products.put("value", this.value.init());<a name="line.458"></a>
-<span class="sourceLineNo">459</span>      }<a name="line.459"></a>
-<span class="sourceLineNo">460</span>      if (this.affiliationIdentifier != null) {<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        products.put("affiliationIdentifier", this.affiliationIdentifier.init());<a name="line.461"></a>
-<span class="sourceLineNo">462</span>      }<a name="line.462"></a>
-<span class="sourceLineNo">463</span>      if (this.affiliationIdentifierScheme != null) {<a name="line.463"></a>
-<span class="sourceLineNo">464</span>        products.put("affiliationIdentifierScheme", this.affiliationIdentifierScheme.init());<a name="line.464"></a>
-<span class="sourceLineNo">465</span>      }<a name="line.465"></a>
-<span class="sourceLineNo">466</span>      if (this.schemeURI != null) {<a name="line.466"></a>
-<span class="sourceLineNo">467</span>        products.put("schemeURI", this.schemeURI.init());<a name="line.467"></a>
-<span class="sourceLineNo">468</span>      }<a name="line.468"></a>
-<span class="sourceLineNo">469</span>      return products;<a name="line.469"></a>
-<span class="sourceLineNo">470</span>    }<a name="line.470"></a>
-<span class="sourceLineNo">471</span><a name="line.471"></a>
-<span class="sourceLineNo">472</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; value() {<a name="line.472"></a>
-<span class="sourceLineNo">473</span>      return ((this.value == null)<a name="line.473"></a>
-<span class="sourceLineNo">474</span>          ? this.value =<a name="line.474"></a>
-<span class="sourceLineNo">475</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.475"></a>
-<span class="sourceLineNo">476</span>                  this._root, this, "value")<a name="line.476"></a>
-<span class="sourceLineNo">477</span>          : this.value);<a name="line.477"></a>
-<span class="sourceLineNo">478</span>    }<a name="line.478"></a>
-<span class="sourceLineNo">479</span><a name="line.479"></a>
-<span class="sourceLineNo">480</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.480"></a>
-<span class="sourceLineNo">481</span>        affiliationIdentifier() {<a name="line.481"></a>
-<span class="sourceLineNo">482</span>      return ((this.affiliationIdentifier == null)<a name="line.482"></a>
-<span class="sourceLineNo">483</span>          ? this.affiliationIdentifier =<a name="line.483"></a>
-<span class="sourceLineNo">484</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.484"></a>
-<span class="sourceLineNo">485</span>                  this._root, this, "affiliationIdentifier")<a name="line.485"></a>
-<span class="sourceLineNo">486</span>          : this.affiliationIdentifier);<a name="line.486"></a>
-<span class="sourceLineNo">487</span>    }<a name="line.487"></a>
-<span class="sourceLineNo">488</span><a name="line.488"></a>
-<span class="sourceLineNo">489</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.489"></a>
-<span class="sourceLineNo">490</span>        affiliationIdentifierScheme() {<a name="line.490"></a>
-<span class="sourceLineNo">491</span>      return ((this.affiliationIdentifierScheme == null)<a name="line.491"></a>
-<span class="sourceLineNo">492</span>          ? this.affiliationIdentifierScheme =<a name="line.492"></a>
-<span class="sourceLineNo">493</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.493"></a>
-<span class="sourceLineNo">494</span>                  this._root, this, "affiliationIdentifierScheme")<a name="line.494"></a>
-<span class="sourceLineNo">495</span>          : this.affiliationIdentifierScheme);<a name="line.495"></a>
-<span class="sourceLineNo">496</span>    }<a name="line.496"></a>
-<span class="sourceLineNo">497</span><a name="line.497"></a>
-<span class="sourceLineNo">498</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; schemeURI() {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>      return ((this.schemeURI == null)<a name="line.499"></a>
-<span class="sourceLineNo">500</span>          ? this.schemeURI =<a name="line.500"></a>
-<span class="sourceLineNo">501</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.501"></a>
-<span class="sourceLineNo">502</span>                  this._root, this, "schemeURI")<a name="line.502"></a>
-<span class="sourceLineNo">503</span>          : this.schemeURI);<a name="line.503"></a>
-<span class="sourceLineNo">504</span>    }<a name="line.504"></a>
-<span class="sourceLineNo">505</span>  }<a name="line.505"></a>
-<span class="sourceLineNo">506</span>}<a name="line.506"></a>
+<span class="sourceLineNo">449</span>    @Override<a name="line.449"></a>
+<span class="sourceLineNo">450</span>    public Map&lt;String, PropertyTree&gt; buildChildren() {<a name="line.450"></a>
+<span class="sourceLineNo">451</span>      final Map&lt;String, PropertyTree&gt; products = new HashMap&lt;String, PropertyTree&gt;();<a name="line.451"></a>
+<span class="sourceLineNo">452</span>      products.putAll(super.buildChildren());<a name="line.452"></a>
+<span class="sourceLineNo">453</span>      if (this.value != null) {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        products.put("value", this.value.init());<a name="line.454"></a>
+<span class="sourceLineNo">455</span>      }<a name="line.455"></a>
+<span class="sourceLineNo">456</span>      if (this.affiliationIdentifier != null) {<a name="line.456"></a>
+<span class="sourceLineNo">457</span>        products.put("affiliationIdentifier", this.affiliationIdentifier.init());<a name="line.457"></a>
+<span class="sourceLineNo">458</span>      }<a name="line.458"></a>
+<span class="sourceLineNo">459</span>      if (this.affiliationIdentifierScheme != null) {<a name="line.459"></a>
+<span class="sourceLineNo">460</span>        products.put("affiliationIdentifierScheme", this.affiliationIdentifierScheme.init());<a name="line.460"></a>
+<span class="sourceLineNo">461</span>      }<a name="line.461"></a>
+<span class="sourceLineNo">462</span>      if (this.schemeURI != null) {<a name="line.462"></a>
+<span class="sourceLineNo">463</span>        products.put("schemeURI", this.schemeURI.init());<a name="line.463"></a>
+<span class="sourceLineNo">464</span>      }<a name="line.464"></a>
+<span class="sourceLineNo">465</span>      return products;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    }<a name="line.466"></a>
+<span class="sourceLineNo">467</span><a name="line.467"></a>
+<span class="sourceLineNo">468</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; value() {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>      return ((this.value == null)<a name="line.469"></a>
+<span class="sourceLineNo">470</span>          ? this.value =<a name="line.470"></a>
+<span class="sourceLineNo">471</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.471"></a>
+<span class="sourceLineNo">472</span>                  this._root, this, "value")<a name="line.472"></a>
+<span class="sourceLineNo">473</span>          : this.value);<a name="line.473"></a>
+<span class="sourceLineNo">474</span>    }<a name="line.474"></a>
+<span class="sourceLineNo">475</span><a name="line.475"></a>
+<span class="sourceLineNo">476</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.476"></a>
+<span class="sourceLineNo">477</span>        affiliationIdentifier() {<a name="line.477"></a>
+<span class="sourceLineNo">478</span>      return ((this.affiliationIdentifier == null)<a name="line.478"></a>
+<span class="sourceLineNo">479</span>          ? this.affiliationIdentifier =<a name="line.479"></a>
+<span class="sourceLineNo">480</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.480"></a>
+<span class="sourceLineNo">481</span>                  this._root, this, "affiliationIdentifier")<a name="line.481"></a>
+<span class="sourceLineNo">482</span>          : this.affiliationIdentifier);<a name="line.482"></a>
+<span class="sourceLineNo">483</span>    }<a name="line.483"></a>
+<span class="sourceLineNo">484</span><a name="line.484"></a>
+<span class="sourceLineNo">485</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;<a name="line.485"></a>
+<span class="sourceLineNo">486</span>        affiliationIdentifierScheme() {<a name="line.486"></a>
+<span class="sourceLineNo">487</span>      return ((this.affiliationIdentifierScheme == null)<a name="line.487"></a>
+<span class="sourceLineNo">488</span>          ? this.affiliationIdentifierScheme =<a name="line.488"></a>
+<span class="sourceLineNo">489</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                  this._root, this, "affiliationIdentifierScheme")<a name="line.490"></a>
+<span class="sourceLineNo">491</span>          : this.affiliationIdentifierScheme);<a name="line.491"></a>
+<span class="sourceLineNo">492</span>    }<a name="line.492"></a>
+<span class="sourceLineNo">493</span><a name="line.493"></a>
+<span class="sourceLineNo">494</span>    public com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt; schemeURI() {<a name="line.494"></a>
+<span class="sourceLineNo">495</span>      return ((this.schemeURI == null)<a name="line.495"></a>
+<span class="sourceLineNo">496</span>          ? this.schemeURI =<a name="line.496"></a>
+<span class="sourceLineNo">497</span>              new com.kscs.util.jaxb.Selector&lt;TRoot, Affiliation.Selector&lt;TRoot, TParent&gt;&gt;(<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                  this._root, this, "schemeURI")<a name="line.498"></a>
+<span class="sourceLineNo">499</span>          : this.schemeURI);<a name="line.499"></a>
+<span class="sourceLineNo">500</span>    }<a name="line.500"></a>
+<span class="sourceLineNo">501</span>  }<a name="line.501"></a>
+<span class="sourceLineNo">502</span>}<a name="line.502"></a>
 
 
 
