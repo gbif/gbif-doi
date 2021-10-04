@@ -165,7 +165,7 @@ public class DoiServiceIT {
     assertThrows(DoiExistsException.class, () -> service.reserve(doi, meta));
   }
 
-//  @Disabled("temporarily switched off because of DataCite Internal Server Error 500")
+  //  @Disabled("temporarily switched off because of DataCite Internal Server Error 500")
   @Test
   public void deleteReservedDoiShouldBeOk() throws Exception {
     // given
@@ -221,7 +221,9 @@ public class DoiServiceIT {
     final DOI doi = newDoi();
 
     // when & then
-    assertThrows(NullPointerException.class, () -> service.register(doi, TEST_TARGET, (DataCiteMetadata) null));
+    assertThrows(
+        NullPointerException.class,
+        () -> service.register(doi, TEST_TARGET, (DataCiteMetadata) null));
   }
 
   @Test

@@ -82,53 +82,76 @@ public class DataCiteValidatorTest {
   @Test
   public void
       testValidateMetadataMandatoryFieldIdentifierIsAbsentShouldThrowInvalidMetadataException() {
-    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml")));
+    assertThrows(
+        InvalidMetadataException.class,
+        () ->
+            DataCiteValidator.validateMetadata(
+                FileUtils.classpathStream("metadata/minimal-v4-no-identifier.xml")));
   }
 
   @Test
   public void
       testValidateMetadataMandatoryFieldCreatorsIsAbsentShouldThrowInvalidMetadataException() {
-    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml")));
+    assertThrows(
+        InvalidMetadataException.class,
+        () ->
+            DataCiteValidator.validateMetadata(
+                FileUtils.classpathStream("metadata/minimal-v4-no-creators.xml")));
   }
 
   @Test
   public void
       testValidateMetadataMandatoryFieldPublisherIsAbsentShouldThrowInvalidMetadataException() {
-    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml")));
+    assertThrows(
+        InvalidMetadataException.class,
+        () ->
+            DataCiteValidator.validateMetadata(
+                FileUtils.classpathStream("metadata/minimal-v4-no-publisher.xml")));
   }
 
   @Test
   public void
       testValidateMetadataMandatoryFieldPublicationYearIsAbsentShouldThrowInvalidMetadataException() {
-    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml")));
+    assertThrows(
+        InvalidMetadataException.class,
+        () ->
+            DataCiteValidator.validateMetadata(
+                FileUtils.classpathStream("metadata/minimal-v4-no-publicationYear.xml")));
   }
 
   @Test
   public void
       testValidateMetadataMandatoryFieldResourceTypeIsAbsentShouldThrowInvalidMetadataException() {
-    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml")));
+    assertThrows(
+        InvalidMetadataException.class,
+        () ->
+            DataCiteValidator.validateMetadata(
+                FileUtils.classpathStream("metadata/minimal-v4-no-resourceType.xml")));
   }
 
   @Test
-  public void testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException() {
-    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml")));
+  public void
+      testValidateMetadataMandatoryFieldTitlesIsAbsentShouldThrowInvalidMetadataException() {
+    assertThrows(
+        InvalidMetadataException.class,
+        () ->
+            DataCiteValidator.validateMetadata(
+                FileUtils.classpathStream("metadata/minimal-v4-no-titles.xml")));
   }
 
   @Test
   public void testValidateMetadataNotSupportedFieldIsPresentShouldThrowInvalidMetadataException() {
-    assertThrows(InvalidMetadataException.class, () -> DataCiteValidator.validateMetadata(
-        FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml")));
+    assertThrows(
+        InvalidMetadataException.class,
+        () ->
+            DataCiteValidator.validateMetadata(
+                FileUtils.classpathStream("metadata/minimal-v4-with-unsupported-field.xml")));
   }
 
   @Test
   public void testValidateMetadataIfWrongSourceShouldThrowIllegalStateException() {
-    assertThrows(IllegalStateException.class,
+    assertThrows(
+        IllegalStateException.class,
         () -> DataCiteValidator.validateMetadata(FileUtils.classpathStream("wrong_path")));
   }
 

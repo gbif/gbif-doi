@@ -226,7 +226,8 @@ public class Box {
 
   @Override
   public int hashCode() {
-    return Objects.hash(westBoundLongitude, eastBoundLongitude, southBoundLatitude, northBoundLatitude);
+    return Objects.hash(
+        westBoundLongitude, eastBoundLongitude, southBoundLatitude, northBoundLatitude);
   }
 
   public static class Builder<_B> implements Buildable {

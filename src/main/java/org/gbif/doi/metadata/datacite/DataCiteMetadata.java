@@ -1160,9 +1160,26 @@ public class DataCiteMetadata {
 
   @Override
   public int hashCode() {
-    return Objects.hash(identifier, creators, titles, publisher, publicationYear, resourceType, subjects, contributors,
-        dates, language, alternateIdentifiers, relatedIdentifiers, sizes, formats, version, rightsList, descriptions,
-        geoLocations, fundingReferences);
+    return Objects.hash(
+        identifier,
+        creators,
+        titles,
+        publisher,
+        publicationYear,
+        resourceType,
+        subjects,
+        contributors,
+        dates,
+        language,
+        alternateIdentifiers,
+        relatedIdentifiers,
+        sizes,
+        formats,
+        version,
+        rightsList,
+        descriptions,
+        geoLocations,
+        fundingReferences);
   }
 
   /**
@@ -1536,7 +1553,8 @@ public class DataCiteMetadata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AlternateIdentifier that = (AlternateIdentifier) o;
-        return Objects.equals(value, that.value) && Objects.equals(alternateIdentifierType, that.alternateIdentifierType);
+        return Objects.equals(value, that.value)
+            && Objects.equals(alternateIdentifierType, that.alternateIdentifierType);
       }
 
       @Override
@@ -3650,7 +3668,8 @@ public class DataCiteMetadata {
 
       @Override
       public int hashCode() {
-        return Objects.hash(contributorName, givenName, familyName, nameIdentifier, affiliation, contributorType);
+        return Objects.hash(
+            contributorName, givenName, familyName, nameIdentifier, affiliation, contributorType);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -4310,7 +4329,9 @@ public class DataCiteMetadata {
           if (this == o) return true;
           if (o == null || getClass() != o.getClass()) return false;
           ContributorName that = (ContributorName) o;
-          return Objects.equals(value, that.value) && nameType == that.nameType && Objects.equals(lang, that.lang);
+          return Objects.equals(value, that.value)
+              && nameType == that.nameType
+              && Objects.equals(lang, that.lang);
         }
 
         @Override
@@ -7998,8 +8019,7 @@ public class DataCiteMetadata {
 
         @Override
         public String toString() {
-          return new StringJoiner(", ", Br.class.getSimpleName() + "[", "]")
-              .toString();
+          return new StringJoiner(", ", Br.class.getSimpleName() + "[", "]").toString();
         }
 
         public static class Builder<_B> implements Buildable {
@@ -9467,7 +9487,10 @@ public class DataCiteMetadata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FundingReference that = (FundingReference) o;
-        return Objects.equals(funderName, that.funderName) && Objects.equals(funderIdentifier, that.funderIdentifier) && Objects.equals(awardNumber, that.awardNumber) && Objects.equals(awardTitle, that.awardTitle);
+        return Objects.equals(funderName, that.funderName)
+            && Objects.equals(funderIdentifier, that.funderIdentifier)
+            && Objects.equals(awardNumber, that.awardNumber)
+            && Objects.equals(awardTitle, that.awardTitle);
       }
 
       @Override
@@ -10313,7 +10336,9 @@ public class DataCiteMetadata {
           if (this == o) return true;
           if (o == null || getClass() != o.getClass()) return false;
           FunderIdentifier that = (FunderIdentifier) o;
-          return Objects.equals(value, that.value) && funderIdentifierType == that.funderIdentifierType && Objects.equals(schemeURI, that.schemeURI);
+          return Objects.equals(value, that.value)
+              && funderIdentifierType == that.funderIdentifierType
+              && Objects.equals(schemeURI, that.schemeURI);
         }
 
         @Override
@@ -11288,7 +11313,9 @@ public class DataCiteMetadata {
       @Override
       public String toString() {
         return new StringJoiner(", ", GeoLocation.class.getSimpleName() + "[", "]")
-            .add("geoLocationPlaceOrGeoLocationPointOrGeoLocationBox=" + geoLocationPlaceOrGeoLocationPointOrGeoLocationBox)
+            .add(
+                "geoLocationPlaceOrGeoLocationPointOrGeoLocationBox="
+                    + geoLocationPlaceOrGeoLocationPointOrGeoLocationBox)
             .toString();
       }
 
@@ -11297,7 +11324,9 @@ public class DataCiteMetadata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GeoLocation that = (GeoLocation) o;
-        return Objects.equals(geoLocationPlaceOrGeoLocationPointOrGeoLocationBox, that.geoLocationPlaceOrGeoLocationPointOrGeoLocationBox);
+        return Objects.equals(
+            geoLocationPlaceOrGeoLocationPointOrGeoLocationBox,
+            that.geoLocationPlaceOrGeoLocationPointOrGeoLocationBox);
       }
 
       @Override
@@ -12501,7 +12530,8 @@ public class DataCiteMetadata {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       Identifier that = (Identifier) o;
-      return Objects.equals(value, that.value) && Objects.equals(identifierType, that.identifierType);
+      return Objects.equals(value, that.value)
+          && Objects.equals(identifierType, that.identifierType);
     }
 
     @Override
@@ -13762,8 +13792,14 @@ public class DataCiteMetadata {
 
       @Override
       public int hashCode() {
-        return Objects.hash(value, resourceTypeGeneral, relatedIdentifierType, relationType, relatedMetadataScheme,
-            schemeURI, schemeType);
+        return Objects.hash(
+            value,
+            resourceTypeGeneral,
+            relatedIdentifierType,
+            relationType,
+            relatedMetadataScheme,
+            schemeURI,
+            schemeType);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -14369,8 +14405,7 @@ public class DataCiteMetadata {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       ResourceType that = (ResourceType) o;
-      return Objects.equals(value, that.value)
-          && resourceTypeGeneral == that.resourceTypeGeneral;
+      return Objects.equals(value, that.value) && resourceTypeGeneral == that.resourceTypeGeneral;
     }
 
     @Override
@@ -15225,12 +15260,18 @@ public class DataCiteMetadata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rights rights = (Rights) o;
-        return Objects.equals(value, rights.value) && Objects.equals(rightsURI, rights.rightsURI) && Objects.equals(rightsIdentifier, rights.rightsIdentifier) && Objects.equals(rightsIdentifierScheme, rights.rightsIdentifierScheme) && Objects.equals(schemeURI, rights.schemeURI) && Objects.equals(lang, rights.lang);
+        return Objects.equals(value, rights.value)
+            && Objects.equals(rightsURI, rights.rightsURI)
+            && Objects.equals(rightsIdentifier, rights.rightsIdentifier)
+            && Objects.equals(rightsIdentifierScheme, rights.rightsIdentifierScheme)
+            && Objects.equals(schemeURI, rights.schemeURI)
+            && Objects.equals(lang, rights.lang);
       }
 
       @Override
       public int hashCode() {
-        return Objects.hash(value, rightsURI, rightsIdentifier, rightsIdentifierScheme, schemeURI, lang);
+        return Objects.hash(
+            value, rightsURI, rightsIdentifier, rightsIdentifierScheme, schemeURI, lang);
       }
 
       public static class Builder<_B> implements Buildable {
@@ -16942,7 +16983,11 @@ public class DataCiteMetadata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subject subject = (Subject) o;
-        return Objects.equals(value, subject.value) && Objects.equals(subjectScheme, subject.subjectScheme) && Objects.equals(schemeURI, subject.schemeURI) && Objects.equals(valueURI, subject.valueURI) && Objects.equals(lang, subject.lang);
+        return Objects.equals(value, subject.value)
+            && Objects.equals(subjectScheme, subject.subjectScheme)
+            && Objects.equals(schemeURI, subject.schemeURI)
+            && Objects.equals(valueURI, subject.valueURI)
+            && Objects.equals(lang, subject.lang);
       }
 
       @Override
