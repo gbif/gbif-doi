@@ -260,6 +260,22 @@ public class RestJsonApiDataCiteService implements DoiService {
   }
 
   /**
+   * Deactivate a doi.
+   *
+   * @param doi the identifier to deactivate
+   */
+  @Override
+  public void deactivate(DOI doi) throws DoiException {
+    Objects.requireNonNull(doi, "DOI can't be deactivated without identifier");
+
+    DoiSimplifiedModel model = new DoiSimplifiedModel();
+    model.setDoi(doi.getDoiName());
+    model.setEvent(EventType.HIDE.getValue());
+    JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
+    throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
+  }
+
+  /**
    * Update with metadata.
    *
    * @param doi the identifier

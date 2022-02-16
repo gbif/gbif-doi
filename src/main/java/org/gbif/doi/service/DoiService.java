@@ -79,7 +79,7 @@ public interface DoiService {
   /**
    * Registers an identifier that is either brand new, has been reserved or is currently marked as
    * deleted. It assigns the latest metadata and a URL for resolution. This causes the DOI to be
-   * publicly registered with resolvers and other external services.
+   * publicly registered (findable) with resolvers and other external services.
    *
    * @param doi the identifier to register
    * @param target the URL the DOI should resolve to
@@ -94,7 +94,7 @@ public interface DoiService {
   /**
    * Registers an identifier that is either brand new, has been reserved or is currently marked as
    * deleted. It assigns the latest metadata and a URL for resolution. This causes the DOI to be
-   * publicly registered with resolvers and other external services.
+   * publicly registered (findable) with resolvers and other external services.
    *
    * @param doi the identifier to register
    * @param target the URL the DOI should resolve to
@@ -115,6 +115,15 @@ public interface DoiService {
    * @throws DoiException if the operation failed for any reason
    */
   boolean delete(DOI doi) throws DoiException;
+
+  /**
+   * Tries to deactivate an identifier. If the DOI has only been drafted or reserved nothing changes.
+   * For findable DOI it changes state to registered.
+   *
+   * @param doi the identifier to deactivate
+   * @throws DoiException if the operation failed for any reason
+   */
+  void deactivate(DOI doi) throws DoiException;
 
   /**
    * Updates the identifier metadata. This method must be called every time the object or metadata
