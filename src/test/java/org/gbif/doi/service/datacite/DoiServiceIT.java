@@ -19,7 +19,6 @@ import org.gbif.datacite.rest.client.DataCiteClient;
 import org.gbif.datacite.rest.client.configuration.ClientConfiguration;
 import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 import org.gbif.doi.metadata.datacite.DataCiteMetadataTest;
-import org.gbif.doi.service.DoiException;
 import org.gbif.doi.service.DoiExistsException;
 import org.gbif.doi.service.DoiHttpException;
 import org.gbif.doi.service.DoiNotFoundException;
@@ -39,6 +38,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
+import static org.gbif.api.model.common.DoiStatus.DELETED;
 import static org.gbif.api.model.common.DoiStatus.FAILED;
 import static org.gbif.api.model.common.DoiStatus.NEW;
 import static org.gbif.api.model.common.DoiStatus.REGISTERED;
@@ -185,8 +185,11 @@ public class DoiServiceIT {
     DataCiteMetadata meta = DataCiteMetadataTest.getMockMetadata(doi, "delete test");
     service.register(doi, TEST_TARGET, meta);
 
-    // when & then
-    assertThrows(DoiException.class, () -> service.delete(doi));
+    // when
+    service.delete(doi);
+
+    // then
+    assertEquals(new DoiData(DELETED, TEST_TARGET), service.resolve(doi));
   }
 
   @Test
