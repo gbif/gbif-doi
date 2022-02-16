@@ -46,6 +46,7 @@ import retrofit2.Response;
 
 import static org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.DRAFT;
 import static org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.FINDABLE;
+import static org.gbif.doi.service.datacite.DataCiteDoiStatusConstants.REGISTERED;
 
 /** DataCite service implementation with REST and JSON:API. */
 public class RestJsonApiDataCiteService implements DoiService {
@@ -101,6 +102,10 @@ public class RestJsonApiDataCiteService implements DoiService {
     if (DRAFT.equals(doiState)) {
       return new DoiData(
           DoiStatus.RESERVED, body.getUrl() != null ? URI.create(body.getUrl()) : null);
+    }
+
+    if (REGISTERED.equals(doiState)) {
+      return new DoiData(DoiStatus.DELETED, URI.create(body.getUrl()));
     }
 
     if (FINDABLE.equals(doiState)) {
