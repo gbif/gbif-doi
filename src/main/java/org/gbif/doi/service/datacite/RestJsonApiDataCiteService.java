@@ -203,7 +203,8 @@ public class RestJsonApiDataCiteService implements DoiService {
     if (doiData.getStatus() == DoiStatus.REGISTERED) {
       throw new DoiExistsException(
           "Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
-    } else if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.DELETED) {
+    } else if (doiData.getStatus() == DoiStatus.RESERVED
+        || doiData.getStatus() == DoiStatus.DELETED) {
       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
     } else {
       throwExceptionOnBadResponse(dataCiteClient.createDoi(jsonApiWrapper));
@@ -254,8 +255,10 @@ public class RestJsonApiDataCiteService implements DoiService {
     boolean result;
 
     if (doiData.getStatus() == DoiStatus.NEW || doiData.getStatus() == DoiStatus.FAILED) {
-      throw new DoiNotFoundException("Can't delete " + doiData.getStatus() + " DOI " + doi.getDoiName(), doi);
-    } else if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.DELETED) {
+      throw new DoiNotFoundException(
+          "Can't delete " + doiData.getStatus() + " DOI " + doi.getDoiName(), doi);
+    } else if (doiData.getStatus() == DoiStatus.REGISTERED
+        || doiData.getStatus() == DoiStatus.DELETED) {
       DoiSimplifiedModel model = new DoiSimplifiedModel();
       model.setDoi(doi.getDoiName());
       model.setEvent(EventType.HIDE.getValue());
