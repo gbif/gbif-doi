@@ -107,23 +107,15 @@ public interface DoiService {
 
   /**
    * Tries to delete an identifier. If the DOI has only been reserved it will be fully deleted, if
-   * it was registered before it cannot be deleted as DOIs are permanent identifiers. You can
-   * re-register a deleted DOI again if needed.
+   * it was registered before it cannot be deleted as DOIs are permanent identifiers, and its state will
+   * be set to registered.
+   * You can re-register a deleted DOI again if needed.
    *
    * @param doi the identifier to delete
    * @return true if the reserved DOI was fully deleted, false if it was only marked as deleted
    * @throws DoiException if the operation failed for any reason
    */
   boolean delete(DOI doi) throws DoiException;
-
-  /**
-   * Tries to deactivate an identifier. If the DOI has only been drafted or reserved nothing changes.
-   * For findable DOI it changes state to registered.
-   *
-   * @param doi the identifier to deactivate
-   * @throws DoiException if the operation failed for any reason
-   */
-  void deactivate(DOI doi) throws DoiException;
 
   /**
    * Updates the identifier metadata. This method must be called every time the object or metadata

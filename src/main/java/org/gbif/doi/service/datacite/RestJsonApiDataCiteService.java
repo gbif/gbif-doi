@@ -244,40 +244,31 @@ public class RestJsonApiDataCiteService implements DoiService {
    * Delete a doi.
    *
    * @param doi the identifier to delete
-   * @return true if successfully deleted, false otherwise
+   * @return true if the reserved DOI was fully deleted, false if it was only marked as deleted
    */
   @Override
   public boolean delete(DOI doi) throws DoiException {
     Objects.requireNonNull(doi, "DOI can't be deleted without identifier");
 
     DoiData doiData = resolve(doi);
+    boolean result;
 
-    if (doiData.getStatus() == DoiStatus.REGISTERED) {
-      throw new DoiException("Registered DOI can't be deleted " + doi.getDoiName());
-    } else if (doiData.getStatus() == DoiStatus.NEW) {
-      throw new DoiNotFoundException("Can't delete non-existing DOI " + doi.getDoiName(), doi);
+    if (doiData.getStatus() == DoiStatus.NEW || doiData.getStatus() == DoiStatus.FAILED) {
+      throw new DoiNotFoundException("Can't delete " + doiData.getStatus() + " DOI " + doi.getDoiName(), doi);
+    } else if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.DELETED) {
+      DoiSimplifiedModel model = new DoiSimplifiedModel();
+      model.setDoi(doi.getDoiName());
+      model.setEvent(EventType.HIDE.getValue());
+      JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
+      throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
+      result = false;
+    } else {
+      Response<Void> deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());
+      throwExceptionOnBadResponse(deleteResponse);
+      result = deleteResponse.isSuccessful();
     }
 
-    Response<Void> deleteResponse = dataCiteClient.deleteDoi(doi.getDoiName());
-    throwExceptionOnBadResponse(deleteResponse);
-
-    return deleteResponse.isSuccessful();
-  }
-
-  /**
-   * Deactivate a doi.
-   *
-   * @param doi the identifier to deactivate
-   */
-  @Override
-  public void deactivate(DOI doi) throws DoiException {
-    Objects.requireNonNull(doi, "DOI can't be deactivated without identifier");
-
-    DoiSimplifiedModel model = new DoiSimplifiedModel();
-    model.setDoi(doi.getDoiName());
-    model.setEvent(EventType.HIDE.getValue());
-    JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
-    throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
+    return result;
   }
 
   /**
