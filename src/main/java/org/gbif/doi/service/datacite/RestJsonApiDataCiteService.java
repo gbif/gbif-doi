@@ -203,7 +203,7 @@ public class RestJsonApiDataCiteService implements DoiService {
     if (doiData.getStatus() == DoiStatus.REGISTERED) {
       throw new DoiExistsException(
           "Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
-    } else if (doiData.getStatus() == DoiStatus.RESERVED) {
+    } else if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.DELETED) {
       throwExceptionOnBadResponse(dataCiteClient.updateDoi(doi.getDoiName(), jsonApiWrapper));
     } else {
       throwExceptionOnBadResponse(dataCiteClient.createDoi(jsonApiWrapper));
