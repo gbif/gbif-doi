@@ -157,9 +157,10 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     DoiData doiData = resolve(doi);
 
-    if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED) {
+    if (doiData.getStatus() == DoiStatus.REGISTERED || doiData.getStatus() == DoiStatus.RESERVED
+        || doiData.getStatus() == DoiStatus.DELETED) {
       throw new DoiExistsException(
-          "Can't reserve a DOI which is already registered/reserved " + doi.getDoiName(), doi);
+          "Can't reserve a DOI which is already registered/reserved or deleted " + doi.getDoiName(), doi);
     } else {
       DoiSimplifiedModel model = prepareDoiCreateModel(doi, metadata);
       JSONAPIDocument<DoiSimplifiedModel> jsonApiWrapper = new JSONAPIDocument<>(model);
@@ -287,7 +288,8 @@ public class RestJsonApiDataCiteService implements DoiService {
 
     DoiData doiData = resolve(doi);
 
-    if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.REGISTERED) {
+    if (doiData.getStatus() == DoiStatus.RESERVED || doiData.getStatus() == DoiStatus.REGISTERED
+        || doiData.getStatus() == DoiStatus.DELETED) {
       DoiSimplifiedModel model = new DoiSimplifiedModel();
       model.setDoi(doi.getDoiName());
       model.setXml(Base64.getEncoder().encodeToString(metadata.getBytes()));
