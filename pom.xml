@@ -68,7 +68,7 @@
     <junit.version>5.6.3</junit.version>
     <mockito.version>3.3.3</mockito.version>
     <gbif-common.version>0.51</gbif-common.version>
-    <jackson.version>2.13.2</jackson.version>
+    <jackson.version>2.13.2.1</jackson.version>
 
     <!-- Sonar -->
     <sonar.sources>src/main/java</sonar.sources>
