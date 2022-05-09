@@ -1,4 +1,4 @@
-user: ${datacite.user}
+username: ${datacite.user}
 password: ${datacite.password}
 baseApiUrl: https://api.test.datacite.org/
 fileCacheMaxSizeMb: 64
