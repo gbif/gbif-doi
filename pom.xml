@@ -69,6 +69,7 @@
     <mockito.version>3.3.3</mockito.version>
     <gbif-common.version>0.51</gbif-common.version>
     <jackson.version>2.13.2</jackson.version>
+    <jackson-databind.version>2.13.2.2</jackson-databind.version>
 
     <!-- Sonar -->
     <sonar.sources>src/main/java</sonar.sources>
@@ -315,7 +316,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
+      <version>${jackson-databind.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
