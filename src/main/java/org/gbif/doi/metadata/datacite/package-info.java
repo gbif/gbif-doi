@@ -6,7 +6,7 @@
 // Generated on: 2019.07.17 at 03:36:00 PM CEST
 //
 
-@javax.xml.bind.annotation.XmlSchema(
+@jakarta.xml.bind.annotation.XmlSchema(
     namespace = "http://datacite.org/schema/kernel-4",
-    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+    elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.gbif.doi.metadata.datacite;
