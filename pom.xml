@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>58-SNAPSHOT</version>
+    <version>55</version>
   </parent>
 
   <artifactId>gbif-doi</artifactId>
@@ -50,9 +50,6 @@
   </pluginRepositories>
 
   <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-
     <spotless.check.skip>false</spotless.check.skip>
 
     <!-- plugins -->
@@ -66,8 +63,6 @@
     <gbif-datacite-rest-client.version>1.12</gbif-datacite-rest-client.version>
     <logback.version>1.2.13</logback.version>
     <slf4j.version>1.7.36</slf4j.version>
-    <jakarta-xml-bind.version>4.0.2</jakarta-xml-bind.version>
-    <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 
     <!-- Test dependencies -->
     <junit.version>5.9.1</junit.version>
@@ -284,16 +279,6 @@
       <artifactId>logback-classic</artifactId>
       <version>${logback.version}</version>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
-      <version>${jakarta-xml-bind.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jaxb</groupId>
-      <artifactId>jaxb-runtime</artifactId>
-      <version>4.0.5</version>
     </dependency>
 
     <!-- TEST -->

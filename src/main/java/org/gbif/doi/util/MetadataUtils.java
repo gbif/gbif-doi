@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.xml.bind.JAXBException;
+import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
