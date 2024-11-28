@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>gbif-doi</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>GBIF DOI Service</name>
