@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>58</version>
+    <version>59</version>
   </parent>
 
   <artifactId>gbif-doi</artifactId>
@@ -130,22 +130,6 @@
             <exclude>**/*IT*</exclude>
             <exclude>**/*Exception*</exclude>
           </excludes>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-scm-publish-plugin</artifactId>
-        <version>3.2.1</version>
-        <configuration>
-          <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
-          <checkinComment>Publishing Site Docs for ${project.artifactId}:${project.version}
-          </checkinComment>
-          <skipDeletedFiles>false</skipDeletedFiles>
-          <!-- publish to same git repo as code, just use a different branch -->
-          <pubScmUrl>${project.scm.connection}</pubScmUrl>
-          <!-- This is the git branch that the web "pages" are located in -->
-          <scmBranch>gh-pages</scmBranch>
         </configuration>
       </plugin>
 
