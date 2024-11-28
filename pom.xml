@@ -133,6 +133,22 @@
         </configuration>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <version>3.2.1</version>
+        <configuration>
+          <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
+          <checkinComment>Publishing Site Docs for ${project.artifactId}:${project.version}
+          </checkinComment>
+          <skipDeletedFiles>false</skipDeletedFiles>
+          <!-- publish to same git repo as code, just use a different branch -->
+          <pubScmUrl>${project.scm.connection}</pubScmUrl>
+          <!-- This is the git branch that the web "pages" are located in -->
+          <scmBranch>gh-pages</scmBranch>
+        </configuration>
+      </plugin>
+
       <!--
      Generates source from the XSD using plugins to provide
      classes, fluent builders, annotations for selected @XmlRootElement.
