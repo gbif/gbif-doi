@@ -61,20 +61,19 @@
     <jaxb2_commons.version>0.6.3</jaxb2_commons.version>
 
     <!-- Libs -->
-    <findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
-    <gbif-api.version>0.176</gbif-api.version>
+    <jakarta-annotation.version>3.0.0</jakarta-annotation.version>
+    <gbif-api.version>2.2.2</gbif-api.version>
     <gbif-datacite-rest-client.version>2.0.0</gbif-datacite-rest-client.version>
-    <logback.version>1.4.14</logback.version>
-    <slf4j.version>2.0.9</slf4j.version>
+    <slf4j.version>2.0.17</slf4j.version>
     <!-- JAXB 4.x (Jakarta) for Java 17: uses jakarta.* packages -->
     <jakarta-jaxb-api.version>4.0.0</jakarta-jaxb-api.version>
     <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
 
     <!-- Test dependencies -->
-    <junit.version>5.10.3</junit.version>
-    <mockito.version>5.12.0</mockito.version>
-    <gbif-common.version>0.58</gbif-common.version>
-    <jackson.version>2.17.2</jackson.version>
+    <junit.version>5.14.1</junit.version>
+    <mockito.version>5.20.0</mockito.version>
+    <gbif-common.version>0.60</gbif-common.version>
+    <jackson.version>2.19.4</jackson.version>
 
     <!-- Sonar -->
     <sonar.sources>src/main/java</sonar.sources>
@@ -276,20 +275,14 @@
 
     <!-- OTHER -->
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>${findbugs-jsr305.version}</version>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>${jakarta-annotation.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
@@ -336,6 +329,12 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
       <scope>test</scope>
     </dependency>

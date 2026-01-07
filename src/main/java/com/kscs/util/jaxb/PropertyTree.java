@@ -23,7 +23,7 @@ public class PropertyTree {
   private final String propertyName;
 
   public static final class Builder {
-    private final Map<String, Builder> children = new LinkedHashMap<String, Builder>();
+    private final Map<String, Builder> children = new LinkedHashMap<>();
     private final Builder parent;
     private final String propertyName;
 
@@ -55,7 +55,7 @@ public class PropertyTree {
 
     private Map<String, PropertyTree> buildChildren() {
       final Map<String, PropertyTree> childProducts =
-          new LinkedHashMap<String, PropertyTree>(this.children.size());
+          new LinkedHashMap<>(this.children.size());
       for (final Builder childBuilder : this.children.values()) {
         final PropertyTree child =
             new PropertyTree(childBuilder.propertyName, childBuilder.buildChildren());

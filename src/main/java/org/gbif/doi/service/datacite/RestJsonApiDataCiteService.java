@@ -34,7 +34,7 @@ import java.net.URI;
 import java.util.Base64;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

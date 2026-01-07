@@ -19,7 +19,7 @@ import org.gbif.doi.metadata.datacite.DataCiteMetadata;
 
 import java.net.URI;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface DoiService {
 
